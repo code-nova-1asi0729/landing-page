@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CodeNova — Mantenimiento preventivo inteligente</title>
+<meta name="description" content="CodeNova: plataforma IoT de mantenimiento preventivo para edificios y condominios. Anticipa fallas en bombas, tableros y ascensores antes de que se conviertan en emergencias.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect x='6' y='6' width='28' height='28' rx='6' fill='none' stroke='%230F5C78' stroke-width='3'/%3E%3Cpolyline points='10,24 15,24 18,15 22,29 26,11 30,24 34,24' fill='none' stroke='%232E9E6D' stroke-width='2.5'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="site-header" id="header">
+  <div class="container header-inner">
+    <a href="#top" class="logo" aria-label="CodeNova - inicio">
+      <svg viewBox="0 0 40 40" width="36" height="36" aria-hidden="true">
+        <rect x="6" y="6" width="28" height="28" rx="6" fill="none" stroke="#0F5C78" stroke-width="3"></rect>
+        <polyline points="10,24 15,24 18,15 22,29 26,11 30,24 34,24" fill="none" stroke="#2E9E6D" stroke-width="2.5"></polyline>
+      </svg>
+      <span>CodeNova</span>
+    </a>
+
+    <nav class="main-nav" id="main-nav">
+      <a href="#features">Producto</a>
+      <a href="#how-it-works">Cómo funciona</a>
+      <a href="#pricing">Precios</a>
+      <a href="#about">Nosotros</a>
+      <a href="#contact">Contacto</a>
+    </nav>
+
+    <div class="header-actions">
+      <a href="#login" class="btn btn-outline btn-sm">Iniciar sesión</a>
+      <a href="#contact" class="btn btn-primary btn-sm">Solicitar demo</a>
+    </div>
+
+    <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="main-nav">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container hero-inner">
+      <div class="hero-copy">
+        <span class="badge badge-green">Nuevo · Plataforma IoT</span>
+        <h1>Mantenimiento preventivo inteligente para tu edificio</h1>
+        <p class="lead">Anticipa fallas en bombas, tableros y ascensores antes de que se conviertan en emergencias.</p>
+        <div class="hero-cta">
+          <a href="#contact" class="btn btn-primary">Solicitar demo</a>
+          <a href="#how-it-works" class="btn btn-outline">Ver cómo funciona</a>
+        </div>
+        <div class="hero-stats">
+          <div class="stat">
+            <h3>+50</h3>
+            <p>Edificios activos</p>
+          </div>
+          <div class="stat">
+            <h3>120</h3>
+            <p>Alertas/mes</p>
+          </div>
+          <div class="stat">
+            <h3>4.8★</h3>
+            <p>Satisfacción</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <div class="chart-card">
+          <svg viewBox="0 0 200 100" aria-label="Vista previa del dashboard de CodeNova">
+            <polyline points="0,70 30,70 40,30 55,90 70,15 90,70 200,70" fill="none" stroke="#ffffff" stroke-width="3" opacity="0.85"></polyline>
+          </svg>
+        </div>
+        <div class="status-card">
+          <p class="status-title">Estado de equipos</p>
+          <div class="status-legend">
+            <span class="dot" style="background:#2E9E6D"></span>Normal
+            <span class="dot" style="background:#F4B400"></span>Baja
+            <span class="dot" style="background:#F2994A"></span>Media
+            <span class="dot" style="background:#E53935"></span>Crítica
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="section section-alt" id="features">
+    <div class="container">
+      <div class="section-heading">
+        <p class="eyebrow">— LO QUE OFRECEMOS</p>
+        <h2>Todo lo que necesitas para el mantenimiento de tu edificio</h2>
+        <p class="section-sub">Sensores, alertas priorizadas y gestión de visitas en un solo lugar.</p>
+      </div>
+
+      <div class="grid grid-3">
+        <div class="card">
+          <div class="icon-badge icon-blue"></div>
+          <h3>Sensores IoT</h3>
+          <p>Vibración, temperatura, humedad y consumo eléctrico monitoreados en tiempo real.</p>
+          <span class="tag tag-blue">Tiempo real</span>
+        </div>
+        <div class="card">
+          <div class="icon-badge icon-orange"></div>
+          <h3>Alertas por severidad</h3>
+          <p>Verde, amarillo, naranja y rojo: prioriza de un vistazo qué atender primero.</p>
+          <span class="tag tag-orange">Prioridad</span>
+        </div>
+        <div class="card">
+          <div class="icon-badge icon-green"></div>
+          <h3>Gestión de solicitudes</h3>
+          <p>Recepción, agenda de visitas y control de materiales en un solo lugar.</p>
+          <span class="tag tag-green">Automatizado</span>
+        </div>
+        <div class="card">
+          <div class="icon-badge icon-blue"></div>
+          <h3>Agenda de visitas</h3>
+          <p>Planificación priorizada por severidad y zona para las empresas de mantenimiento.</p>
+          <span class="tag tag-blue">Calendario</span>
+        </div>
+        <div class="card">
+          <div class="icon-badge icon-green"></div>
+          <h3>Control de materiales</h3>
+          <p>Seguimiento del inventario usado en cada intervención.</p>
+          <span class="tag tag-green">Inventario</span>
+        </div>
+        <div class="card">
+          <div class="icon-badge icon-blue"></div>
+          <h3>Reportes y ahorro</h3>
+          <p>Sustenta el ahorro acumulado ante la junta del edificio.</p>
+          <span class="tag tag-blue">Dashboard</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="section" id="how-it-works">
+    <div class="container how-inner">
+      <div class="how-copy">
+        <p class="eyebrow">— PROCESO SIMPLE</p>
+        <h2>¿Cómo funciona CodeNova?</h2>
+
+        <ol class="steps">
+          <li>
+            <span class="step-number">1</span>
+            <div>
+              <h3>Instala los sensores</h3>
+              <p>Vibración, temperatura, humedad y consumo eléctrico.</p>
+            </div>
+          </li>
+          <li>
+            <span class="step-number">2</span>
+            <div>
+              <h3>Configura tu edificio</h3>
+              <p>Registra equipos por tipo: bombas, tableros, ascensores.</p>
+            </div>
+          </li>
+          <li>
+            <span class="step-number">3</span>
+            <div>
+              <h3>Recibe alertas priorizadas</h3>
+              <p>Ordenadas por severidad: crítica, media, baja.</p>
+            </div>
+          </li>
+          <li>
+            <span class="step-number">4</span>
+            <div>
+              <h3>Gestiona el mantenimiento</h3>
+              <p>Agenda la visita y registra la intervención realizada.</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+
+      <div class="how-visual">
+        <div class="action-card">
+          <div class="action-icon"></div>
+          <h3>CodeNova en acción</h3>
+          <p>Más edificios previenen fallas críticas cada mes</p>
+          <div class="action-metric">
+            <h3>98%</h3>
+            <p>Alertas atendidas a tiempo</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="section section-alt" id="about">
+    <div class="container">
+      <div class="about-top">
+        <div class="about-copy">
+          <p class="eyebrow">— CONÓCENOS</p>
+          <h2>Somos CodeNova</h2>
+          <p>Un equipo enfocado en anticipar fallas antes de que se conviertan en emergencias.</p>
+          <p>Creemos que el mantenimiento preventivo debe ser claro y accesible para todos.</p>
+          <div class="mission-callout">
+            <p class="mission-label">NUESTRA MISIÓN</p>
+            <p>Dar control y tranquilidad a quienes administran un edificio.</p>
+          </div>
+        </div>
+
+        <div class="about-stats">
+          <div class="grid grid-2">
+            <div class="stat-card">
+              <h3>2025</h3>
+              <p>Fundación</p>
+            </div>
+            <div class="stat-card">
+              <h3>3</h3>
+              <p>Integrantes</p>
+            </div>
+            <div class="stat-card">
+              <h3>+10</h3>
+              <p>Edificios</p>
+            </div>
+            <div class="stat-card">
+              <h3>Perú</h3>
+              <p>Origen</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-2 about-values">
+        <div class="value-card">
+          <div class="icon-badge icon-blue small"></div>
+          <h3>Misión</h3>
+          <p>Brindar mantenimiento preventivo seguro y accesible.</p>
+        </div>
+        <div class="value-card">
+          <div class="icon-badge icon-green small"></div>
+          <h3>Visión</h3>
+          <p>Ser la plataforma líder de mantenimiento preventivo en Perú.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TEAM -->
+  <section class="section" id="team">
+    <div class="container">
+      <h2 class="text-center">Conoce al equipo</h2>
+      <div class="grid grid-3 team-grid">
+        <div class="team-card">
+          <div class="avatar avatar-blue">AV</div>
+          <h3>Arturo Valladolid</h3>
+          <p>Team Leader</p>
+        </div>
+        <div class="team-card">
+          <div class="avatar avatar-green">FD</div>
+          <h3>Fernanda Díaz</h3>
+          <p>Integrante</p>
+        </div>
+        <div class="team-card">
+          <div class="avatar avatar-orange">MR</div>
+          <h3>Matthias Romero</h3>
+          <p>Integrante</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="section section-alt" id="testimonials">
+    <div class="container">
+      <div class="section-heading">
+        <p class="eyebrow">— TESTIMONIOS</p>
+        <h2>Lo que dicen los administradores de edificios</h2>
+      </div>
+
+      <div class="grid grid-3">
+        <div class="testimonial-card">
+          <div class="stars">★★★★★</div>
+          <p>Ahora detectamos fallas antes de que se vuelvan un problema costoso.</p>
+          <div class="testimonial-author">
+            <div class="avatar avatar-blue small"></div>
+            <div>
+              <p class="author-name">Nombre Apellido</p>
+              <p class="author-role">Administrador de edificio</p>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="stars">★★★★★</div>
+          <p>Las alertas por severidad nos ayudan a priorizar sin leer cada reporte.</p>
+          <div class="testimonial-author">
+            <div class="avatar avatar-green small"></div>
+            <div>
+              <p class="author-name">Nombre Apellido</p>
+              <p class="author-role">Empresa de mantenimiento</p>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="stars">★★★★★</div>
+          <p>Reportar un incidente desde mi celular es muy sencillo.</p>
+          <div class="testimonial-author">
+            <div class="avatar avatar-orange small"></div>
+            <div>
+              <p class="author-name">Nombre Apellido</p>
+              <p class="author-role">Residente</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section" id="faq">
+    <div class="container">
+      <div class="section-heading">
+        <p class="eyebrow">— FAQ</p>
+        <h2>Resolvemos tus dudas</h2>
+        <p class="section-sub">¿No encuentras tu respuesta? Escríbenos directamente.</p>
+      </div>
+
+      <div class="faq-list">
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            <span>¿CodeNova es gratuito?</span>
+            <span class="faq-icon"></span>
+          </button>
+          <div class="faq-answer">
+            <p>Ofrecemos un plan de demo sin costo para que pruebes la plataforma. Los planes pagos varían según la cantidad de equipos y edificios que quieras monitorear.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            <span>¿Cómo se instalan los sensores?</span>
+            <span class="faq-icon"></span>
+          </button>
+          <div class="faq-answer">
+            <p>Nuestro equipo técnico coordina una visita para instalar los sensores en bombas, tableros y ascensores. El proceso no interrumpe el funcionamiento del edificio.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            <span>¿En qué edificios puedo usarlo?</span>
+            <span class="faq-icon"></span>
+          </button>
+          <div class="faq-answer">
+            <p>CodeNova funciona en edificios residenciales, condominios y edificios corporativos de cualquier tamaño.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            <span>¿Cómo funciona la escala de severidad?</span>
+            <span class="faq-icon"></span>
+          </button>
+          <div class="faq-answer">
+            <p>Las alertas se clasifican en cuatro niveles: normal, baja, media y crítica, según el tipo de anomalía detectada por los sensores.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            <span>¿Mis datos están seguros?</span>
+            <span class="faq-icon"></span>
+          </button>
+          <div class="faq-answer">
+            <p>Sí, la información de tus equipos y edificios se almacena de forma cifrada y solo es accesible para los usuarios autorizados de tu cuenta.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="section section-alt" id="contact">
+    <div class="container contact-inner">
+      <div class="contact-form-wrap">
+        <p class="eyebrow">— CONTACTO</p>
+        <h2>Escríbenos</h2>
+
+        <form id="contact-form" novalidate>
+          <div class="form-row">
+            <div class="form-field">
+              <label for="firstname">Nombre</label>
+              <input type="text" id="firstname" name="firstname" required>
+              <span class="field-error"></span>
+            </div>
+            <div class="form-field">
+              <label for="lastname">Apellido</label>
+              <input type="text" id="lastname" name="lastname" required>
+              <span class="field-error"></span>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label for="email">Correo electrónico</label>
+            <input type="email" id="email" name="email" required>
+            <span class="field-error"></span>
+          </div>
+
+          <div class="form-field">
+            <label for="subject">Asunto</label>
+            <input type="text" id="subject" name="subject" required>
+            <span class="field-error"></span>
+          </div>
+
+          <div class="form-field">
+            <label for="message">Mensaje</label>
+            <textarea id="message" name="message" rows="4" required></textarea>
+            <span class="field-error"></span>
+          </div>
+
+          <label class="checkbox-field">
+            <input type="checkbox" id="terms" name="terms" required>
+            Acepto los términos y condiciones
+          </label>
+
+          <button type="submit" class="btn btn-primary">Enviar mensaje</button>
+
+          <p class="form-feedback" id="form-feedback" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+
+      <div class="contact-info">
+        <div class="info-item">
+          <div class="icon-badge icon-blue"></div>
+          <div>
+            <h3>Correo</h3>
+            <p>soporte@codenova.pe</p>
+          </div>
+        </div>
+        <div class="info-item">
+          <div class="icon-badge icon-green"></div>
+          <div>
+            <h3>WhatsApp</h3>
+            <p>+51 999 888 777</p>
+          </div>
+        </div>
+        <div class="info-item">
+          <div class="icon-badge icon-blue"></div>
+          <div>
+            <h3>Horario</h3>
+            <p>Lun-Vie: 9am - 6pm</p>
+          </div>
+        </div>
+        <div class="info-item">
+          <div class="icon-badge icon-green"></div>
+          <div>
+            <h3>Ubicación</h3>
+            <p>Lima, Perú</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section">
+    <div class="container">
+      <div class="cta-box">
+        <h2>Empieza a optimizar tu edificio hoy</h2>
+        <p>Sin tarjeta de crédito, sin compromisos.</p>
+        <div class="cta-actions">
+          <a href="#login" class="btn btn-outline btn-inverse">Iniciar sesión</a>
+          <a href="#contact" class="btn btn-accent">Solicitar demo</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#top" class="logo logo-light">
+          <svg viewBox="0 0 40 40" width="32" height="32" aria-hidden="true">
+            <rect x="6" y="6" width="28" height="28" rx="6" fill="none" stroke="#ffffff" stroke-width="3"></rect>
+            <polyline points="10,24 15,24 18,15 22,29 26,11 30,24 34,24" fill="none" stroke="#2E9E6D" stroke-width="2.5"></polyline>
+          </svg>
+          <span>CodeNova</span>
+        </a>
+        <p>Mantenimiento preventivo inteligente para edificios y condominios.</p>
+        <div class="social-links">
+          <a href="#" aria-label="Facebook"></a>
+          <a href="#" aria-label="Instagram"></a>
+          <a href="#" aria-label="LinkedIn"></a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h3>Producto</h3>
+        <a href="#features">Servicios</a>
+        <a href="#how-it-works">Cómo funciona</a>
+        <a href="#pricing">Precios</a>
+      </div>
+
+      <div class="footer-col">
+        <h3>Empresa</h3>
+        <a href="#about">Nosotros</a>
+        <a href="#team">Equipo</a>
+        <a href="#contact">Contacto</a>
+      </div>
+
+      <div class="footer-col">
+        <h3>Legal</h3>
+        <a href="#">Términos</a>
+        <a href="#">Privacidad</a>
+        <a href="#">Reclamaciones</a>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>© 2026 CodeNova. Todos los derechos reservados.</p>
+      <p>Desarrollado por el equipo CodeNova · UPC</p>
+    </div>
+  </div>
+</footer>
+
+<script src="js/script.js"></script>
+</body>
+</html>
