@@ -32,8 +32,8 @@
     </nav>
 
     <div class="header-actions">
-      <a href="#login" class="btn btn-outline btn-sm">Iniciar sesión</a>
-      <a href="#contact" class="btn btn-primary btn-sm">Solicitar demo</a>
+      <a href="app/index.html#/login" class="btn btn-outline btn-sm">Iniciar sesión</a>
+      <a href="#contact" class="btn btn-primary btn-sm" data-open-demo>Solicitar demo</a>
     </div>
 
     <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="main-nav">
@@ -52,7 +52,7 @@
         <h1>Mantenimiento preventivo inteligente para tu edificio</h1>
         <p class="lead">Anticipa fallas en bombas, tableros y ascensores antes de que se conviertan en emergencias.</p>
         <div class="hero-cta">
-          <a href="#contact" class="btn btn-primary">Solicitar demo</a>
+          <a href="#contact" class="btn btn-primary" data-open-demo>Solicitar demo</a>
           <a href="#how-it-works" class="btn btn-outline">Ver cómo funciona</a>
         </div>
         <div class="hero-stats">
@@ -193,8 +193,84 @@
     </div>
   </section>
 
+  <!-- PRICING -->
+  <section class="section section-alt" id="pricing">
+    <div class="container">
+      <div class="section-heading">
+        <p class="eyebrow">— PRECIOS</p>
+        <h2>Planes que crecen con tu edificio</h2>
+        <p class="section-sub">Sin permanencia. Cambia de plan cuando lo necesites.</p>
+        <div class="billing-toggle" role="group" aria-label="Facturación">
+          <button type="button" class="on" data-billing="monthly">Mensual</button>
+          <button type="button" data-billing="yearly">Anual <span>-20%</span></button>
+        </div>
+      </div>
+
+      <div class="pricing-carousel">
+        <button type="button" class="carousel-btn prev" id="price-prev" aria-label="Plan anterior">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
+
+        <div class="pricing-track" id="price-track" tabindex="0" aria-label="Planes de precios">
+          <article class="plan">
+            <h3>Inicial</h3>
+            <p class="plan-desc">Para empezar a monitorear un edificio pequeño.</p>
+            <p class="plan-price"><span class="cur">S/</span><span class="amount" data-monthly="149" data-yearly="119">149</span><span class="per">/mes</span></p>
+            <p class="plan-billed" data-monthly-text="Facturado mensualmente" data-yearly-text="Facturado anualmente (S/ 1,428)">Facturado mensualmente</p>
+            <ul class="plan-list">
+              <li>1 edificio</li>
+              <li>Hasta 10 equipos monitoreados</li>
+              <li>Alertas por severidad</li>
+              <li>App para residentes</li>
+              <li>Soporte por correo</li>
+            </ul>
+            <a href="app/index.html#/register/admin" class="btn btn-outline">Empezar ahora</a>
+          </article>
+
+          <article class="plan plan-featured">
+            <span class="plan-flag">Más popular</span>
+            <h3>Profesional</h3>
+            <p class="plan-desc">Para administradores con varios edificios y empresas de mantenimiento.</p>
+            <p class="plan-price"><span class="cur">S/</span><span class="amount" data-monthly="349" data-yearly="279">349</span><span class="per">/mes</span></p>
+            <p class="plan-billed" data-monthly-text="Facturado mensualmente" data-yearly-text="Facturado anualmente (S/ 3,348)">Facturado mensualmente</p>
+            <ul class="plan-list">
+              <li>Hasta 3 edificios</li>
+              <li>Hasta 40 equipos monitoreados</li>
+              <li>Agenda de visitas y técnicos</li>
+              <li>Reportes PDF para la junta</li>
+              <li>Exportación de lecturas a CSV</li>
+              <li>Soporte prioritario por WhatsApp</li>
+            </ul>
+            <a href="app/index.html#/register/admin" class="btn btn-primary">Empezar ahora</a>
+          </article>
+
+          <article class="plan">
+            <h3>Corporativo</h3>
+            <p class="plan-desc">Para administradoras y constructoras con muchos edificios.</p>
+            <p class="plan-price plan-custom"><span class="amount">A medida</span></p>
+            <p class="plan-billed">Cotización según tu portafolio</p>
+            <ul class="plan-list">
+              <li>Edificios y equipos ilimitados</li>
+              <li>Panel comparativo entre edificios</li>
+              <li>Ranking de empresas de mantenimiento</li>
+              <li>Integración con tus propios sensores</li>
+              <li>Gerente de cuenta dedicado</li>
+            </ul>
+            <a href="#contact" class="btn btn-outline" data-open-demo>Hablar con ventas</a>
+          </article>
+        </div>
+
+        <button type="button" class="carousel-btn next" id="price-next" aria-label="Plan siguiente">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+        </button>
+      </div>
+      <div class="carousel-dots" id="price-dots" aria-hidden="true"></div>
+      <p class="pricing-note">Precios en soles peruanos (PEN) e incluyen IGV. ¿Dudas? <a href="#contact">Escríbenos</a>.</p>
+    </div>
+  </section>
+
   <!-- ABOUT -->
-  <section class="section section-alt" id="about">
+  <section class="section" id="about">
     <div class="container">
       <div class="about-top">
         <div class="about-copy">
@@ -246,7 +322,7 @@
   </section>
 
   <!-- TEAM -->
-  <section class="section" id="team">
+  <section class="section section-alt" id="team">
     <div class="container">
       <h2 class="text-center">Conoce al equipo</h2>
       <div class="grid grid-3 team-grid">
@@ -270,7 +346,7 @@
   </section>
 
   <!-- TESTIMONIALS -->
-  <section class="section section-alt" id="testimonials">
+  <section class="section" id="testimonials">
     <div class="container">
       <div class="section-heading">
         <p class="eyebrow">— TESTIMONIOS</p>
@@ -316,7 +392,7 @@
   </section>
 
   <!-- FAQ -->
-  <section class="section" id="faq">
+  <section class="section section-alt" id="faq">
     <div class="container">
       <div class="section-heading">
         <p class="eyebrow">— FAQ</p>
@@ -379,7 +455,7 @@
   </section>
 
   <!-- CONTACT -->
-  <section class="section section-alt" id="contact">
+  <section class="section" id="contact">
     <div class="container contact-inner">
       <div class="contact-form-wrap">
         <p class="eyebrow">— CONTACTO</p>
@@ -468,8 +544,8 @@
         <h2>Empieza a optimizar tu edificio hoy</h2>
         <p>Sin tarjeta de crédito, sin compromisos.</p>
         <div class="cta-actions">
-          <a href="#login" class="btn btn-outline btn-inverse">Iniciar sesión</a>
-          <a href="#contact" class="btn btn-accent">Solicitar demo</a>
+          <a href="app/index.html#/login" class="btn btn-outline btn-inverse">Iniciar sesión</a>
+          <a href="#contact" class="btn btn-accent" data-open-demo>Solicitar demo</a>
         </div>
       </div>
     </div>
@@ -501,6 +577,7 @@
         <a href="#features">Servicios</a>
         <a href="#how-it-works">Cómo funciona</a>
         <a href="#pricing">Precios</a>
+        <a href="app/index.html#/login">Ingresar a la app</a>
       </div>
 
       <div class="footer-col">
@@ -526,5 +603,6 @@
 </footer>
 
 <script src="js/script.js"></script>
+<script src="js/landing-extras.js"></script>
 </body>
 </html>
