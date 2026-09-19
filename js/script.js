@@ -9,7 +9,7 @@ menuToggle.addEventListener('click', () => {
   menuToggle.setAttribute('aria-expanded', String(isOpen));
 });
 
-header.querySelectorAll('.main-nav a, .header-actions a').forEach((link) => {
+mainNav.querySelectorAll('a').forEach((link) => {
   link.addEventListener('click', () => {
     header.classList.remove('nav-open');
     menuToggle.classList.remove('open');
@@ -35,7 +35,7 @@ document.querySelectorAll('.faq-item').forEach((item) => {
   });
 });
 
-// Demo request form validation + simulated submit
+// Contact form validation + simulated submit
 const form = document.getElementById('contact-form');
 const feedback = document.getElementById('form-feedback');
 
@@ -49,9 +49,14 @@ function setError(field, message) {
 function validateForm() {
   let isValid = true;
 
-  const { firstname, lastname, email, company, message, terms } = form;
+  const firstname = form.firstname;
+  const lastname = form.lastname;
+  const email = form.email;
+  const subject = form.subject;
+  const message = form.message;
+  const terms = form.terms;
 
-  [firstname, lastname, company].forEach((field) => {
+  [firstname, lastname, subject].forEach((field) => {
     if (!field.value.trim()) {
       setError(field, 'Este campo es obligatorio.');
       isValid = false;
@@ -98,7 +103,7 @@ form.addEventListener('submit', (event) => {
     return;
   }
 
-  feedback.textContent = '¡Gracias! Recibimos tu solicitud. Te contactaremos pronto para agendar tu demo.';
+  feedback.textContent = '¡Gracias! Tu mensaje fue enviado. Te contactaremos pronto.';
   feedback.className = 'form-feedback success';
   form.reset();
 });

@@ -1,4 +1,4 @@
-/* CodeNova — administrador: dashboard, edificios, equipos y sensores. */
+/* Vigilia — administrador: dashboard, edificios, equipos y sensores. */
 (function () {
   'use strict';
   const CN = window.CN, esc = CN.esc, ic = CN.icon;
@@ -35,7 +35,7 @@
         '<ol class="onb-steps">' + steps.map((x, i) => '<li class="' + (x.done ? 'done' : i === pending ? 'now' : '') + '"><span>' + (x.done ? ic('check', 16) : i + 1) + '</span>' + x.title + '</li>').join('') + '</ol></div>';
     }
     if (!b) {
-      return { title: 'Dashboard', html: CN.pageHead('DASHBOARD', 'Bienvenido a CodeNova') + html + (showOnb ? '' : CN.empty('building', 'Aún no tienes edificios registrados', 'Registra tu primer edificio para empezar a monitorear tus equipos.', '<a class="btn btn-primary" href="#/buildings/new">Registrar edificio</a>')), mount: mountDash };
+      return { title: 'Dashboard', html: CN.pageHead('DASHBOARD', 'Bienvenido a Vigilia') + html + (showOnb ? '' : CN.empty('building', 'Aún no tienes edificios registrados', 'Registra tu primer edificio para empezar a monitorear tus equipos.', '<a class="btn btn-primary" href="#/buildings/new">Registrar edificio</a>')), mount: mountDash };
     }
     const alerts = CN.activeAlerts([b.id]).sort((x, y) => CN.sevRank(y.severity) - CN.sevRank(x.severity) || y.createdAt - x.createdAt);
     const saving = CN.buildingSavings(b.id);

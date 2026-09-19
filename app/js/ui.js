@@ -1,4 +1,4 @@
-/* CodeNova — componentes de interfaz reutilizables. */
+/* Vigilia — componentes de interfaz reutilizables. */
 (function () {
   'use strict';
   const CN = window.CN;
@@ -171,7 +171,7 @@
     const t = document.createElement('div');
     t.className = 'toast push';
     const sev = CN.SEV[n.sev];
-    t.innerHTML = '<div class="push-top">' + CN.logoTile(20) + '<span>CodeNova · ahora</span><button class="push-x" aria-label="Cerrar">' + ic('x', 16) + '</button></div>' +
+    t.innerHTML = '<div class="push-top">' + CN.logoTile(20) + '<span>Vigilia · ahora</span><button class="push-x" aria-label="Cerrar">' + ic('x', 16) + '</button></div>' +
       '<strong>' + esc(n.title) + '</strong><p>' + esc(n.body) + '</p>' + (sev ? '<i class="push-bar" style="background:' + sev.color + '"></i>' : '');
     t.addEventListener('click', (e) => { if (e.target.closest('.push-x')) { t.remove(); return; } if (n.link) location.hash = n.link.replace('#', ''); t.remove(); });
     toastHost().appendChild(t);

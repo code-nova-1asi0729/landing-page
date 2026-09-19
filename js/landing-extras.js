@@ -108,7 +108,7 @@
   function formView() {
     document.getElementById('demo-body').innerHTML =
       '<h2 id="demo-title">Solicita una demo</h2>' +
-      '<p>Cuéntanos quién eres y te contactaremos para mostrarte CodeNova en acción.</p>' +
+      '<p>Cuéntanos quién eres y te contactaremos para mostrarte Vigilia en acción.</p>' +
       '<form class="demo-form" novalidate>' +
       '<div class="form-field"><label for="demo-name">Nombre</label><input type="text" id="demo-name" name="name" autocomplete="name"><span class="field-error"></span></div>' +
       '<div class="form-field"><label for="demo-email">Correo electrónico</label><input type="email" id="demo-email" name="email" autocomplete="email"><span class="field-error"></span></div>' +

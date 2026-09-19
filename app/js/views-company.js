@@ -1,4 +1,4 @@
-/* CodeNova — empresa de mantenimiento: mi semana, clientes y técnicos. */
+/* Vigilia — empresa de mantenimiento: mi semana, clientes y técnicos. */
 (function () {
   'use strict';
   const CN = window.CN, esc = CN.esc, ic = CN.icon;

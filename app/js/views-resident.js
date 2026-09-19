@@ -1,4 +1,4 @@
-/* CodeNova — residente: reportar incidente, seguimiento y calificación (US23–US27, US47). */
+/* Vigilia — residente: reportar incidente, seguimiento y calificación (US23–US27, US47). */
 (function () {
   'use strict';
   const CN = window.CN, esc = CN.esc, ic = CN.icon;

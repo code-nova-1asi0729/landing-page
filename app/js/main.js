@@ -1,4 +1,4 @@
-/* CodeNova — router, layouts (sidebar / celular) y notificaciones. */
+/* Vigilia — router, layouts (sidebar / celular) y notificaciones. */
 (function () {
   'use strict';
   const CN = window.CN, esc = CN.esc, ic = CN.icon;
@@ -52,13 +52,13 @@
 
   function shellFor(u) {
     if (u.role === 'resident') {
-      return '<div class="res-stage"><div class="phone"><header class="phone-top"><a class="brand" href="#/home">' + CN.logoTile(30) + '<b>CodeNova</b></a><div id="bell-slot"></div></header>' +
+      return '<div class="res-stage"><div class="phone"><header class="phone-top"><a class="brand" href="#/home">' + CN.logoTile(30) + '<b>Vigilia</b></a><div id="bell-slot"></div></header>' +
         '<main id="view" class="phone-view" tabindex="-1"></main><nav class="tabbar" id="tabbar"></nav></div></div>';
     }
-    return '<div class="app"><aside class="sidebar" id="sidebar"><a class="brand" href="#' + HOME[u.role] + '">' + CN.logoTile(32) + '<b>CodeNova</b></a><nav id="sidenav"></nav><div class="grow"></div>' +
+    return '<div class="app"><aside class="sidebar" id="sidebar"><a class="brand" href="#' + HOME[u.role] + '">' + CN.logoTile(32) + '<b>Vigilia</b></a><nav id="sidenav"></nav><div class="grow"></div>' +
       '<div class="side-user"><div class="avatar">' + esc(CN.initials(u.name)) + '</div><div><b>' + esc(u.name) + '</b><span>' + esc(CN.userLabel(u)) + '</span></div></div>' +
       '<button class="side-logout" id="logout">' + ic('logout', 20) + '<span>Cerrar sesión</span></button></aside><div class="sb-backdrop" id="sb-backdrop"></div>' +
-      '<div class="main"><header class="topbar"><button class="icon-btn menu-btn" id="menu-btn" aria-label="Abrir menú">' + ic('menu', 24) + '</button><a class="brand mobile-brand" href="#' + HOME[u.role] + '">' + CN.logoTile(28) + '<b>CodeNova</b></a><div class="grow"></div><div id="bell-slot"></div></header>' +
+      '<div class="main"><header class="topbar"><button class="icon-btn menu-btn" id="menu-btn" aria-label="Abrir menú">' + ic('menu', 24) + '</button><a class="brand mobile-brand" href="#' + HOME[u.role] + '">' + CN.logoTile(28) + '<b>Vigilia</b></a><div class="grow"></div><div id="bell-slot"></div></header>' +
       '<main id="view" class="view" tabindex="-1"></main></div></div>';
   }
 
@@ -135,7 +135,7 @@
 
     let res = match.fn(params, user) || {};
     if (typeof res === 'string') res = { html: res };
-    document.title = (res.title ? res.title + ' · ' : '') + 'CodeNova';
+    document.title = (res.title ? res.title + ' · ' : '') + 'Vigilia';
     const host = app();
 
     if (o.public) {

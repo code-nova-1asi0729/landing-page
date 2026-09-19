@@ -1,4 +1,4 @@
-/* CodeNova — perfil (US06, US45, US46) y configuración de plataforma (US15). */
+/* Vigilia — perfil (US06, US45, US46) y configuración de plataforma (US15). */
 (function () {
   'use strict';
   const CN = window.CN, esc = CN.esc, ic = CN.icon;
@@ -48,7 +48,7 @@
           const paint = () => {
             const sel = root.querySelector('#wsel'); const b = sel ? CN.building(sel.value) : CN.selectedBuilding(u);
             const s = CN.weeklySummary(b.id);
-            mail.innerHTML = '<p class="muted small">De: CodeNova &lt;resumen@codenova.pe&gt;</p><h4>Tu resumen semanal · ' + esc(b.name) + '</h4><div class="grid-3 mini"><div><h2>' + s.alerts + '</h2><p>Alertas nuevas</p></div><div><h2>' + s.visits + '</h2><p>Visita' + (s.visits === 1 ? '' : 's') + ' realizada' + (s.visits === 1 ? '' : 's') + '</p></div><div><h2>' + s.incidents + '</h2><p>Incidente' + (s.incidents === 1 ? '' : 's') + ' reportado' + (s.incidents === 1 ? '' : 's') + '</p></div></div>';
+            mail.innerHTML = '<p class="muted small">De: Vigilia &lt;resumen@codenova.pe&gt;</p><h4>Tu resumen semanal · ' + esc(b.name) + '</h4><div class="grid-3 mini"><div><h2>' + s.alerts + '</h2><p>Alertas nuevas</p></div><div><h2>' + s.visits + '</h2><p>Visita' + (s.visits === 1 ? '' : 's') + ' realizada' + (s.visits === 1 ? '' : 's') + '</p></div><div><h2>' + s.incidents + '</h2><p>Incidente' + (s.incidents === 1 ? '' : 's') + ' reportado' + (s.incidents === 1 ? '' : 's') + '</p></div></div>';
           };
           const sel = root.querySelector('#wsel'); if (sel) sel.addEventListener('change', paint);
           paint();

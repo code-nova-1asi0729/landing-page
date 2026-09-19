@@ -1,146 +1,200 @@
-/* FleetCare app — autenticación: HU-38 registro, HU-39 login, HU-40 recuperar contraseña */
+/* Vigilia — login, registros y recuperación de contraseña (US01–US05). */
 (function () {
   'use strict';
-  const R = window.FleetCare;
-  const { html, ico } = R;
+  const CN = window.CN, esc = CN.esc, ic = CN.icon;
 
-  const brand = html`<a class="auth-brand" href="#/login"><img class="logo-img" src="../img/fleetcare-logo-128.png" alt="" width="40" height="40"><span>FleetCare</span></a>`;
-  const pw = (label, name, auto, extra = '') => html`<div class="field"><label for="pw-${name}">${label}</label>
-    <div class="pw"><input id="pw-${name}" name="${name}" type="password" autocomplete="${auto}" ${R.raw(extra)}><button type="button" class="pw-toggle" data-action="toggle-pass" aria-label="Mostrar contraseña">${ico('eye', 18)}</button></div>
-    <span class="field-error" data-err="${name}" role="alert"></span></div>`;
-  const shellAuth = (inner, aside) => html`<div class="auth-card">${brand}${inner}</div>${aside || ''}<a class="auth-back" href="../index.html">← Volver al sitio de FleetCare</a>`;
+  function authShell(inner) {
+    return '<div class="auth"><aside class="auth-side"><div class="auth-brand">' + CN.logoTile(56) + '<h1>Vigilia</h1><p>Mantenimiento preventivo inteligente para edificios y condominios.</p></div>' +
+      '<a class="auth-back" href="../index.html">' + ic('back', 18) + ' Volver al sitio</a></aside>' +
+      '<section class="auth-main"><div class="auth-card">' + inner + '</div></section></div>';
+  }
+  const submit = (label, icon) => '<button type="submit" class="btn btn-primary btn-block">' + ic(icon || 'key', 22) + '<span>' + label + '</span></button>';
 
-  R.actions['toggle-pass'] = (el) => {
-    const i = el.parentElement.querySelector('input');
-    const show = i.type === 'password';
-    i.type = show ? 'text' : 'password';
-    el.setAttribute('aria-label', show ? 'Ocultar contraseña' : 'Mostrar contraseña');
-  };
+  function emailTaken(email) { return CN.db().users.some((u) => u.email.toLowerCase() === email.trim().toLowerCase()); }
+  function checkCommon(v, fail) {
+    let ok = true;
+    if (!CN.isEmail(v.email)) { fail('email', 'Ingresa un correo válido.'); ok = false; }
+    else if (emailTaken(v.email)) { fail('email', 'Ya existe una cuenta con este correo.'); ok = false; }
+    if (v.password.length < 8) { fail('password', 'La contraseña debe tener al menos 8 caracteres.'); ok = false; }
+    return ok;
+  }
+  function enter(user, msg) {
+    CN.login(user);
+    CN.toast(msg || 'Bienvenido/a, ' + user.name.split(' ')[0] + '.');
+    CN.go(CN.homeFor(user));
+  }
 
-  /* ----- Login ----- */
-  R.route('/login', null, () => ({
-    title: 'Inicia sesión',
-    html: shellAuth(html`<h2>Inicia sesión</h2><p class="auth-sub">Accede al panel de tu flota o a tu app de conductor.</p>
-      <form data-form="login" novalidate>
-        ${R.field({ label: 'Correo electrónico', name: 'email', type: 'email', attrs: { autocomplete: 'email', inputmode: 'email' } })}
-        ${pw('Contraseña', 'password', 'current-password')}
-        <p class="form-alert" data-err="form" role="alert"></p>
-        <button class="btn btn-primary btn-block" type="submit">Iniciar sesión</button>
-      </form>
-      <div class="auth-links"><a href="#/recuperar">¿Olvidaste tu contraseña?</a><a href="#/registro">Crear cuenta</a></div>`,
-    html`<div class="demo-box"><strong>Cuentas de demostración</strong><p>Explora la app con datos de ejemplo (contraseña <code>${R.DEMO_PASSWORD}</code>).</p>
-      <div class="demo-btns"><button class="btn btn-outline btn-sm" data-action="demo-login" data-role="manager">Entrar como jefe de flota</button><button class="btn btn-outline btn-sm" data-action="demo-login" data-role="driver">Entrar como conductor</button></div>
-      <button class="link-btn" data-action="reset-demo">Restablecer datos de demostración</button></div>`),
+  // ---------- US02: inicio de sesión por rol ----------
+  CN.route('/login', { public: true }, () => ({
+    title: 'Iniciar sesión',
+    html: authShell(
+      '<p class="eyebrow">INICIAR SESIÓN</p><h1>Bienvenido de vuelta</h1>' +
+      '<form id="f" class="stack">' +
+      CN.field({ id: 'email', label: 'Correo electrónico', type: 'email', placeholder: 'tu@correo.com', attrs: 'autocomplete="username"' }) +
+      CN.field({ id: 'password', label: 'Contraseña', type: 'password' }) +
+      '<div class="row-between"><span></span><a href="#/forgot" class="link">¿Olvidaste tu contraseña?</a></div>' +
+      '<p class="err form-err" id="ferr" role="alert"></p>' +
+      submit('Iniciar sesión') + '</form>' +
+      '<p class="muted small">El sistema te redirige automáticamente a tu dashboard según tu rol (administrador, residente o empresa de mantenimiento).</p>' +
+      '<div class="demo-box"><b>Cuentas de demostración</b><p class="muted small">Contraseña: <code>demo1234</code></p><div class="demo-chips">' +
+      '<button type="button" class="chip-btn" data-demo="admin@demo.pe">Administrador</button>' +
+      '<button type="button" class="chip-btn" data-demo="residente@demo.pe">Residente</button>' +
+      '<button type="button" class="chip-btn" data-demo="empresa@demo.pe">Empresa</button>' +
+      '<button type="button" class="chip-btn" data-demo="plataforma@demo.pe">Plataforma</button></div></div>' +
+      '<div class="reg-links"><span>¿No tienes cuenta?</span> <a href="#/register/admin">Administrador</a> · <a href="#/register/resident">Residente</a> · <a href="#/register/company">Empresa</a></div>'
+    ),
+    mount(root) {
+      const f = root.querySelector('#f');
+      CN.bindForm(f, (v) => {
+        const u = CN.db().users.find((x) => x.email.toLowerCase() === v.email.trim().toLowerCase() && x.password === v.password);
+        if (!u) { root.querySelector('#ferr').textContent = 'Correo o contraseña incorrectos.'; return; }
+        enter(u);
+      });
+      root.querySelectorAll('[data-demo]').forEach((b) => b.addEventListener('click', () => {
+        f.email.value = b.dataset.demo; f.password.value = 'demo1234'; f.requestSubmit();
+      }));
+    },
   }));
 
-  R.actions['demo-login'] = (el) => {
-    const f = R.$('form[data-form="login"]');
-    f.elements.email.value = el.getAttribute('data-role') === 'manager' ? 'jefe@fleetcare.pe' : 'conductor@fleetcare.pe';
-    f.elements.password.value = R.DEMO_PASSWORD;
-    f.requestSubmit();
-  };
-  R.actions['reset-demo'] = async () => {
-    const ok = await R.confirm({ title: '¿Restablecer datos de demostración?', text: 'Se borrarán todos los datos guardados en este navegador (incluidas las cuentas que hayas creado) y se cargarán los datos de ejemplo.', confirm: 'Restablecer', danger: true });
-    if (!ok) return;
-    await R.resetDemo();
-    R.toast('Datos de demostración restablecidos.');
-    R.dispatch();
-  };
-
-  R.forms.login = async (form) => {
-    const d = R.formData(form);
-    const errs = {};
-    if (!R.validEmail(d.email)) errs.email = 'Ingresa un correo válido.';
-    if (!d.password) errs.password = 'Ingresa tu contraseña.';
-    if (R.setErrors(form, errs)) return;
-    const btn = R.$('button[type=submit]', form);
-    btn.disabled = true;
-    const u = R.state().users.find((x) => x.email.toLowerCase() === d.email.toLowerCase());
-    const h = await R.hash(d.password);
-    btn.disabled = false;
-    if (!u || u.passHash !== h) return R.setErrors(form, { form: 'Correo o contraseña incorrectos.' });
-    if (u.active === false) return R.setErrors(form, { form: 'Tu acceso fue revocado. Contacta a tu jefe de flota.' });
-    R.session.set(u.id);
-    R.toast(`Hola, ${u.name.split(' ')[0]}.`, 'ok', 'Sesión iniciada');
-    R.go(R.home(u));
-  };
-
-  /* ----- Registro (jefe de flota) ----- */
-  R.route('/registro', null, () => ({
-    title: 'Crea tu cuenta',
-    html: shellAuth(html`<h2>Crea tu cuenta</h2><p class="auth-sub">Regístrate como jefe de flota y empieza a anticipar el mantenimiento.</p>
-      <form data-form="register" novalidate>
-        ${R.field({ label: 'Nombre completo', name: 'name', attrs: { autocomplete: 'name' } })}
-        ${R.field({ label: 'Correo electrónico', name: 'email', type: 'email', attrs: { autocomplete: 'email', inputmode: 'email' } })}
-        ${R.field({ label: 'Empresa de transporte', name: 'company', attrs: { autocomplete: 'organization' } })}
-        ${pw('Contraseña', 'password', 'new-password')}
-        <span class="hint">Mínimo 6 caracteres.</span>
-        <p class="form-alert" data-err="form" role="alert"></p>
-        <button class="btn btn-primary btn-block" type="submit">Crear cuenta</button>
-      </form>
-      <div class="auth-links"><a href="#/login">¿Ya tienes cuenta? Inicia sesión</a></div>`),
+  // ---------- US01: registro de administrador ----------
+  CN.route('/register/admin', { public: true }, () => ({
+    title: 'Crear cuenta',
+    html: authShell(
+      '<p class="eyebrow">CREAR CUENTA · ADMINISTRADOR</p><h1>Registra tu cuenta y tu edificio</h1>' +
+      '<form id="f" class="stack">' +
+      CN.field({ id: 'name', label: 'Nombre completo', autocomplete: 'name' }) +
+      CN.field({ id: 'email', label: 'Correo electrónico', type: 'email' }) +
+      CN.field({ id: 'password', label: 'Contraseña', type: 'password', hint: 'Mínimo 8 caracteres.', autocomplete: 'new-password' }) +
+      CN.field({ id: 'building', label: 'Nombre del edificio' }) +
+      CN.field({ id: 'address', label: 'Dirección del edificio' }) +
+      submit('Crear cuenta') + '</form>' +
+      '<p class="muted">¿Ya tienes cuenta? <a href="#/login" class="link">Inicia sesión</a></p>'
+    ),
+    mount(root) {
+      CN.bindForm(root.querySelector('#f'), (v, fail) => {
+        let ok = checkCommon(v, fail);
+        const dup = CN.db().buildings.some((b) => b.name.trim().toLowerCase() === v.building.trim().toLowerCase() && b.address.trim().toLowerCase() === v.address.trim().toLowerCase());
+        if (dup) { fail('building', 'Este edificio ya está registrado.'); ok = false; }
+        if (!ok) return;
+        const db = CN.db();
+        const u = { id: CN.uid('u'), role: 'admin', name: v.name.trim(), email: v.email.trim(), password: v.password, phone: '', prefs: { push: true, email: true }, onboardingDone: false };
+        db.users.push(u);
+        CN.addBuilding(u, { name: v.building, address: v.address });
+        CN.save();
+        enter(u, 'Cuenta creada. ¡Bienvenido/a a Vigilia!');
+      });
+    },
   }));
 
-  R.forms.register = async (form) => {
-    const d = R.formData(form);
-    const errs = {};
-    if (d.name.length < 3) errs.name = 'Ingresa tu nombre completo.';
-    if (!R.validEmail(d.email)) errs.email = 'Ingresa un correo válido.';
-    else if (R.state().users.some((u) => u.email.toLowerCase() === d.email.toLowerCase())) errs.email = 'Ya existe una cuenta con este correo.';
-    if (d.company.length < 2) errs.company = 'Ingresa el nombre de tu empresa.';
-    if (d.password.length < 6) errs.password = 'La contraseña debe tener al menos 6 caracteres.';
-    if (R.setErrors(form, errs)) return;
-    const st = R.state();
-    const cid = R.newCompanyId();
-    st.companies[cid] = R.blankDb({ name: d.company, ruc: '', address: '', email: d.email });
-    const user = { id: R.uid('u_'), name: d.name, email: d.email, passHash: await R.hash(d.password), role: 'manager', companyId: cid, active: true };
-    st.users.push(user);
-    if (!R.save()) return;
-    R.session.set(user.id);
-    R.toast('Empieza registrando tus vehículos.', 'ok', '¡Cuenta creada!');
-    R.go('/dashboard');
-  };
+  // ---------- US04: registro de residente ----------
+  CN.route('/register/resident', { public: true }, () => ({
+    title: 'Crear cuenta',
+    html: authShell(
+      '<p class="eyebrow">CREAR CUENTA · RESIDENTE</p><h1>Regístrate en tu edificio</h1>' +
+      '<form id="f" class="stack">' +
+      CN.field({ id: 'name', label: 'Nombre completo' }) +
+      CN.field({ id: 'email', label: 'Correo electrónico', type: 'email' }) +
+      CN.field({ id: 'password', label: 'Contraseña', type: 'password', hint: 'Mínimo 8 caracteres.', autocomplete: 'new-password' }) +
+      CN.field({ id: 'code', label: 'Código de edificio', placeholder: 'Ej. SF240', hint: 'Pídeselo a tu administrador. Para la demo usa <code>SF240</code>.' }) +
+      CN.field({ id: 'unit', label: 'Número de departamento', placeholder: 'Ej. 502' }) +
+      submit('Registrarme') + '</form>' +
+      '<p class="muted">¿Ya tienes cuenta? <a href="#/login" class="link">Inicia sesión</a></p>'
+    ),
+    mount(root) {
+      CN.bindForm(root.querySelector('#f'), (v, fail) => {
+        let ok = checkCommon(v, fail);
+        const b = CN.db().buildings.find((x) => x.code.toLowerCase() === v.code.trim().toLowerCase());
+        if (!b) { fail('code', 'No encontramos un edificio con ese código.'); ok = false; }
+        else if (b.units && /^\d+$/.test(v.unit.trim()) && b.units < 1) { ok = false; }
+        if (!ok) return;
+        const u = { id: CN.uid('u'), role: 'resident', name: v.name.trim(), email: v.email.trim(), password: v.password, phone: '', buildingId: b.id, unit: v.unit.trim(), prefs: { push: true, email: false } };
+        CN.db().users.push(u); CN.save();
+        enter(u, 'Cuenta creada. Estás vinculado/a a ' + b.name + '.');
+      });
+    },
+  }));
 
-  /* ----- Recuperar contraseña ----- */
-  R.route('/recuperar', null, () => {
-    if (R.query.paso === 'nueva') {
-      return {
-        title: 'Nueva contraseña',
-        html: shellAuth(html`<h2>Nueva contraseña</h2><p class="auth-sub">Elige una contraseña nueva para <strong>${R.ui.resetEmail || 'tu cuenta'}</strong>.</p>
-          <form data-form="reset" novalidate>${pw('Nueva contraseña', 'password', 'new-password')}${pw('Repite la contraseña', 'again', 'new-password')}
-            <p class="form-alert" data-err="form" role="alert"></p><button class="btn btn-primary btn-block" type="submit">Guardar contraseña</button></form>`),
-      };
-    }
+  // ---------- US05: registro de empresa de mantenimiento ----------
+  CN.route('/register/company', { public: true }, () => ({
+    title: 'Crear cuenta',
+    html: authShell(
+      '<p class="eyebrow">CREAR CUENTA · EMPRESA DE MANTENIMIENTO</p><h1>Registra tu empresa</h1>' +
+      '<form id="f" class="stack">' +
+      CN.field({ id: 'name', label: 'Nombre de la empresa' }) +
+      CN.field({ id: 'ruc', label: 'RUC', attrs: 'inputmode="numeric" maxlength="11"', placeholder: '11 dígitos' }) +
+      CN.field({ id: 'email', label: 'Correo electrónico', type: 'email' }) +
+      CN.field({ id: 'password', label: 'Contraseña', type: 'password', hint: 'Mínimo 8 caracteres.', autocomplete: 'new-password' }) +
+      CN.multiSelect('buildings', 'Edificios asignados', CN.db().buildings.map((b) => ({ value: b.id, label: b.name + ' · ' + b.district })), 'Selecciona uno o más edificios') +
+      submit('Registrar empresa') + '</form>' +
+      '<p class="muted">¿Ya tienes cuenta? <a href="#/login" class="link">Inicia sesión</a></p>'
+    ),
+    mount(root) {
+      const vals = CN.bindMultiSelect(root, 'buildings', 'Selecciona uno o más edificios');
+      CN.bindForm(root.querySelector('#f'), (v, fail) => {
+        let ok = checkCommon(v, fail);
+        if (!/^(10|15|17|20)\d{9}$/.test(v.ruc.trim())) { fail('ruc', 'El RUC debe tener 11 dígitos (ej. 20601234567).'); ok = false; }
+        else if (CN.db().companies.some((c) => c.ruc === v.ruc.trim())) { fail('ruc', 'Ya existe una empresa con este RUC.'); ok = false; }
+        const bids = vals();
+        if (!bids.length) { fail('buildings', 'Selecciona al menos un edificio.'); ok = false; }
+        if (!ok) return;
+        const db = CN.db();
+        const c = { id: CN.uid('c'), name: v.name.trim(), ruc: v.ruc.trim(), email: v.email.trim(), baseVisits: 0, baseAvg: 0, hours: [] };
+        db.companies.push(c);
+        bids.forEach((id) => { const b = CN.building(id); if (b && !b.companyIds.includes(c.id)) b.companyIds.push(c.id); });
+        const u = { id: CN.uid('u'), role: 'company', name: v.name.trim(), email: v.email.trim(), password: v.password, phone: '', companyId: c.id, prefs: { push: true, email: true } };
+        db.users.push(u); CN.save();
+        enter(u, 'Empresa registrada correctamente.');
+      });
+    },
+  }));
+
+  // ---------- US03: recuperación de contraseña ----------
+  CN.route('/forgot', { public: true }, () => ({
+    title: 'Recuperar acceso',
+    html: authShell(
+      '<p class="eyebrow">RECUPERAR ACCESO</p><h1>¿Olvidaste tu contraseña?</h1>' +
+      '<div id="body"><form id="f" class="stack">' +
+      CN.field({ id: 'email', label: 'Correo electrónico registrado', type: 'email' }) +
+      submit('Enviar enlace de recuperación', 'send') + '</form>' +
+      '<p class="muted">Te enviaremos un enlace válido por 24 horas.</p></div>' +
+      '<p class="muted"><a href="#/login" class="link">← Volver a iniciar sesión</a></p>'
+    ),
+    mount(root) {
+      CN.bindForm(root.querySelector('#f'), (v, fail) => {
+        if (!CN.isEmail(v.email)) { fail('email', 'Ingresa un correo válido.'); return; }
+        const u = CN.db().users.find((x) => x.email.toLowerCase() === v.email.trim().toLowerCase());
+        let link = '';
+        if (u) {
+          const token = CN.uid('tk') + Math.random().toString(36).slice(2, 8);
+          CN.db().resets.push({ token, userId: u.id, expires: Date.now() + 24 * CN.H, used: false });
+          CN.save();
+          link = '<div class="mail-sim"><b>' + ic('mail', 18) + ' Correo simulado</b><p>Para: ' + esc(u.email) + '</p><p>Asunto: Recupera tu acceso a Vigilia</p><a class="btn btn-outline" href="#/reset/' + token + '">Restablecer mi contraseña</a><small class="muted">Este enlace solo aparece aquí porque la demo no envía correos reales.</small></div>';
+        }
+        root.querySelector('#body').innerHTML = '<div class="notice ok">' + ic('checkCircle', 22) + '<div><b>Revisa tu correo</b><p>Si el correo está registrado, te enviamos un enlace de recuperación válido por 24 horas.</p></div></div>' + link;
+      });
+    },
+  }));
+
+  CN.route('/reset/:token', { public: true }, (p) => {
+    const rec = CN.db().resets.find((r) => r.token === p.token);
+    const valid = rec && !rec.used && rec.expires > Date.now();
     return {
-      title: 'Recuperar contraseña',
-      html: shellAuth(html`<h2>Recuperar contraseña</h2><p class="auth-sub">Ingresa tu correo y te enviaremos un enlace para restablecer tu contraseña.</p>
-        <form data-form="recover" novalidate>${R.field({ label: 'Correo electrónico', name: 'email', type: 'email', attrs: { autocomplete: 'email', inputmode: 'email' } })}
-          <button class="btn btn-primary btn-block" type="submit">Enviar enlace de recuperación</button></form>
-        <div class="sent" id="recover-sent" hidden><strong>Revisa tu correo</strong><p>Si el correo está registrado, recibirás un enlace para restablecer tu contraseña.</p>
-          <p class="demo-note">Esta demostración no envía correos reales.</p><a class="btn btn-outline btn-block" href="#/recuperar?paso=nueva">Abrir enlace de demostración</a></div>
-        <div class="auth-links"><a href="#/login">← Volver a iniciar sesión</a></div>`),
+      title: 'Nueva contraseña',
+      html: authShell(valid
+        ? '<p class="eyebrow">RECUPERAR ACCESO</p><h1>Crea una nueva contraseña</h1><form id="f" class="stack">' +
+          CN.field({ id: 'password', label: 'Nueva contraseña', type: 'password', hint: 'Mínimo 8 caracteres.', autocomplete: 'new-password' }) +
+          CN.field({ id: 'confirm', label: 'Repite la contraseña', type: 'password', autocomplete: 'new-password' }) +
+          submit('Guardar contraseña', 'check') + '</form>'
+        : '<p class="eyebrow">RECUPERAR ACCESO</p><h1>Enlace no válido</h1><p class="muted">El enlace expiró o ya fue usado. Solicita uno nuevo.</p><a class="btn btn-primary" href="#/forgot">Solicitar otro enlace</a>'),
+      mount(root) {
+        if (!valid) return;
+        CN.bindForm(root.querySelector('#f'), (v, fail) => {
+          if (v.password.length < 8) { fail('password', 'La contraseña debe tener al menos 8 caracteres.'); return; }
+          if (v.password !== v.confirm) { fail('confirm', 'Las contraseñas no coinciden.'); return; }
+          CN.userById(rec.userId).password = v.password; rec.used = true; CN.save();
+          CN.toast('Contraseña actualizada. Ya puedes iniciar sesión.'); CN.go('/login');
+        });
+      },
     };
   });
-
-  R.forms.recover = (form) => {
-    const d = R.formData(form);
-    if (R.setErrors(form, R.validEmail(d.email) ? {} : { email: 'Ingresa un correo válido.' })) return;
-    R.ui.resetEmail = d.email;
-    form.hidden = true;
-    R.$('#recover-sent').hidden = false;
-  };
-
-  R.forms.reset = async (form) => {
-    const d = R.formData(form);
-    const errs = {};
-    if (d.password.length < 6) errs.password = 'Debe tener al menos 6 caracteres.';
-    if (d.again !== d.password) errs.again = 'Las contraseñas no coinciden.';
-    if (R.setErrors(form, errs)) return;
-    const u = R.state().users.find((x) => x.email.toLowerCase() === String(R.ui.resetEmail || '').toLowerCase());
-    if (!u) return R.setErrors(form, { form: 'El enlace no es válido o ya expiró. Solicita uno nuevo.' });
-    u.passHash = await R.hash(d.password);
-    R.save();
-    R.toast('Ya puedes iniciar sesión con tu nueva contraseña.', 'ok', 'Contraseña actualizada');
-    R.go('/login');
-  };
 })();
