@@ -3,37 +3,35 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CodeNova — Mantenimiento preventivo inteligente</title>
-<meta name="description" content="CodeNova: plataforma IoT de mantenimiento preventivo para edificios y condominios. Anticipa fallas en bombas, tableros y ascensores antes de que se conviertan en emergencias.">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect x='6' y='6' width='28' height='28' rx='6' fill='none' stroke='%230F5C78' stroke-width='3'/%3E%3Cpolyline points='10,24 15,24 18,15 22,29 26,11 30,24 34,24' fill='none' stroke='%232E9E6D' stroke-width='2.5'/%3E%3C/svg%3E">
+<title>FleetCare — Mantenimiento preventivo para flotas de carga</title>
+<meta name="description" content="FleetCare conecta el checklist diario del conductor con las alertas de mantenimiento del jefe de flota, para que ninguna falla te tome por sorpresa en ruta.">
+<link rel="icon" type="image/png" href="img/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/wireframe.css">
 </head>
 <body>
 
 <header class="site-header" id="header">
   <div class="container header-inner">
-    <a href="#top" class="logo" aria-label="CodeNova - inicio">
-      <svg viewBox="0 0 40 40" width="36" height="36" aria-hidden="true">
-        <rect x="6" y="6" width="28" height="28" rx="6" fill="none" stroke="#0F5C78" stroke-width="3"></rect>
-        <polyline points="10,24 15,24 18,15 22,29 26,11 30,24 34,24" fill="none" stroke="#2E9E6D" stroke-width="2.5"></polyline>
-      </svg>
-      <span>CodeNova</span>
+    <a href="#top" class="logo" aria-label="FleetCare - inicio">
+      <img class="logo-img" src="img/fleetcare-logo-128.png" alt="" width="40" height="40">
+      <span>FleetCare</span>
     </a>
 
-    <nav class="main-nav" id="main-nav">
-      <a href="#features">Producto</a>
-      <a href="#how-it-works">Cómo funciona</a>
-      <a href="#pricing">Precios</a>
-      <a href="#about">Nosotros</a>
-      <a href="#contact">Contacto</a>
+    <nav class="main-nav" id="main-nav" aria-label="Principal">
+      <a href="#producto">Producto</a>
+      <a href="#como-funciona">Cómo funciona</a>
+      <a href="#planes">Planes</a>
+      <a href="#nosotros">Nosotros</a>
+      <a href="#contacto">Contacto</a>
     </nav>
 
     <div class="header-actions">
       <a href="app/index.html#/login" class="btn btn-outline btn-sm">Iniciar sesión</a>
-      <a href="#contact" class="btn btn-primary btn-sm" data-open-demo>Solicitar demo</a>
+      <a href="#contacto" class="btn btn-primary btn-sm">Solicitar demo</a>
     </div>
 
     <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="main-nav">
@@ -48,132 +46,173 @@
   <section class="hero">
     <div class="container hero-inner">
       <div class="hero-copy">
-        <span class="badge badge-green">Nuevo · Plataforma IoT</span>
-        <h1>Mantenimiento preventivo inteligente para tu edificio</h1>
-        <p class="lead">Anticipa fallas en bombas, tableros y ascensores antes de que se conviertan en emergencias.</p>
+        <span class="badge badge-green">Nuevo · SaaS de mantenimiento preventivo</span>
+        <h1>Anticípate a las averías de tu flota antes de que ocurran en ruta</h1>
+        <p class="lead">FleetCare conecta el checklist diario del conductor con las alertas de mantenimiento del jefe de flota, para que ninguna falla te tome por sorpresa.</p>
         <div class="hero-cta">
-          <a href="#contact" class="btn btn-primary" data-open-demo>Solicitar demo</a>
-          <a href="#how-it-works" class="btn btn-outline">Ver cómo funciona</a>
+          <a href="#contacto" class="btn btn-primary">Solicitar demo</a>
+          <a href="#como-funciona" class="btn btn-outline">Ver cómo funciona</a>
         </div>
         <div class="hero-stats">
           <div class="stat">
-            <h3>+50</h3>
-            <p>Edificios activos</p>
+            <h3>18%</h3>
+            <p>Disponibilidad ↑</p>
           </div>
           <div class="stat">
-            <h3>120</h3>
-            <p>Alertas/mes</p>
+            <h3>15%</h3>
+            <p>Costos ↓</p>
           </div>
           <div class="stat">
-            <h3>4.8★</h3>
-            <p>Satisfacción</p>
+            <h3>12%</h3>
+            <p>Fallas ↓</p>
           </div>
         </div>
       </div>
 
       <div class="hero-visual">
         <div class="chart-card">
-          <svg viewBox="0 0 200 100" aria-label="Vista previa del dashboard de CodeNova">
-            <polyline points="0,70 30,70 40,30 55,90 70,15 90,70 200,70" fill="none" stroke="#ffffff" stroke-width="3" opacity="0.85"></polyline>
+          <svg viewBox="0 0 200 100" aria-label="Vista previa del dashboard de FleetCare" role="img">
+            <polyline points="0,80 25,80 40,55 55,65 70,20 90,45 110,30 130,50 150,25 200,25" fill="none" stroke="#ffffff" stroke-width="3" opacity="0.9"></polyline>
           </svg>
         </div>
         <div class="status-card">
-          <p class="status-title">Estado de equipos</p>
+          <p class="status-title">Estado de la flota</p>
           <div class="status-legend">
-            <span class="dot" style="background:#2E9E6D"></span>Normal
-            <span class="dot" style="background:#F4B400"></span>Baja
-            <span class="dot" style="background:#F2994A"></span>Media
-            <span class="dot" style="background:#E53935"></span>Crítica
+            <span><i class="dot dot-green"></i>Bueno</span>
+            <span><i class="dot dot-orange"></i>Alerta</span>
+            <span><i class="dot dot-red"></i>Crítico</span>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- FEATURES -->
-  <section class="section section-alt" id="features">
+  <!-- SOBRE FLEETCARE -->
+  <section class="section section-alt" id="nosotros">
+    <div class="container">
+      <div class="about-head">
+        <p class="eyebrow">— Conócenos</p>
+        <h2>Somos FleetCare</h2>
+        <p class="about-lead">Team Track nace para anticiparse a la falla: FleetCare da a las pequeñas empresas de transporte de carga ligera un registro centralizado y confiable del desgaste de cada unidad de su flota.</p>
+      </div>
+
+      <div class="grid grid-3">
+        <div class="fact-card">
+          <p class="fact-num fact-red">40%</p>
+          <p class="fact-text">de la flota de carga activa del Perú opera en tramo de penalización</p>
+          <p class="fact-source">Mordor Intelligence, 2026</p>
+        </div>
+        <div class="fact-card">
+          <p class="fact-num fact-orange">488</p>
+          <p class="fact-text">accidentes de tránsito en 2023 causados por fallas mecánicas</p>
+          <p class="fact-source">Falla Carrillo, 2024</p>
+        </div>
+        <div class="fact-card">
+          <p class="fact-num fact-blue">66.66%</p>
+          <p class="fact-text">de pymes de logística aún con transformación digital básica</p>
+          <p class="fact-source">Rojas García et al., 2023</p>
+        </div>
+      </div>
+
+      <div class="founders" id="equipo">
+        <p class="founders-label">Equipo fundador</p>
+        <ul class="founders-list">
+          <li><span class="avatar avatar-blue">FD</span>Fernanda Díaz Vargas</li>
+          <li><span class="avatar avatar-green">MR</span>Matthias Romero Véliz</li>
+          <li><span class="avatar avatar-orange">SE</span>Santiago Echevarría Lizana</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- FUNCIONALIDADES -->
+  <section class="section" id="producto">
     <div class="container">
       <div class="section-heading">
-        <p class="eyebrow">— LO QUE OFRECEMOS</p>
-        <h2>Todo lo que necesitas para el mantenimiento de tu edificio</h2>
-        <p class="section-sub">Sensores, alertas priorizadas y gestión de visitas en un solo lugar.</p>
+        <p class="eyebrow">— Lo que ofrecemos</p>
+        <h2>Todo lo que necesita tu flota</h2>
       </div>
 
       <div class="grid grid-3">
         <div class="card">
-          <div class="icon-badge icon-blue"></div>
-          <h3>Sensores IoT</h3>
-          <p>Vibración, temperatura, humedad y consumo eléctrico monitoreados en tiempo real.</p>
-          <span class="tag tag-blue">Tiempo real</span>
+          <div class="icon-badge icon-blue">
+            <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#1E5AA8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><polyline points="8 12.5 11 15.5 16 9"></polyline></svg>
+          </div>
+          <h3>Checklist de salida</h3>
+          <p>El conductor revisa el vehículo en segundos antes de cada ruta, sin papeleo.</p>
         </div>
         <div class="card">
-          <div class="icon-badge icon-orange"></div>
-          <h3>Alertas por severidad</h3>
-          <p>Verde, amarillo, naranja y rojo: prioriza de un vistazo qué atender primero.</p>
-          <span class="tag tag-orange">Prioridad</span>
+          <div class="icon-badge icon-blue">
+            <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#1E5AA8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2 14 7 14 9.5 7 14 19 16.5 14 22 14"></polyline></svg>
+          </div>
+          <h3>Kilometraje diario</h3>
+          <p>Cada unidad actualiza su kilometraje para calcular el próximo mantenimiento.</p>
         </div>
         <div class="card">
-          <div class="icon-badge icon-green"></div>
-          <h3>Gestión de solicitudes</h3>
-          <p>Recepción, agenda de visitas y control de materiales en un solo lugar.</p>
-          <span class="tag tag-green">Automatizado</span>
+          <div class="icon-badge icon-orange">
+            <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#E8963D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 L22 20 L2 20 Z"></path><line x1="12" y1="9" x2="12" y2="14"></line><circle cx="12" cy="17" r="0.6" fill="#E8963D" stroke="none"></circle></svg>
+          </div>
+          <h3>Reporte de fallas con foto</h3>
+          <p>Evidencia fotográfica de cada incidencia, lista para el jefe de flota.</p>
         </div>
         <div class="card">
-          <div class="icon-badge icon-blue"></div>
-          <h3>Agenda de visitas</h3>
-          <p>Planificación priorizada por severidad y zona para las empresas de mantenimiento.</p>
-          <span class="tag tag-blue">Calendario</span>
+          <div class="icon-badge icon-orange">
+            <svg viewBox="0 0 24 24" width="26" height="26" fill="#E8963D" stroke="none" aria-hidden="true"><polygon points="13 2 3 14 11 14 10 22 21 10 13 10"></polygon></svg>
+          </div>
+          <h3>Alertas automáticas</h3>
+          <p>Aviso antes de que venza el cambio de aceite, frenos u otro servicio.</p>
         </div>
         <div class="card">
-          <div class="icon-badge icon-green"></div>
-          <h3>Control de materiales</h3>
-          <p>Seguimiento del inventario usado en cada intervención.</p>
-          <span class="tag tag-green">Inventario</span>
+          <div class="icon-badge icon-green">
+            <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#3AA76D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="20" x2="4" y2="12"></line><line x1="10" y1="20" x2="10" y2="4"></line><line x1="16" y1="20" x2="16" y2="15"></line><line x1="3" y1="20" x2="21" y2="20"></line></svg>
+          </div>
+          <h3>Dashboard de salud</h3>
+          <p>Semáforo por severidad para decidir qué unidad atender primero.</p>
         </div>
         <div class="card">
-          <div class="icon-badge icon-blue"></div>
-          <h3>Reportes y ahorro</h3>
-          <p>Sustenta el ahorro acumulado ante la junta del edificio.</p>
-          <span class="tag tag-blue">Dashboard</span>
+          <div class="icon-badge icon-green">
+            <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#3AA76D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5" rx="8" ry="3"></ellipse><path d="M4 5 V19 C4 20.66 7.58 22 12 22 C16.42 22 20 20.66 20 19 V5"></path><path d="M4 12 C4 13.66 7.58 15 12 15 C16.42 15 20 13.66 20 12"></path></svg>
+          </div>
+          <h3>Rendimiento de combustible</h3>
+          <p>Consumo por unidad para detectar variaciones fuera de lo esperado.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- HOW IT WORKS -->
-  <section class="section" id="how-it-works">
+  <!-- CÓMO FUNCIONA -->
+  <section class="section section-alt" id="como-funciona">
     <div class="container how-inner">
       <div class="how-copy">
-        <p class="eyebrow">— PROCESO SIMPLE</p>
-        <h2>¿Cómo funciona CodeNova?</h2>
+        <h2>¿Cómo funciona FleetCare?</h2>
 
         <ol class="steps">
           <li>
             <span class="step-number">1</span>
             <div>
-              <h3>Instala los sensores</h3>
-              <p>Vibración, temperatura, humedad y consumo eléctrico.</p>
+              <h3>Registra tu flota</h3>
+              <p>Da de alta cada unidad con placa, modelo y kilometraje inicial.</p>
             </div>
           </li>
           <li>
             <span class="step-number">2</span>
             <div>
-              <h3>Configura tu edificio</h3>
-              <p>Registra equipos por tipo: bombas, tableros, ascensores.</p>
+              <h3>Completa el checklist de salida</h3>
+              <p>El conductor revisa el vehículo desde su celular en segundos.</p>
             </div>
           </li>
           <li>
             <span class="step-number">3</span>
             <div>
-              <h3>Recibe alertas priorizadas</h3>
-              <p>Ordenadas por severidad: crítica, media, baja.</p>
+              <h3>Recibe alertas automáticas</h3>
+              <p>La plataforma avisa antes de que venza un mantenimiento programado.</p>
             </div>
           </li>
           <li>
             <span class="step-number">4</span>
             <div>
-              <h3>Gestiona el mantenimiento</h3>
-              <p>Agenda la visita y registra la intervención realizada.</p>
+              <h3>Decide con el dashboard</h3>
+              <p>El jefe de flota prioriza la unidad más urgente según su severidad.</p>
             </div>
           </li>
         </ol>
@@ -181,142 +220,59 @@
 
       <div class="how-visual">
         <div class="action-card">
-          <div class="action-icon"></div>
-          <h3>CodeNova en acción</h3>
-          <p>Más edificios previenen fallas críticas cada mes</p>
+          <div class="action-icon">
+            <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#3AA76D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><polyline points="8 12.5 11 15.5 16 9"></polyline></svg>
+          </div>
+          <h3>FleetCare en acción</h3>
+          <p>Meta de adopción para el primer mes de piloto</p>
           <div class="action-metric">
-            <h3>98%</h3>
-            <p>Alertas atendidas a tiempo</p>
+            <strong>70%</strong>
+            <p>de conductores completa el checklist</p>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- PRICING -->
-  <section class="section section-alt" id="pricing">
+  <!-- PLANES -->
+  <section class="section" id="planes">
     <div class="container">
       <div class="section-heading">
-        <p class="eyebrow">— PRECIOS</p>
-        <h2>Planes que crecen con tu edificio</h2>
-        <p class="section-sub">Sin permanencia. Cambia de plan cuando lo necesites.</p>
-        <div class="billing-toggle" role="group" aria-label="Facturación">
-          <button type="button" class="on" data-billing="monthly">Mensual</button>
-          <button type="button" data-billing="yearly">Anual <span>-20%</span></button>
-        </div>
+        <p class="eyebrow">— Planes</p>
+        <h2>Un plan simple, por vehículo</h2>
+        <p class="section-sub">Suscripción mensual por vehículo. El monto se cotiza según el tamaño de tu flota — sin letra chica ni permanencia forzosa.</p>
       </div>
 
-      <div class="pricing-carousel">
-        <button type="button" class="carousel-btn prev" id="price-prev" aria-label="Plan anterior">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
-        </button>
-
-        <div class="pricing-track" id="price-track" tabindex="0" aria-label="Planes de precios">
-          <article class="plan">
-            <h3>Inicial</h3>
-            <p class="plan-desc">Para empezar a monitorear un edificio pequeño.</p>
-            <p class="plan-price"><span class="cur">S/</span><span class="amount" data-monthly="149" data-yearly="119">149</span><span class="per">/mes</span></p>
-            <p class="plan-billed" data-monthly-text="Facturado mensualmente" data-yearly-text="Facturado anualmente (S/ 1,428)">Facturado mensualmente</p>
-            <ul class="plan-list">
-              <li>1 edificio</li>
-              <li>Hasta 10 equipos monitoreados</li>
-              <li>Alertas por severidad</li>
-              <li>App para residentes</li>
-              <li>Soporte por correo</li>
-            </ul>
-            <a href="app/index.html#/register/admin" class="btn btn-outline">Empezar ahora</a>
-          </article>
-
-          <article class="plan plan-featured">
-            <span class="plan-flag">Más popular</span>
-            <h3>Profesional</h3>
-            <p class="plan-desc">Para administradores con varios edificios y empresas de mantenimiento.</p>
-            <p class="plan-price"><span class="cur">S/</span><span class="amount" data-monthly="349" data-yearly="279">349</span><span class="per">/mes</span></p>
-            <p class="plan-billed" data-monthly-text="Facturado mensualmente" data-yearly-text="Facturado anualmente (S/ 3,348)">Facturado mensualmente</p>
-            <ul class="plan-list">
-              <li>Hasta 3 edificios</li>
-              <li>Hasta 40 equipos monitoreados</li>
-              <li>Agenda de visitas y técnicos</li>
-              <li>Reportes PDF para la junta</li>
-              <li>Exportación de lecturas a CSV</li>
-              <li>Soporte prioritario por WhatsApp</li>
-            </ul>
-            <a href="app/index.html#/register/admin" class="btn btn-primary">Empezar ahora</a>
-          </article>
-
-          <article class="plan">
-            <h3>Corporativo</h3>
-            <p class="plan-desc">Para administradoras y constructoras con muchos edificios.</p>
-            <p class="plan-price plan-custom"><span class="amount">A medida</span></p>
-            <p class="plan-billed">Cotización según tu portafolio</p>
-            <ul class="plan-list">
-              <li>Edificios y equipos ilimitados</li>
-              <li>Panel comparativo entre edificios</li>
-              <li>Ranking de empresas de mantenimiento</li>
-              <li>Integración con tus propios sensores</li>
-              <li>Gerente de cuenta dedicado</li>
-            </ul>
-            <a href="#contact" class="btn btn-outline" data-open-demo>Hablar con ventas</a>
-          </article>
-        </div>
-
-        <button type="button" class="carousel-btn next" id="price-next" aria-label="Plan siguiente">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
-        </button>
-      </div>
-      <div class="carousel-dots" id="price-dots" aria-hidden="true"></div>
-      <p class="pricing-note">Precios en soles peruanos (PEN) e incluyen IGV. ¿Dudas? <a href="#contact">Escríbenos</a>.</p>
-    </div>
-  </section>
-
-  <!-- ABOUT -->
-  <section class="section" id="about">
-    <div class="container">
-      <div class="about-top">
-        <div class="about-copy">
-          <p class="eyebrow">— CONÓCENOS</p>
-          <h2>Somos CodeNova</h2>
-          <p>Un equipo enfocado en anticipar fallas antes de que se conviertan en emergencias.</p>
-          <p>Creemos que el mantenimiento preventivo debe ser claro y accesible para todos.</p>
-          <div class="mission-callout">
-            <p class="mission-label">NUESTRA MISIÓN</p>
-            <p>Dar control y tranquilidad a quienes administran un edificio.</p>
+      <div class="plans">
+        <article class="plan">
+          <h3>Suscripción mensual</h3>
+          <p class="plan-desc">Un solo plan, por vehículo activo en tu flota. Sin costos ocultos.</p>
+          <div class="plan-price">
+            <p class="plan-price-label">Precio por vehículo</p>
+            <p>Cotización personalizada según tu flota</p>
           </div>
-        </div>
+          <ul class="plan-list">
+            <li>Checklist de salida y kilometraje</li>
+            <li>Alertas automáticas de mantenimiento</li>
+            <li>Dashboard de salud por vehículo</li>
+          </ul>
+          <a href="#contacto" class="btn btn-outline">Solicitar cotización</a>
+        </article>
 
-        <div class="about-stats">
-          <div class="grid grid-2">
-            <div class="stat-card">
-              <h3>2025</h3>
-              <p>Fundación</p>
-            </div>
-            <div class="stat-card">
-              <h3>3</h3>
-              <p>Integrantes</p>
-            </div>
-            <div class="stat-card">
-              <h3>+10</h3>
-              <p>Edificios</p>
-            </div>
-            <div class="stat-card">
-              <h3>Perú</h3>
-              <p>Origen</p>
-            </div>
+        <article class="plan plan-founder">
+          <span class="badge badge-orange">Flotas fundadoras</span>
+          <h3>Para las primeras empresas</h3>
+          <p class="plan-desc">Meses gratuitos o precio reducido por vehículo para las primeras flotas que se sumen al piloto.</p>
+          <div class="plan-price">
+            <p class="plan-price-label">Beneficio fundador</p>
+            <p>Meses gratis o tarifa reducida</p>
           </div>
-        </div>
-      </div>
-
-      <div class="grid grid-2 about-values">
-        <div class="value-card">
-          <div class="icon-badge icon-blue small"></div>
-          <h3>Misión</h3>
-          <p>Brindar mantenimiento preventivo seguro y accesible.</p>
-        </div>
-        <div class="value-card">
-          <div class="icon-badge icon-green small"></div>
-          <h3>Visión</h3>
-          <p>Ser la plataforma líder de mantenimiento preventivo en Perú.</p>
-        </div>
+          <ul class="plan-list">
+            <li>Todo lo del plan mensual</li>
+            <li>Acompañamiento cercano del equipo</li>
+          </ul>
+          <a href="#contacto" class="btn btn-accent">Unirme como fundador</a>
+        </article>
       </div>
     </div>
   </section>
@@ -354,141 +310,140 @@
   <section class="section" id="testimonials">
     <div class="container">
       <div class="section-heading">
-        <p class="eyebrow">— TESTIMONIOS</p>
-        <h2>Lo que dicen los administradores de edificios</h2>
+        <p class="eyebrow">— Voces que guían el diseño</p>
+        <h2>Lo que buscan resolver nuestros usuarios</h2>
       </div>
 
       <div class="grid grid-3">
-        <div class="testimonial-card">
-          <div class="stars">★★★★★</div>
-          <p>Ahora detectamos fallas antes de que se vuelvan un problema costoso.</p>
-          <div class="testimonial-author">
-            <div class="avatar avatar-blue small"></div>
-            <div>
-              <p class="author-name">Nombre Apellido</p>
-              <p class="author-role">Administrador de edificio</p>
-            </div>
-          </div>
-        </div>
-        <div class="testimonial-card">
-          <div class="stars">★★★★★</div>
-          <p>Las alertas por severidad nos ayudan a priorizar sin leer cada reporte.</p>
-          <div class="testimonial-author">
-            <div class="avatar avatar-green small"></div>
-            <div>
-              <p class="author-name">Nombre Apellido</p>
-              <p class="author-role">Empresa de mantenimiento</p>
-            </div>
-          </div>
-        </div>
-        <div class="testimonial-card">
-          <div class="stars">★★★★★</div>
-          <p>Reportar un incidente desde mi celular es muy sencillo.</p>
-          <div class="testimonial-author">
-            <div class="avatar avatar-orange small"></div>
-            <div>
-              <p class="author-name">Nombre Apellido</p>
-              <p class="author-role">Residente</p>
-            </div>
-          </div>
-        </div>
+        <figure class="testimonial-card">
+          <span class="quote-mark quote-blue" aria-hidden="true">“</span>
+          <blockquote>Ahora programo el mantenimiento antes de que se convierta en una avería en ruta.</blockquote>
+          <figcaption class="testimonial-author">
+            <span class="avatar avatar-blue small"></span>
+            <span>
+              <span class="author-name">Nombre Apellido</span>
+              <span class="author-role">Jefe de flota</span>
+            </span>
+          </figcaption>
+        </figure>
+        <figure class="testimonial-card">
+          <span class="quote-mark quote-green" aria-hidden="true">“</span>
+          <blockquote>Reportar una falla con foto me toma segundos y deja constancia de que avisé a tiempo.</blockquote>
+          <figcaption class="testimonial-author">
+            <span class="avatar avatar-green small"></span>
+            <span>
+              <span class="author-name">Nombre Apellido</span>
+              <span class="author-role">Conductor de flota</span>
+            </span>
+          </figcaption>
+        </figure>
+        <figure class="testimonial-card">
+          <span class="quote-mark quote-orange" aria-hidden="true">“</span>
+          <blockquote>El semáforo de severidad me dice de un vistazo qué unidad atender primero.</blockquote>
+          <figcaption class="testimonial-author">
+            <span class="avatar avatar-orange small"></span>
+            <span>
+              <span class="author-name">Nombre Apellido</span>
+              <span class="author-role">Empresa de transporte</span>
+            </span>
+          </figcaption>
+        </figure>
       </div>
     </div>
   </section>
 
   <!-- FAQ -->
-  <section class="section section-alt" id="faq">
+  <section class="section" id="faq">
     <div class="container">
       <div class="section-heading">
         <p class="eyebrow">— FAQ</p>
         <h2>Resolvemos tus dudas</h2>
-        <p class="section-sub">¿No encuentras tu respuesta? Escríbenos directamente.</p>
       </div>
 
       <div class="faq-list">
-        <div class="faq-item">
-          <button class="faq-question" aria-expanded="false">
-            <span>¿CodeNova es gratuito?</span>
-            <span class="faq-icon"></span>
+        <div class="faq-item open">
+          <button class="faq-question" aria-expanded="true">
+            <span>¿FleetCare es gratuito?</span>
+            <span class="faq-icon" aria-hidden="true"></span>
           </button>
           <div class="faq-answer">
-            <p>Ofrecemos un plan de demo sin costo para que pruebes la plataforma. Los planes pagos varían según la cantidad de equipos y edificios que quieras monitorear.</p>
+            <p>Ofrecemos una demo sin costo. Los planes pagos se cobran por suscripción mensual según el número de vehículos de tu flota.</p>
           </div>
         </div>
 
         <div class="faq-item">
           <button class="faq-question" aria-expanded="false">
-            <span>¿Cómo se instalan los sensores?</span>
-            <span class="faq-icon"></span>
+            <span>¿Cómo empiezo a usar FleetCare?</span>
+            <span class="faq-icon" aria-hidden="true"></span>
           </button>
           <div class="faq-answer">
-            <p>Nuestro equipo técnico coordina una visita para instalar los sensores en bombas, tableros y ascensores. El proceso no interrumpe el funcionamiento del edificio.</p>
+            <p>Solicita una demo y nuestro equipo te ayudará a registrar tu flota: cada unidad con su placa, modelo y kilometraje inicial. Luego tus conductores ya pueden completar el checklist de salida desde su celular.</p>
           </div>
         </div>
 
         <div class="faq-item">
           <button class="faq-question" aria-expanded="false">
-            <span>¿En qué edificios puedo usarlo?</span>
-            <span class="faq-icon"></span>
+            <span>¿Funciona con conectividad limitada en ruta?</span>
+            <span class="faq-icon" aria-hidden="true"></span>
           </button>
           <div class="faq-answer">
-            <p>CodeNova funciona en edificios residenciales, condominios y edificios corporativos de cualquier tamaño.</p>
+            <p>El checklist y el reporte de fallas están pensados para completarse en pocos segundos, de modo que el conductor pueda registrarlos incluso con señal limitada antes de salir a ruta.</p>
           </div>
         </div>
 
         <div class="faq-item">
           <button class="faq-question" aria-expanded="false">
-            <span>¿Cómo funciona la escala de severidad?</span>
-            <span class="faq-icon"></span>
+            <span>¿Cómo prioriza FleetCare las alertas?</span>
+            <span class="faq-icon" aria-hidden="true"></span>
           </button>
           <div class="faq-answer">
-            <p>Las alertas se clasifican en cuatro niveles: normal, baja, media y crítica, según el tipo de anomalía detectada por los sensores.</p>
+            <p>Cada unidad se clasifica con un semáforo de severidad — bueno, alerta o crítico — según su kilometraje, los servicios próximos a vencer y las fallas reportadas, para que atiendas primero la más urgente.</p>
           </div>
         </div>
 
         <div class="faq-item">
           <button class="faq-question" aria-expanded="false">
             <span>¿Mis datos están seguros?</span>
-            <span class="faq-icon"></span>
+            <span class="faq-icon" aria-hidden="true"></span>
           </button>
           <div class="faq-answer">
-            <p>Sí, la información de tus equipos y edificios se almacena de forma cifrada y solo es accesible para los usuarios autorizados de tu cuenta.</p>
+            <p>La información de tu flota solo es accesible para los usuarios autorizados de tu cuenta, y la usamos únicamente para calcular el mantenimiento de tus unidades.</p>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- CONTACT -->
-  <section class="section" id="contact">
+  <!-- SOLICITA UNA DEMO -->
+  <section class="section section-alt" id="contacto">
     <div class="container contact-inner">
       <div class="contact-form-wrap">
-        <p class="eyebrow">— CONTACTO</p>
+        <p class="eyebrow">— Solicita una demo</p>
         <h2>Escríbenos</h2>
 
         <form id="contact-form" novalidate>
           <div class="form-row">
             <div class="form-field">
               <label for="firstname">Nombre</label>
-              <input type="text" id="firstname" name="firstname" required>
+              <input type="text" id="firstname" name="firstname" autocomplete="given-name" required>
               <span class="field-error"></span>
             </div>
             <div class="form-field">
               <label for="lastname">Apellido</label>
-              <input type="text" id="lastname" name="lastname" required>
+              <input type="text" id="lastname" name="lastname" autocomplete="family-name" required>
               <span class="field-error"></span>
             </div>
           </div>
 
           <div class="form-field">
             <label for="email">Correo electrónico</label>
-            <input type="email" id="email" name="email" required>
+            <input type="email" id="email" name="email" autocomplete="email" required>
             <span class="field-error"></span>
           </div>
 
           <div class="form-field">
-            <label for="subject">Asunto</label>
-            <input type="text" id="subject" name="subject" required>
+            <label for="company">Empresa de transporte</label>
+            <input type="text" id="company" name="company" autocomplete="organization" required>
             <span class="field-error"></span>
           </div>
 
@@ -503,7 +458,7 @@
             Acepto los términos y condiciones
           </label>
 
-          <button type="submit" class="btn btn-primary">Enviar mensaje</button>
+          <button type="submit" class="btn btn-primary">Solicitar demo</button>
 
           <p class="form-feedback" id="form-feedback" role="status" aria-live="polite"></p>
         </form>
@@ -511,28 +466,36 @@
 
       <div class="contact-info">
         <div class="info-item">
-          <div class="icon-badge icon-blue"></div>
+          <div class="icon-badge icon-blue">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#1E5AA8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+          </div>
           <div>
             <h3>Correo</h3>
-            <p>soporte@codenova.pe</p>
+            <p>contacto@fleetcare.pe</p>
           </div>
         </div>
         <div class="info-item">
-          <div class="icon-badge icon-green"></div>
+          <div class="icon-badge icon-green">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#3AA76D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4 H20 V16 H9 L4 20 Z"></path></svg>
+          </div>
           <div>
             <h3>WhatsApp</h3>
             <p>+51 999 888 777</p>
           </div>
         </div>
         <div class="info-item">
-          <div class="icon-badge icon-blue"></div>
+          <div class="icon-badge icon-orange">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#E8963D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><polyline points="12 7 12 12 15.5 14.5"></polyline></svg>
+          </div>
           <div>
             <h3>Horario</h3>
-            <p>Lun-Vie: 9am - 6pm</p>
+            <p>Lun–Vie: 9am–6pm</p>
           </div>
         </div>
         <div class="info-item">
-          <div class="icon-badge icon-green"></div>
+          <div class="icon-badge icon-blue">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#1E5AA8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><line x1="3" y1="12" x2="21" y2="12"></line><path d="M12 3 C16 7 16 17 12 21 C8 17 8 7 12 3 Z"></path></svg>
+          </div>
           <div>
             <h3>Ubicación</h3>
             <p>Lima, Perú</p>
@@ -543,14 +506,14 @@
   </section>
 
   <!-- CTA -->
-  <section class="section">
+  <section class="section section-cta">
     <div class="container">
       <div class="cta-box">
-        <h2>Empieza a optimizar tu edificio hoy</h2>
-        <p>Sin tarjeta de crédito, sin compromisos.</p>
+        <h2>Empieza a anticipar el mantenimiento de tu flota</h2>
+        <p>Agenda una demo con nuestro equipo. Sin tarjeta de crédito.</p>
         <div class="cta-actions">
           <a href="app/index.html#/login" class="btn btn-outline btn-inverse">Iniciar sesión</a>
-          <a href="#contact" class="btn btn-accent" data-open-demo>Solicitar demo</a>
+          <a href="#contacto" class="btn btn-accent">Solicitar demo</a>
         </div>
       </div>
     </div>
@@ -562,34 +525,25 @@
   <div class="container">
     <div class="footer-grid">
       <div class="footer-brand">
-        <a href="#top" class="logo logo-light">
-          <svg viewBox="0 0 40 40" width="32" height="32" aria-hidden="true">
-            <rect x="6" y="6" width="28" height="28" rx="6" fill="none" stroke="#ffffff" stroke-width="3"></rect>
-            <polyline points="10,24 15,24 18,15 22,29 26,11 30,24 34,24" fill="none" stroke="#2E9E6D" stroke-width="2.5"></polyline>
-          </svg>
-          <span>CodeNova</span>
+        <a href="#top" class="logo logo-light" aria-label="FleetCare - inicio">
+          <img class="logo-img logo-img-sm" src="img/fleetcare-logo-128.png" alt="" width="34" height="34">
+          <span>FleetCare</span>
         </a>
-        <p>Mantenimiento preventivo inteligente para edificios y condominios.</p>
-        <div class="social-links">
-          <a href="#" aria-label="Facebook"></a>
-          <a href="#" aria-label="Instagram"></a>
-          <a href="#" aria-label="LinkedIn"></a>
-        </div>
+        <p>Mantenimiento preventivo y telemetría para flotas de carga ligera.</p>
       </div>
 
       <div class="footer-col">
         <h3>Producto</h3>
-        <a href="#features">Servicios</a>
-        <a href="#how-it-works">Cómo funciona</a>
-        <a href="#pricing">Precios</a>
-        <a href="app/index.html#/login">Ingresar a la app</a>
+        <a href="#producto">Funcionalidades</a>
+        <a href="#como-funciona">Cómo funciona</a>
+        <a href="#planes">Planes</a>
       </div>
 
       <div class="footer-col">
         <h3>Empresa</h3>
-        <a href="#about">Nosotros</a>
-        <a href="#team">Equipo</a>
-        <a href="#contact">Contacto</a>
+        <a href="#nosotros">Nosotros</a>
+        <a href="#equipo">Equipo</a>
+        <a href="#contacto">Contacto</a>
       </div>
 
       <div class="footer-col">
@@ -601,13 +555,12 @@
     </div>
 
     <div class="footer-bottom">
-      <p>© 2026 CodeNova. Todos los derechos reservados.</p>
-      <p>Desarrollado por el equipo CodeNova · UPC</p>
+      <p>© 2026 FleetCare. Todos los derechos reservados.</p>
+      <p>Desarrollado por Team Track · UPC</p>
     </div>
   </div>
 </footer>
 
 <script src="js/script.js"></script>
-<script src="js/landing-extras.js"></script>
 </body>
 </html>
