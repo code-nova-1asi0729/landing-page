@@ -1,256 +1,376 @@
-/* CodeNova — operación: alertas, incidentes, visitas y reportes. */
+/* FleetCare app — jefe de flota: fallas, incidencias, mantenimiento, conductores, suscripción, reportes, configuración */
 (function () {
   'use strict';
-  const CN = window.CN, esc = CN.esc, ic = CN.icon;
-  const AC = { roles: ['admin', 'company'] };
-  CN.query = () => { const h = location.hash, i = h.indexOf('?'); return new URLSearchParams(i >= 0 ? h.slice(i + 1) : ''); };
+  const R = window.FleetCare;
+  const { html, ico } = R;
 
-  // =============== ALERTAS ===============
-  CN.route('/alerts', AC, (p, u) => {
-    const bs = CN.buildingsOf(u);
-    const filt = CN.store.get('cn_alert_filter') || 'activas';
-    const bsel = CN.store.get('cn_alert_building') || '';
-    const ids = bsel && bs.some((b) => b.id === bsel) ? [bsel] : bs.map((b) => b.id);
-    let list = CN.db().alerts.filter((a) => ids.includes(a.buildingId));
-    if (filt === 'activas') list = list.filter((a) => a.status !== 'resuelta');
-    if (filt === 'resueltas') list = list.filter((a) => a.status === 'resuelta');
-    list.sort((a, b) => (a.status === 'resuelta') - (b.status === 'resuelta') || CN.sevRank(b.severity) - CN.sevRank(a.severity) || b.createdAt - a.createdAt);
+  const PRIO_ORDER = ['alta', 'media', 'baja'];
+  const liveFaults = (db) => db.faults.filter((f) => { const v = R.vehicle(db, f.vehicleId); return v && v.active !== false; });
+  const sortByPrio = (a, b) => PRIO_ORDER.indexOf(a.priority) - PRIO_ORDER.indexOf(b.priority) || b.ts - a.ts;
+
+  /* =====================================================
+     FALLAS + INCIDENCIAS (HU-16/17/18/31/32/33)
+     ===================================================== */
+  R.route('/fallas', 'manager', () => {
+    const db = R.db();
+    const vid = R.ui.fallaVeh || '';
+    const st = R.ui.fallaState || 'todos';
+    const list = liveFaults(db).filter((f) => (!vid || f.vehicleId === vid) && (st === 'todos' || f.status === st)).sort((a, b) => b.ts - a.ts);
+    const chip = (val, l) => html`<button type="button" class="chip ${st === val ? 'on' : ''}" data-action="falla-state" data-value="${val}">${l}</button>`;
+    const v = vid && R.vehicle(db, vid);
     return {
-      title: 'Alertas',
-      html: CN.pageHead('ALERTAS', 'Alertas por severidad', u.role === 'company' ? 'Alertas de los edificios que atiendes' : null) +
-        '<div class="card"><div class="filters">' +
-        '<div class="seg" role="tablist">' + [['activas', 'Activas'], ['resueltas', 'Resueltas'], ['todas', 'Todas']].map((x) => '<button role="tab" data-f="' + x[0] + '" class="' + (filt === x[0] ? 'on' : '') + '">' + x[1] + '</button>').join('') + '</div>' +
-        (bs.length > 1 ? '<div class="select-wrap inline"><select id="ab" aria-label="Edificio"><option value="">Todos los edificios</option>' + bs.map((b) => '<option value="' + b.id + '"' + (b.id === bsel ? ' selected' : '') + '>' + esc(b.name) + '</option>').join('') + '</select>' + ic('chevron', 18) + '</div>' : '') + '</div>' +
-        (list.length ? CN.responsiveTable(['Equipo', 'Edificio', 'Severidad', 'Estado', 'Detectado'], list.map((a) => { const e = CN.equip(a.equipId); return { link: '#/alerts/' + a.id, cells: ['<b>' + esc(CN.equipName(e)) + '</b>' + (a.kind === 'sin_datos' ? '<br><span class="muted small">Sensor desconectado</span>' : ''), esc(CN.building(a.buildingId).name), CN.sev(a.severity), CN.alertStatusChip(a.status), CN.timeAgo(a.createdAt)] }; }))
-          : CN.empty('checkCircle', 'Sin alertas', filt === 'activas' ? 'No hay alertas activas. Todo opera con normalidad.' : 'No hay alertas para mostrar.')) + '</div>',
-      mount(root) {
-        CN.bindRowLinks(root);
-        CN.delegate(root, 'click', '[data-f]', (e, t) => { CN.store.set('cn_alert_filter', t.dataset.f); CN.render(); });
-        const s = root.querySelector('#ab'); if (s) s.addEventListener('change', () => { CN.store.set('cn_alert_building', s.value); CN.render(); });
-      },
+      eyebrow: 'Fallas', title: v ? `Historial de fallas — ${v.plate}` : 'Historial de fallas',
+      html: html`<div class="toolbar">${R.vehSelect(db, 'fallaVeh', vid, true)}<div class="chips">${chip('todos', 'Todas')}${chip('pendiente', 'Pendientes')}${chip('en_proceso', 'En proceso')}${chip('resuelta', 'Resueltas')}</div></div>
+        ${list.length ? html`<div class="table-wrap"><table class="table resp"><thead><tr><th>Fecha</th><th>Unidad</th><th>Descripción</th><th>Prioridad</th><th>Estado</th></tr></thead><tbody>
+          ${list.map((f) => html`<tr class="row-link" data-href="/fallas/${f.id}?from=fallas" tabindex="0"><td data-label="Fecha">${R.fmtDate(f.date)}</td><td data-label="Unidad"><strong>${R.vehicle(db, f.vehicleId).plate}</strong></td><td data-label="Descripción">${f.title}</td><td data-label="Prioridad">${R.prioPill(f.priority)}</td><td data-label="Estado">${R.faultPill(f.status)}</td></tr>`)}</tbody></table></div>` : R.empty('Sin fallas', 'No hay fallas que coincidan con los filtros.')}`,
+    };
+  });
+  R.actions['falla-state'] = (el) => { R.ui.fallaState = el.getAttribute('data-value'); R.rerender(); };
+
+  R.route('/incidencias', 'manager', () => {
+    const db = R.db();
+    const vid = R.ui.incVeh || '';
+    const list = liveFaults(db).filter((f) => R.faultOpen(f) && (!vid || f.vehicleId === vid)).sort(sortByPrio);
+    return {
+      eyebrow: 'Incidencias', title: 'Incidencias activas',
+      html: html`<div class="toolbar">${R.vehSelect(db, 'incVeh', vid, true)}<span class="muted">${list.length} ${list.length === 1 ? 'incidencia activa' : 'incidencias activas'}</span></div>
+        ${list.length ? html`<ul class="inc-list">${list.map((f) => html`<li><a class="inc-card prio-${f.priority}" href="#/fallas/${f.id}?from=incidencias"><div class="inc-main"><strong>${R.vehicle(db, f.vehicleId).plate} · ${f.title}</strong><small>${f.description}</small><em>Reportada por ${f.reportedBy} · ${R.ago(f.ts)}${f.comments.length ? ` · ${f.comments.filter((c) => !c.sys).length} comentarios` : ''}</em></div><div class="inc-side">${R.prioPill(f.priority)}${R.faultPill(f.status)}</div></a></li>`)}</ul>` : R.empty('Sin incidencias activas', vid ? 'Esta unidad no tiene incidencias abiertas.' : 'Todas las fallas reportadas están resueltas.')}`,
     };
   });
 
-  CN.route('/alerts/:id', AC, (p, u) => {
-    const a = CN.alert(p.id);
-    if (!a || !CN.canSee(u, a.buildingId)) return { html: CN.empty('alert', 'Alerta no encontrada', '', '<a class="btn btn-primary" href="#/alerts">Volver</a>') };
-    const e = CN.equip(a.equipId), b = CN.building(a.buildingId);
-    const isAdmin = u.role === 'admin';
-    const disc = a.kind === 'sin_datos';
-    const multi = a.history.length > 1;
-    const notified = a.notifiedCompany;
-    const visits = CN.db().visits.filter((v) => v.equipId === e.id && !['realizada', 'cancelada'].includes(v.status));
+  R.route('/fallas/:id', 'manager', ({ id }) => {
+    const db = R.db();
+    const f = db.faults.find((x) => x.id === id);
+    if (!f) return { redirect: '/fallas' };
+    const v = R.vehicle(db, f.vehicleId);
+    const from = R.query.from === 'incidencias' ? 'incidencias' : 'fallas';
+    const seg = (action, cur, opts) => html`<div class="seg" role="group">${opts.map(([val, l]) => html`<button type="button" class="${cur === val ? 'on' : ''}" aria-pressed="${cur === val}" data-action="${action}" data-id="${f.id}" data-value="${val}">${l}</button>`)}</div>`;
     return {
-      title: 'Alerta',
-      html: '<a class="back" href="#/alerts">' + ic('back', 18) + ' Alertas</a>' +
-        CN.pageHead('ALERTAS · ' + esc(b.name.toUpperCase()), disc ? 'Sensor desconectado' : multi ? 'Alerta actualizada · ' + esc(CN.equipShort(e)) : 'Alerta generada') +
-        '<div class="card"><div class="alert-line">' + CN.sevChip(a.severity, true) + '<h2>' + esc(CN.equipName(e)) + '</h2>' + CN.alertStatusChip(a.status) + '</div>' +
-        '<p class="muted">' + (disc ? 'Sin lecturas hace ' + CN.hoursWithoutData(a) + ' horas. El monitoreo de este equipo está interrumpido.' : esc(a.message)) + '</p>' +
-        '<p class="muted small">' + esc(e.location) + ' · ' + esc(b.name) + ' · Detectada ' + CN.timeAgo(a.createdAt).toLowerCase() + '</p>' +
-        '<div class="btn-row">' +
-        (isAdmin && disc && a.status !== 'resuelta' ? (notified ? '<span class="chip" style="background:#E6F4EC;color:#2E9E6D">' + ic('check', 16) + 'Empresa notificada</span>' : '<button class="btn btn-primary" id="notify">' + ic('send', 20) + '<span>Notificar a empresa de mantenimiento</span></button>') : '') +
-        (isAdmin ? '<a class="btn btn-outline" href="#/equipment/' + e.id + '/' + (disc ? 'sensors' : 'live') + '">' + ic('cpu', 18) + '<span>Ver detalle del equipo</span></a>' : '') +
-        (isAdmin && a.status !== 'resuelta' ? '<a class="btn btn-outline" href="#/visits/new?equip=' + e.id + '&alert=' + a.id + '">' + ic('calendar', 18) + '<span>Programar visita</span></a>' : '') + '</div></div>' +
-        (multi ? '<div class="card"><div class="card-head"><h3>Evolución de la alerta</h3></div>' + CN.responsiveTable(['Fecha', 'Lectura', 'Severidad'], a.history.slice().sort((x, y) => x.ts - y.ts).map((h) => ({ cells: [CN.fmtDateTime(h.ts), CN.fmtVal(h.value, a.variable), CN.sev(h.severity)] }))) + '<p class="muted small">La alerta existente se actualiza a la severidad más alta en lugar de crear una nueva.</p></div>' : '') +
-        (visits.length ? '<div class="card"><div class="card-head"><h3>Visitas relacionadas</h3></div>' + visits.map((v) => '<a class="list-row link-row" href="#/visits/' + v.id + '"><div><b>' + CN.fmtDateTime(v.date) + '</b> <span class="muted">· ' + esc(CN.company(v.companyId).name) + '</span></div>' + CN.visitStatusChip(v.status) + '</a>').join('') + '</div>' : '') +
-        '<div class="card form-card"><div class="card-head"><h3>Estado de la alerta</h3></div><form id="fs" class="stack">' + CN.field({ id: 'status', label: 'Estado', type: 'select', options: Object.keys(CN.ALERT_STATUS).map((k) => ({ value: k, label: CN.ALERT_STATUS[k] })), value: a.status }) + CN.btn('Guardar estado', { type: 'submit', icon: 'check' }) + '</form></div>',
-      mount(root) {
-        const n = root.querySelector('#notify');
-        if (n) n.addEventListener('click', () => { CN.notifyCompaniesOfAlert(a); if (!(b.companyIds || []).length) CN.toast('Este edificio no tiene empresas vinculadas.', 'err'); else CN.toast('Empresa de mantenimiento notificada.'); CN.render(); });
-        CN.bindForm(root.querySelector('#fs'), (v) => { CN.setAlertStatus(a, v.status); CN.toast('Estado actualizado a “' + CN.ALERT_STATUS[v.status] + '”.'); CN.render(); });
-        CN.bindRowLinks(root);
-      },
+      eyebrow: from === 'incidencias' ? 'Incidencias' : 'Fallas', title: `Incidencia — ${f.title}`, navKey: '/' + from,
+      html: html`<a class="back" href="#/${from}">${ico('back', 16)} Volver a ${from === 'incidencias' ? 'incidencias' : 'fallas'}</a>
+        <div class="grid grid-2 detail-grid">
+          <div class="stack">
+            ${R.card('Detalle', html`<dl class="dl"><div><dt>Unidad</dt><dd><a href="#/vehiculos/${v.id}">${v.plate}</a> · ${v.brand} ${v.model}</dd></div><div><dt>Reportado por</dt><dd>${f.reportedBy} · ${R.ago(f.ts)}</dd></div><div><dt>Descripción</dt><dd>${f.description || 'Sin descripción.'}</dd></div></dl>
+              ${f.photos.length ? html`<div class="photos">${f.photos.map((p, i) => html`<button type="button" class="photo" data-action="photo" data-fault="${f.id}" data-i="${i}" aria-label="Ver foto ${i + 1}"><img src="${p}" alt="Foto ${i + 1} de la falla"></button>`)}</div>` : html`<p class="muted">Sin fotos adjuntas.</p>`}`)}
+            ${R.card('Estado y prioridad', html`<h4 class="sub-h">Estado</h4>${seg('fault-state', f.status, [['pendiente', 'Pendiente'], ['en_proceso', 'En proceso'], ['resuelta', 'Resuelta']])}<h4 class="sub-h">Prioridad</h4>${seg('fault-prio', f.priority, [['baja', 'Baja'], ['media', 'Media'], ['alta', 'Alta']])}`)}
+          </div>
+          ${R.card('Comentarios', html`${f.comments.length ? html`<ul class="comments">${f.comments.map((c) => html`<li class="${c.sys ? 'sys' : ''}"><p>${c.text}</p><small>${c.by}${c.role === 'driver' ? ' · Conductor' : c.sys ? '' : ' · Jefe de flota'} · ${R.ago(c.ts)}</small></li>`)}</ul>` : html`<p class="muted">Aún no hay comentarios.</p>`}
+            <form class="comment-form" data-form="comment" data-id="${f.id}" novalidate>${R.field({ label: 'Nuevo comentario', name: 'text', type: 'textarea', rows: 3, placeholder: 'Escribe una actualización o instrucción…', attrs: { maxlength: 400 } })}<button class="btn btn-primary" type="submit">Comentar</button></form>`)}
+        </div>`,
     };
   });
+  const sysComment = (f, text) => f.comments.push({ id: R.uid('c'), by: R.me().name, role: 'manager', text, ts: Date.now(), sys: true });
+  R.actions['fault-state'] = (el) => {
+    const f = R.db().faults.find((x) => x.id === el.getAttribute('data-id'));
+    const val = el.getAttribute('data-value');
+    if (f.status === val) return;
+    f.status = val;
+    sysComment(f, `Estado cambiado a “${R.faultStates[val]}”.`);
+    R.save();
+    R.toast(`La falla ahora está “${R.faultStates[val]}”.`, 'ok', 'Estado actualizado');
+    R.rerender();
+  };
+  R.actions['fault-prio'] = (el) => {
+    const f = R.db().faults.find((x) => x.id === el.getAttribute('data-id'));
+    const val = el.getAttribute('data-value');
+    if (f.priority === val) return;
+    f.priority = val;
+    sysComment(f, `Prioridad cambiada a “${val}”.`);
+    R.save();
+    R.toast(`Prioridad ${val} asignada.`, 'ok', 'Prioridad actualizada');
+    R.rerender();
+  };
+  R.forms.comment = (form) => {
+    const f = R.db().faults.find((x) => x.id === form.getAttribute('data-id'));
+    const text = form.elements.text.value.trim();
+    if (R.setErrors(form, text ? {} : { text: 'Escribe un comentario.' })) return;
+    f.comments.push({ id: R.uid('c'), by: R.me().name, role: 'manager', text, ts: Date.now() });
+    R.save();
+    R.rerender();
+  };
+  R.actions.photo = (el) => {
+    const f = R.db().faults.find((x) => x.id === el.getAttribute('data-fault'));
+    R.modal(html`<div class="lightbox"><img src="${f.photos[Number(el.getAttribute('data-i'))]}" alt="Foto de la falla ampliada"><button class="btn btn-outline" data-action="modal-close">Cerrar</button></div>`, { wide: true });
+  };
 
-  // =============== INCIDENTES (admin) ===============
-  CN.route('/incidents', { roles: ['admin'] }, (p, u) => {
-    const bs = CN.buildingsOf(u), ids = bs.map((b) => b.id);
-    const list = CN.db().incidents.filter((i) => ids.includes(i.buildingId)).sort((a, b) => (a.status === 'resuelto') - (b.status === 'resuelto') || b.createdAt - a.createdAt);
-    return {
-      title: 'Incidentes',
-      html: CN.pageHead('INCIDENTES', 'Incidentes reportados', 'Reportes enviados por los residentes de tus edificios') +
-        '<div class="card">' + (list.length ? CN.responsiveTable(['Incidente', 'Reportado por', 'Estado', 'Fecha', 'Visita', ''], list.map((i) => {
-          const v = i.visitId && CN.visit(i.visitId);
-          return { cells: ['<b>' + esc(i.title) + '</b>' + (i.rating ? '<br>' + CN.stars(i.rating.stars, 14) : ''), 'Depto. ' + esc(i.unit) + '<br><span class="muted small">' + esc(CN.building(i.buildingId).name) + '</span>', CN.incStatusChip(i.status), CN.timeAgo(i.createdAt), v ? '<a class="link" href="#/visits/' + v.id + '">' + CN.fmtShort(v.date) + '</a>' : '—', '<button class="btn btn-outline btn-sm" data-i="' + i.id + '">Gestionar</button>'] };
-        })) : CN.empty('message', 'Sin incidentes', 'Cuando un residente reporte un problema aparecerá aquí.')) + '</div>',
-      mount(root) { CN.delegate(root, 'click', '[data-i]', (e, t) => manageIncident(CN.incident(t.dataset.i))); },
-    };
-  });
-
-  function manageIncident(i) {
-    const b = CN.building(i.buildingId);
-    const open = CN.db().visits.filter((v) => v.buildingId === b.id && ['propuesta', 'contrapropuesta', 'confirmada'].includes(v.status));
-    const canAssign = i.status !== 'resuelto' && b.companyIds.length;
-    CN.modal({
-      title: esc(i.title.replace(' - ', ' · ')),
-      html: '<p class="muted">Reportado por: Depto. ' + esc(i.unit) + ' · ' + CN.timeAgo(i.createdAt) + '</p><p>' + esc(i.description) + '</p>' + (i.photo ? '<img class="inc-photo" src="' + i.photo + '" alt="Foto del incidente">' : '') +
-        (i.rating ? '<p>Calificación del residente: ' + CN.stars(i.rating.stars) + (i.rating.comment ? '<br><span class="muted">“' + esc(i.rating.comment) + '”</span>' : '') + '</p>' : '') +
-        (canAssign ? '<form id="fa" class="stack">' + CN.field({ id: 'visit', label: 'Asociar a visita', type: 'select', options: [{ value: 'new', label: 'Nueva visita de mantenimiento' }].concat(open.map((v) => ({ value: v.id, label: CN.equipShort(CN.equip(v.equipId)) + ' · ' + CN.fmtDateTime(v.date) }))), value: i.visitId || 'new' }) +
-          '<div class="modal-actions">' + CN.btn('Confirmar asignación', { type: 'submit', icon: 'check' }) + '</div></form>' : (i.status !== 'resuelto' ? '<div class="notice warn">' + ic('alert', 20) + '<div><b>Sin empresa vinculada</b><p>Vincula una empresa de mantenimiento al edificio para asignar visitas.</p></div></div>' : '')) +
-        '<form id="fs" class="stack top-gap">' + CN.field({ id: 'status', label: 'Estado del incidente', type: 'select', options: Object.keys(CN.INC_STATUS).map((k) => ({ value: k, label: CN.INC_STATUS[k] })), value: i.status }) +
-        '<div class="modal-actions"><button type="button" class="btn btn-outline" data-close>Cerrar</button>' + CN.btn('Guardar estado', { type: 'submit', cls: 'btn-outline', icon: 'check' }) + '</div></form>',
-      onMount(w, close) {
-        const fa = w.querySelector('#fa');
-        if (fa) CN.bindForm(fa, (v) => {
-          const r = CN.assignIncident(i, v.visit, CN.session());
-          if (r.error) { CN.toast(r.error, 'err'); return; }
-          close(); CN.toast('Incidente asociado a la visita del ' + CN.fmtDateTime(r.visit.date) + '. El residente fue notificado.'); CN.render();
-        });
-        CN.bindForm(w.querySelector('#fs'), (v) => { CN.setIncidentStatus(i, v.status); close(); CN.toast('Estado actualizado. El residente fue notificado.'); CN.render(); });
-      },
-    });
-  }
-
-  // =============== VISITAS ===============
-  CN.route('/visits', { roles: ['admin'] }, (p, u) => {
-    const ids = CN.buildingsOf(u).map((b) => b.id);
-    const filt = CN.store.get('cn_visit_filter') || 'proximas';
-    let list = CN.db().visits.filter((v) => ids.includes(v.buildingId));
-    if (filt === 'proximas') list = list.filter((v) => ['propuesta', 'contrapropuesta', 'confirmada'].includes(v.status)).sort((a, b) => a.date - b.date);
-    else if (filt === 'historial') list = list.filter((v) => ['realizada', 'cancelada'].includes(v.status)).sort((a, b) => b.date - a.date);
-    else list.sort((a, b) => b.date - a.date);
-    return {
-      title: 'Visitas',
-      html: CN.pageHead('VISITAS', 'Visitas de mantenimiento', null, '<a class="btn btn-primary" href="#/visits/new">' + ic('plus', 20) + '<span>Programar visita</span></a>') +
-        '<div class="card"><div class="filters"><div class="seg">' + [['proximas', 'Próximas'], ['historial', 'Historial'], ['todas', 'Todas']].map((x) => '<button data-f="' + x[0] + '" class="' + (filt === x[0] ? 'on' : '') + '">' + x[1] + '</button>').join('') + '</div></div>' +
-        (list.length ? CN.responsiveTable(['Equipo', 'Edificio', 'Empresa', 'Fecha', 'Técnico', 'Estado'], list.map((v) => ({ link: '#/visits/' + v.id, cells: ['<b>' + esc(CN.equipShort(CN.equip(v.equipId))) + '</b>' + (v.type === 'correctiva' ? '<br><span class="muted small">Correctiva</span>' : ''), esc(CN.building(v.buildingId).name), esc(CN.company(v.companyId).name), CN.fmtDateTime(v.date), esc(CN.techShort(CN.tech(v.techId))), CN.visitStatusChip(v.status)] })))
-          : CN.empty('calendar', 'No hay visitas', 'Programa una visita de mantenimiento preventivo.', '<a class="btn btn-primary" href="#/visits/new">Programar visita</a>')) + '</div>',
-      mount(root) { CN.bindRowLinks(root); CN.delegate(root, 'click', '[data-f]', (e, t) => { CN.store.set('cn_visit_filter', t.dataset.f); CN.render(); }); },
-    };
-  });
-
-  // US28: programar visita preventiva
-  CN.route('/visits/new', { roles: ['admin'] }, (p, u) => {
-    const bs = CN.buildingsOf(u).filter((b) => b.companyIds.length && CN.equipmentOf(b.id).length);
-    const q = CN.query();
-    const pre = q.get('equip') && CN.equip(q.get('equip'));
-    const firstB = pre ? CN.building(pre.buildingId) : bs[0];
-    const min = CN.toLocalInput(Date.now() + CN.H);
-    return {
-      title: 'Programar visita',
-      html: '<a class="back" href="#/visits">' + ic('back', 18) + ' Visitas</a>' + CN.pageHead('VISITAS', 'Programar visita preventiva') +
-        (bs.length ? '<div class="card form-card"><form id="f" class="stack">' +
-          (bs.length > 1 ? CN.field({ id: 'building', label: 'Edificio', type: 'select', options: bs.map((b) => ({ value: b.id, label: b.name })), value: firstB.id }) : '<input type="hidden" name="building" id="building" value="' + firstB.id + '">') +
-          '<div id="dyn"></div>' + CN.field({ id: 'date', label: 'Fecha propuesta', type: 'datetime-local', value: CN.toLocalInput(Math.ceil((Date.now() + 2 * CN.D) / CN.H) * CN.H), attrs: 'min="' + min + '"' }) +
-          CN.field({ id: 'notes', label: 'Notas para la empresa (opcional)', type: 'textarea', rows: 3, required: false }) +
-          CN.btn('Programar visita', { type: 'submit', icon: 'calendar' }) + '</form></div>'
-          : CN.empty('wrench', 'Aún no puedes programar visitas', 'Necesitas un edificio con al menos un equipo y una empresa de mantenimiento vinculada.', '<a class="btn btn-primary" href="#/buildings">Ir a edificios</a>')),
-      mount(root) {
-        const f = root.querySelector('#f'); if (!f) return;
-        const dyn = root.querySelector('#dyn');
-        const alertId = q.get('alert');
-        const paint = () => {
-          const b = CN.building(f.building.value);
-          const eqs = CN.equipmentOf(b.id);
-          dyn.innerHTML = CN.field({ id: 'equip', label: 'Equipo', type: 'select', options: eqs.map((e) => ({ value: e.id, label: CN.equipName(e) })), value: pre && pre.buildingId === b.id ? pre.id : eqs[0].id }) +
-            CN.field({ id: 'company', label: 'Empresa de mantenimiento', type: 'select', options: b.companyIds.map((id) => CN.company(id)).map((c) => ({ value: c.id, label: c.name })) });
-        };
-        f.building.addEventListener('change', paint); paint();
-        CN.bindForm(f, (v, fail) => {
-          const ts = new Date(v.date).getTime();
-          if (isNaN(ts) || ts < Date.now()) { fail('date', 'Elige una fecha y hora futuras.'); return; }
-          const e = CN.equip(v.equip);
-          const al = alertId && CN.alert(alertId);
-          const vis = CN.scheduleVisit({ buildingId: v.building, equipId: v.equip, companyId: v.company, date: ts, notes: v.notes, alertId: al && al.equipId === e.id ? al.id : null, type: al ? 'correctiva' : 'preventiva' });
-          CN.toast('Visita programada. La empresa fue notificada.'); CN.go('/visits/' + vis.id);
-        });
-      },
-    };
-  });
-
-  // Detalle de visita (admin y empresa): US29, US30, US31, US33, US42
-  CN.route('/visits/:id', AC, (p, u) => {
-    const v = CN.visit(p.id);
-    if (!v || !CN.canSee(u, v.buildingId)) return { html: CN.empty('wrench', 'Visita no encontrada', '', '<a class="btn btn-primary" href="#/' + (u.role === 'admin' ? 'visits' : 'week') + '">Volver</a>') };
-    if (u.role === 'company' && v.companyId !== u.companyId) return { html: CN.empty('wrench', 'Visita no encontrada') };
-    const e = CN.equip(v.equipId), b = CN.building(v.buildingId), comp = CN.company(v.companyId);
-    const isAdmin = u.role === 'admin', isCo = u.role === 'company';
-    const open = ['propuesta', 'contrapropuesta', 'confirmada'].includes(v.status);
-    const techs = CN.db().technicians.filter((t) => t.companyId === v.companyId);
-    const prev = CN.db().visits.filter((x) => x.equipId === e.id && x.status === 'realizada' && x.id !== v.id).sort((a, c) => c.intervention.ts - a.intervention.ts);
-    const alertA = CN.activeAlertFor(e.id);
-    const primary = CN.TYPE_VARS[e.type][0];
-    const lr = CN.latestReading(e, primary);
-    const tech = v.techId && CN.tech(v.techId);
-    const back = isAdmin ? '#/visits' : '#/week';
-    let actions = '';
-    if (isAdmin && open) {
-      actions += (v.status === 'contrapropuesta' ? '<button class="btn btn-primary" id="accept">' + ic('check', 20) + '<span>Aceptar nueva fecha</span></button>' : '') + '<button class="btn btn-outline danger-o" id="cancel">' + ic('x', 18) + '<span>Cancelar visita</span></button>';
+  /* =====================================================
+     MANTENIMIENTO (HU-20/21/22/23/24)
+     ===================================================== */
+  R.route('/mantenimiento', 'manager', () => {
+    const db = R.db();
+    const tab = R.query.tab === 'intervalos' ? 'intervalos' : 'alertas';
+    const tabs = html`<div class="tabs" role="tablist"><a role="tab" aria-selected="${tab === 'alertas'}" class="${tab === 'alertas' ? 'on' : ''}" href="#/mantenimiento">Alertas</a><a role="tab" aria-selected="${tab === 'intervalos'}" class="${tab === 'intervalos' ? 'on' : ''}" href="#/mantenimiento?tab=intervalos">Intervalos</a></div>`;
+    if (tab === 'intervalos') {
+      return {
+        eyebrow: 'Mantenimiento', title: 'Intervalos de mantenimiento',
+        html: html`${tabs}<p class="lead-sm">Define cada cuántos kilómetros se debe realizar cada servicio. FleetCare avisará al llegar al ${Math.round(R.WARN_PCT * 100)}% del intervalo.</p>
+          <form class="card form-card" data-form="intervals" novalidate><div class="form-grid">${db.services.map((s) => R.field({ label: `${s.name} — intervalo (km)`, name: 'km_' + s.id, type: 'number', value: s.km, attrs: { min: 500, step: 100, inputmode: 'numeric' } }))}</div>
+            <div class="form-actions"><button class="btn btn-primary" type="submit">Guardar cambios</button></div></form>`,
+      };
     }
-    if (isCo && v.status === 'propuesta') actions += '<button class="btn btn-primary" id="confirm">' + ic('check', 20) + '<span>Confirmar</span></button><button class="btn btn-outline" id="other">' + ic('calendar', 18) + '<span>Proponer otra fecha</span></button>';
-    if (isCo && v.status === 'contrapropuesta') actions += '<span class="chip" style="background:#FFF4D6;color:#8A6100">Esperando respuesta del administrador</span>';
+    const alerts = R.upcomingAlerts(db);
+    const recent = db.maintLog.filter((m) => { const v = R.vehicle(db, m.vehicleId); return v && v.active !== false; }).sort((a, b) => b.ts - a.ts).slice(0, 6);
     return {
-      title: 'Visita',
-      html: '<a class="back" href="' + back + '">' + ic('back', 18) + ' ' + (isAdmin ? 'Visitas' : 'Mi semana') + '</a>' +
-        CN.pageHead('VISITA · ' + esc(b.name.toUpperCase()), esc(CN.equipName(e)), null, CN.visitStatusChip(v.status)) +
-        '<div class="card"><div class="detail-grid">' +
-        '<div><p class="muted">Fecha ' + (v.status === 'propuesta' ? 'propuesta' : v.status === 'contrapropuesta' ? 'propuesta por la empresa' : '') + '</p><h3>' + CN.dayLabel(v.date) + ', ' + CN.fmtDateTime(v.date) + '</h3></div>' +
-        '<div><p class="muted">Empresa</p><h3>' + esc(comp.name) + '</h3></div><div><p class="muted">Técnico asignado</p><h3>' + (tech ? esc(tech.name) : 'Sin asignar') + '</h3></div>' +
-        '<div><p class="muted">Tipo</p><h3>' + (v.type === 'correctiva' ? 'Correctiva' : 'Preventiva') + '</h3></div></div>' +
-        (v.notes ? '<p class="muted">Notas: ' + esc(v.notes) + '</p>' : '') + (v.status === 'cancelada' ? '<div class="notice bad">' + ic('x', 20) + '<div><b>Visita cancelada</b><p>Motivo: ' + esc(v.cancelReason) + '</p></div></div>' : '') +
-        (v.incidentIds.length ? '<p class="muted">Incidentes asociados: ' + v.incidentIds.map((id) => esc(CN.incident(id).title)).join(', ') + '</p>' : '') +
-        (actions ? '<div class="btn-row">' + actions + '</div>' : '') + '</div>' +
-        // US30: datos técnicos previos
-        '<div class="card"><div class="card-head"><h3>Datos técnicos previos: ' + esc(CN.equipShort(e)) + '</h3></div><div class="grid-3 mini">' +
-        '<div class="card stat flat"><h2>' + (lr ? CN.fmtVal(lr.value, primary) : '—') + '</h2><p>Última ' + CN.varLabel(e.type, primary).toLowerCase() + '</p></div>' +
-        '<div class="card stat flat"><h2>' + (alertA ? CN.sev(alertA.severity) : CN.sev('normal')) + '</h2><p>Severidad actual</p></div>' +
-        '<div class="card stat flat"><h2>' + prev.length + '</h2><p>Intervenciones previas</p></div></div>' +
-        (prev.length ? CN.responsiveTable(['Fecha', 'Técnico', 'Descripción'], prev.slice(0, 5).map((x) => ({ cells: [CN.fmtShort(x.date), esc(CN.techShort(CN.tech(x.techId))), esc(x.intervention.desc)] }))) : '') + '</div>' +
-        (isCo && open ? '<div class="card form-card"><div class="card-head"><h3>Asignar técnico</h3></div>' + (techs.length ? '<form id="ft" class="stack">' + CN.field({ id: 'tech', label: 'Técnico disponible', type: 'select', options: techs.map((t) => ({ value: t.id, label: t.name + ' · ' + t.specialty })), value: v.techId || techs[0].id }) + CN.btn('Asignar visita', { type: 'submit', icon: 'check' }) + '</form>' : '<p class="muted">Aún no tienes técnicos. <a class="link" href="#/technicians">Agrega uno</a>.</p>') + '</div>' : '') +
-        (isCo && v.status === 'confirmada' ? '<div class="card form-card"><div class="card-head"><h3>Registrar intervención: ' + esc(CN.equipShort(e)) + '</h3></div><form id="fi" class="stack">' + CN.field({ id: 'desc', label: 'Descripción del trabajo realizado', type: 'textarea', rows: 4 }) + CN.field({ id: 'mats', label: 'Materiales usados', type: 'textarea', rows: 3, required: false, placeholder: 'Ej. Rodamiento 6205, grasa industrial' }) + CN.btn('Guardar intervención', { type: 'submit', icon: 'check' }) + '</form></div>' : '') +
-        (isCo && v.status === 'propuesta' ? '<p class="muted small">Confirma la visita para poder registrar la intervención realizada.</p>' : '') +
-        (v.intervention ? '<div class="card"><div class="card-head"><h3>Intervención realizada</h3>' + CN.statusChip(CN.fmtDateTime(v.intervention.ts), 'ok') + '</div><p>' + esc(v.intervention.desc) + '</p><p class="muted">Materiales: ' + esc(v.intervention.materials) + '</p>' + (v.saving ? '<p><b>Ahorro estimado:</b> ' + CN.money(v.saving) + '</p>' : '') + '</div>' : ''),
-      mount(root) {
-        const on = (id, fn) => { const el = root.querySelector(id); if (el) el.addEventListener('click', fn); };
-        on('#confirm', () => { CN.confirmVisit(v); CN.toast('Visita confirmada. El administrador fue notificado.'); CN.render(); });
-        on('#accept', () => { CN.confirmVisit(v); CN.toast('Nueva fecha aceptada. Visita confirmada.'); CN.render(); });
-        on('#other', () => CN.modal({
-          title: 'Proponer otra fecha', html: '<form id="fo" class="stack">' + CN.field({ id: 'date', label: 'Nueva fecha y hora', type: 'datetime-local', value: CN.toLocalInput(v.date + CN.D), attrs: 'min="' + CN.toLocalInput(Date.now() + CN.H) + '"' }) + '<div class="modal-actions"><button type="button" class="btn btn-outline" data-close>Cancelar</button>' + CN.btn('Proponer fecha', { type: 'submit', icon: 'send' }) + '</div></form>',
-          onMount(w, close) { CN.bindForm(w.querySelector('#fo'), (val, fail) => { const ts = new Date(val.date).getTime(); if (isNaN(ts) || ts < Date.now()) { fail('date', 'Elige una fecha futura.'); return; } CN.counterPropose(v, ts); close(); CN.toast('Nueva fecha propuesta al administrador.'); CN.render(); }); },
-        }));
-        on('#cancel', () => CN.modal({
-          title: 'Cancelar visita: ' + esc(CN.equipShort(e)), html: '<p class="muted">Programada para el ' + CN.fmtDateTime(v.date) + ' con ' + esc(comp.name) + '</p><form id="fc" class="stack">' + CN.field({ id: 'reason', label: 'Motivo de cancelación', type: 'textarea', rows: 3 }) + '<div class="modal-actions"><button type="button" class="btn btn-outline" data-close>Volver</button>' + CN.btn('Cancelar visita', { type: 'submit', cls: 'btn-danger', icon: 'x' }) + '</div></form>',
-          onMount(w, close) { CN.bindForm(w.querySelector('#fc'), (val) => { CN.cancelVisit(v, val.reason.trim()); close(); CN.toast('Visita cancelada. La empresa fue notificada.', 'info'); CN.render(); }); },
-        }));
-        const ft = root.querySelector('#ft'); if (ft) CN.bindForm(ft, (val) => { CN.assignTech(v, val.tech); CN.toast('Visita asignada a ' + CN.tech(val.tech).name + '.'); CN.render(); });
-        const fi = root.querySelector('#fi'); if (fi) CN.bindForm(fi, (val) => { CN.registerIntervention(v, val.desc.trim(), val.mats.trim()); CN.toast('Intervención registrada. Ahorro estimado ' + CN.money(v.saving) + '.'); CN.render(); });
-      },
+      eyebrow: 'Mantenimiento', title: 'Alertas próximas a vencer',
+      html: html`${tabs}${alerts.length ? html`<ul class="alert-list">${alerts.map((a) => html`<li class="alert-card lvl-${a.level}"><div class="alert-main"><strong>${a.plate} · ${a.service}</strong><span class="due ${a.level === 'critico' ? 'txt-red' : a.level === 'alerta' ? 'txt-orange' : ''}">${R.dueText(a)}</span>
+          ${a.kind === 'km' ? html`<div class="progress" role="img" aria-label="${Math.round(a.pct * 100)}% del intervalo consumido"><i style="width:${Math.min(100, a.pct * 100).toFixed(0)}%"></i></div><small>${Math.round(a.pct * 100)}% del intervalo · ${a.remainingKm > 0 ? R.fmtNum(a.remainingKm) + ' km restantes' : 'intervalo superado'}</small>` : ''}</div>
+          <button class="btn btn-outline" data-action="attend" data-id="${a.id}">${ico('check', 16)} Marcar como atendida</button></li>`)}</ul>` : R.empty('Todo al día', 'Ninguna unidad está próxima a un mantenimiento.')}
+        ${R.card('Mantenimientos atendidos recientemente', recent.length ? html`<ul class="timeline">${recent.map((m) => html`<li><strong>${R.vehicle(db, m.vehicleId).plate} · ${m.service}</strong><span>${R.fmtNum(m.km)} km · ${R.fmtDate(m.date)}</span></li>`)}</ul>` : html`<p class="muted">Aún no hay mantenimientos registrados.</p>`)}`,
     };
   });
+  R.actions.attend = async (el) => {
+    const db = R.db();
+    const [vid, sid] = el.getAttribute('data-id').split(':');
+    const v = R.vehicle(db, vid);
+    const name = sid === 'tiempo' ? 'el mantenimiento general' : db.services.find((s) => s.id === sid).name.toLowerCase();
+    const ok = await R.confirm({ title: '¿Marcar como atendida?', text: `Se registrará ${name} de ${v.plate} a ${R.fmtNum(v.km)} km y el contador del servicio se reiniciará.`, confirm: 'Marcar como atendida' });
+    if (!ok) return;
+    const r = R.attendAlert(db, el.getAttribute('data-id'));
+    R.save();
+    R.toast(`${r.name} de ${r.vehicle.plate} quedó registrado.`, 'ok', 'Alerta atendida');
+    R.rerender();
+  };
+  R.forms.intervals = (form) => {
+    const db = R.db();
+    const errs = {};
+    const vals = {};
+    db.services.forEach((s) => {
+      const raw = form.elements['km_' + s.id].value;
+      const n = Number(raw);
+      if (raw === '' || !Number.isInteger(n) || n < 500 || n > 100000) errs['km_' + s.id] = 'Ingresa un intervalo entre 500 y 100 000 km.';
+      else vals[s.id] = n;
+    });
+    if (R.setErrors(form, errs)) return;
+    db.services.forEach((s) => { s.km = vals[s.id]; });
+    R.checkAllAlerts(db);
+    R.save();
+    R.toast('Los intervalos de mantenimiento se actualizaron.', 'ok', 'Cambios guardados');
+    R.flushToasts();
+  };
 
-  // =============== REPORTES (US36, US43) ===============
-  CN.route('/reports', { roles: ['admin'] }, (p, u) => {
-    const bs = CN.buildingsOf(u);
-    const rank = CN.ranking();
+  /* =====================================================
+     CONDUCTORES (HU-45/46/47)
+     ===================================================== */
+  const drivers = (db) => R.state().users.filter((u) => u.role === 'driver' && u.companyId === R.me().companyId);
+  R.route('/conductores', 'manager', () => {
+    const db = R.db();
+    const ds = drivers(db);
+    const active = ds.filter((d) => d.active !== false);
+    const vs = R.activeVehicles(db);
+    const assigned = (d) => R.vehicleOfDriver(db, d);
     return {
-      title: 'Reportes',
-      html: CN.pageHead('REPORTES', 'Generar reporte para la junta', 'Resume alertas, intervenciones y ahorro del período') +
-        (bs.length ? '<div class="card"><div class="filters">' +
-          CN.field({ id: 'rb', label: 'Edificio', type: 'select', options: bs.map((b) => ({ value: b.id, label: b.name })), value: CN.selectedBuilding(u).id, cls: 'fit' }) +
-          CN.field({ id: 'rr', label: 'Rango de fechas', type: 'select', options: [{ value: '30', label: 'Último mes' }, { value: '90', label: 'Último trimestre' }, { value: '365', label: 'Último año' }], value: '90', cls: 'fit' }) +
-          '<div class="field fit btn-field"><button class="btn btn-primary" id="pdf">' + ic('printer', 20) + '<span>Generar reporte PDF</span></button></div></div>' +
-          '<p class="muted small">Se abrirá el diálogo de impresión: elige “Guardar como PDF” como destino.</p></div>' +
-          '<div class="card"><div class="card-head"><h3>Vista previa</h3></div><div id="sheet" class="report-sheet"></div></div>' : CN.empty('book', 'Sin edificios', 'Registra un edificio para generar reportes.')) +
-        '<div class="card"><div class="card-head"><h3>Ranking de empresas por tiempo de respuesta</h3></div>' + CN.responsiveTable(['#', 'Empresa', 'Tiempo promedio de respuesta', 'Visitas completadas'], rank.map((r, i) => ({ cells: [String(i + 1), '<b>' + esc(r.company.name) + '</b>', r.visits && r.avg ? r.avg.toFixed(1) + ' horas' : '—', String(r.visits)] }))) + '</div>',
-      mount(root) {
-        const sheet = root.querySelector('#sheet'); if (!sheet) return;
-        const paint = () => {
-          const b = CN.building(root.querySelector('#rb').value), days = +root.querySelector('#rr').value;
-          const st = CN.stats([b.id], days);
-          const label = { 30: 'Último mes', 90: 'Último trimestre', 365: 'Último año' }[days];
-          const bySev = ['critica', 'alta', 'media', 'baja', 'sin_datos'].map((s) => [s, st.alerts.filter((a) => a.severity === s).length]).filter((x) => x[1]);
-          sheet.innerHTML = '<div class="rs-head"><div>' + CN.logoTile(34) + '<b>CodeNova</b></div><div class="rs-meta"><b>Reporte de mantenimiento preventivo</b><span>' + esc(b.name) + ' · ' + esc(b.address) + '</span><span>' + label + ' · Generado el ' + CN.fmtDate(Date.now()) + '</span></div></div>' +
-            '<div class="grid-4 rs-kpis"><div><h2>' + st.alerts.length + '</h2><p>Alertas generadas</p></div><div><h2>' + st.critical + '</h2><p>Alertas críticas</p></div><div><h2>' + st.visits.length + '</h2><p>Intervenciones</p></div><div><h2>' + CN.money(st.saving) + '</h2><p>Ahorro estimado</p></div></div>' +
-            '<h4>Alertas por severidad</h4>' + (bySev.length ? '<div class="tags">' + bySev.map((x) => CN.sevChip(x[0]).replace('</span>', ': ' + x[1] + '</span>')).join('') + '</div>' : '<p class="muted">Sin alertas en el período.</p>') +
-            '<h4>Intervenciones realizadas</h4>' + (st.visits.length ? CN.responsiveTable(['Fecha', 'Equipo', 'Técnico', 'Descripción', 'Ahorro'], st.visits.sort((a, c) => c.intervention.ts - a.intervention.ts).map((v) => ({ cells: [CN.fmtShort(v.intervention.ts), esc(CN.equipShort(CN.equip(v.equipId))), esc(CN.techShort(CN.tech(v.techId))), esc(v.intervention.desc), CN.money(v.saving)] }))) : '<p class="muted">No se registraron intervenciones en el período. Los ahorros acumulados anteriores suman ' + CN.money(CN.buildingSavings(b.id)) + '.</p>') +
-            '<h4>Incidentes de residentes</h4><p>' + st.incidents.length + ' reportados · ' + st.incidents.filter((i) => i.status === 'resuelto').length + ' resueltos</p>' +
-            '<p class="muted small rs-foot">Ahorro acumulado histórico del edificio: ' + CN.money(CN.buildingSavings(b.id)) + ' frente a mantenimiento correctivo.</p>';
-        };
-        root.querySelector('#rb').addEventListener('change', paint); root.querySelector('#rr').addEventListener('change', paint);
-        root.querySelector('#pdf').addEventListener('click', () => { document.body.classList.add('printing-report'); const done = () => document.body.classList.remove('printing-report'); window.addEventListener('afterprint', done, { once: true }); setTimeout(() => { window.print(); setTimeout(done, 1500); }, 50); });
-        paint();
-      },
+      eyebrow: 'Conductores', title: 'Conductores',
+      html: html`<div class="grid grid-2 detail-grid">
+          ${R.card('Invitar conductor', html`<form data-form="invite" novalidate>${R.field({ label: 'Correo electrónico del conductor', name: 'email', type: 'email', placeholder: 'conductor@empresa.pe', attrs: { inputmode: 'email', autocomplete: 'off' } })}<button class="btn btn-primary" type="submit">${ico('mail', 16)} Enviar invitación</button></form>
+            <h4 class="sub-h">Invitaciones pendientes</h4>${db.invites.length ? html`<ul class="plain-list">${db.invites.map((i) => html`<li><div><strong>${i.email}</strong><small>Enviada ${R.ago(i.ts).toLowerCase()}</small></div><div class="li-actions"><button class="btn btn-sm btn-outline" data-action="invite-accept" data-id="${i.id}">Simular aceptación</button><button class="btn btn-sm btn-danger-outline" data-action="invite-cancel" data-id="${i.id}">Cancelar</button></div></li>`)}</ul>` : html`<p class="muted">No hay invitaciones pendientes.</p>`}`)}
+          ${R.card('Asignar conductor', active.length && vs.length ? html`<form data-form="assign" novalidate>${R.field({ label: 'Conductor', name: 'driver', options: [{ value: '', label: 'Selecciona un conductor' }, ...active.map((d) => ({ value: d.id, label: d.name }))] })}
+            ${R.field({ label: 'Vehículo', name: 'vehicle', options: [{ value: '', label: 'Selecciona un vehículo' }, { value: 'none', label: 'Sin asignar (quitar asignación)' }, ...vs.map((v) => ({ value: v.id, label: R.vehLabel(v) }))] })}<button class="btn btn-primary" type="submit">Asignar</button></form>` : html`<p class="muted">${!vs.length ? 'Registra al menos un vehículo' : 'Invita a un conductor'} para poder hacer asignaciones.</p>`)}
+        </div>
+        ${R.card('Conductores', ds.length ? html`<div class="table-wrap"><table class="table resp"><thead><tr><th>Conductor</th><th>Correo</th><th>Asignación</th><th>Acceso</th><th></th></tr></thead><tbody>
+          ${ds.map((d) => { const v = assigned(d); return html`<tr><td data-label="Conductor"><span class="cell-user"><span class="avatar sm">${R.initials(d.name)}</span><strong>${d.name}</strong></span></td><td data-label="Correo">${d.email}</td><td data-label="Asignación">${d.active === false ? '—' : v ? html`Asignado a <a href="#/vehiculos/${v.id}"><strong>${v.plate}</strong></a>` : html`<span class="muted">Sin vehículo</span>`}</td><td data-label="Acceso">${d.active === false ? R.pill('critico', 'Revocado') : R.pill('bueno', 'Activo')}</td><td class="td-actions">${d.active === false ? '' : html`<button class="btn btn-sm btn-danger-outline" data-action="driver-revoke" data-id="${d.id}">Revocar acceso</button>`}</td></tr>`; })}</tbody></table></div>` : html`<p class="muted">Todavía no tienes conductores. Envía una invitación para comenzar.</p>`)}`,
     };
   });
+  R.forms.invite = (form) => {
+    const db = R.db();
+    const email = form.elements.email.value.trim().toLowerCase();
+    let err = '';
+    if (!R.validEmail(email)) err = 'Ingresa un correo válido.';
+    else if (R.state().users.some((u) => u.email.toLowerCase() === email)) err = 'Ya existe una cuenta con este correo.';
+    else if (db.invites.some((i) => i.email.toLowerCase() === email)) err = 'Ya enviaste una invitación a este correo.';
+    if (R.setErrors(form, err ? { email: err } : {})) return;
+    db.invites.unshift({ id: R.uid('inv'), email, ts: Date.now() });
+    R.save();
+    R.toast(`Invitación enviada a ${email}.`, 'ok', 'Invitación enviada');
+    R.rerender();
+  };
+  R.actions['invite-cancel'] = (el) => { const db = R.db(); db.invites = db.invites.filter((i) => i.id !== el.getAttribute('data-id')); R.save(); R.toast('Invitación cancelada.'); R.rerender(); };
+  R.actions['invite-accept'] = (el) => {
+    const inv = R.db().invites.find((i) => i.id === el.getAttribute('data-id'));
+    R.modal(html`<h3 id="modal-title">Aceptar invitación</h3><p class="modal-text">Simulación de lo que haría el conductor <strong>${inv.email}</strong> al abrir su enlace de invitación.</p>
+      <form data-form="invite-accept" data-id="${inv.id}" novalidate>${R.field({ label: 'Nombre completo', name: 'name', attrs: { autocomplete: 'off' } })}${R.field({ label: 'Contraseña', name: 'password', type: 'password', value: R.DEMO_PASSWORD, attrs: { autocomplete: 'new-password' } })}
+      <div class="modal-actions"><button type="button" class="btn btn-outline" data-action="modal-close">Cancelar</button><button type="submit" class="btn btn-primary">Crear cuenta de conductor</button></div></form>`);
+  };
+  R.forms['invite-accept'] = async (form) => {
+    const db = R.db();
+    const inv = db.invites.find((i) => i.id === form.getAttribute('data-id'));
+    const d = R.formData(form);
+    const errs = {};
+    if (d.name.length < 3) errs.name = 'Ingresa el nombre del conductor.';
+    if (d.password.length < 6) errs.password = 'Mínimo 6 caracteres.';
+    if (R.setErrors(form, errs)) return;
+    R.state().users.push({ id: R.uid('u_'), name: d.name, email: inv.email, passHash: await R.hash(d.password), role: 'driver', companyId: R.me().companyId, active: true });
+    db.invites = db.invites.filter((i) => i.id !== inv.id);
+    R.save();
+    R.closeModal(false);
+    R.toast(`${d.name} ya puede iniciar sesión con ${inv.email}.`, 'ok', 'Conductor registrado');
+    R.rerender();
+  };
+  R.forms.assign = (form) => {
+    const db = R.db();
+    const d = R.formData(form);
+    const errs = {};
+    if (!d.driver) errs.driver = 'Selecciona un conductor.';
+    if (!d.vehicle) errs.vehicle = 'Selecciona un vehículo o “Sin asignar”.';
+    if (R.setErrors(form, errs)) return;
+    const drv = R.userById(d.driver);
+    db.vehicles.forEach((v) => { if (v.driverId === drv.id) v.driverId = null; });
+    if (d.vehicle === 'none') { R.save(); R.toast(`${drv.name} ya no tiene un vehículo asignado.`); return R.rerender(); }
+    const v = R.vehicle(db, d.vehicle);
+    const prev = v.driverId && R.userById(v.driverId);
+    v.driverId = drv.id;
+    R.save();
+    R.toast(`${drv.name} fue asignado a ${v.plate}.${prev && prev.id !== drv.id ? ` ${prev.name} quedó sin vehículo.` : ''}`, 'ok', 'Conductor asignado');
+    R.rerender();
+  };
+  R.actions['driver-revoke'] = async (el) => {
+    const db = R.db();
+    const u = R.userById(el.getAttribute('data-id'));
+    const ok = await R.confirm({ title: '¿Revocar el acceso de este conductor?', text: `${u.name} dejará de poder usar la app con su cuenta de inmediato.`, confirm: 'Revocar acceso', danger: true });
+    if (!ok) return;
+    u.active = false;
+    db.vehicles.forEach((v) => { if (v.driverId === u.id) v.driverId = null; });
+    R.save();
+    R.toast(`Se revocó el acceso de ${u.name}.`, 'ok', 'Acceso revocado');
+    R.rerender();
+  };
+
+  /* =====================================================
+     SUSCRIPCIÓN (HU-42/43/44)
+     ===================================================== */
+  const luhn = (num) => { let s = 0, alt = false; for (let i = num.length - 1; i >= 0; i--) { let n = Number(num[i]); if (alt) { n *= 2; if (n > 9) n -= 9; } s += n; alt = !alt; } return s % 10 === 0; };
+  R.inputs['card-mask'] = (el) => { el.value = el.value.replace(/\D/g, '').slice(0, 19).replace(/(.{4})/g, '$1 ').trim(); };
+  R.inputs['exp-mask'] = (el) => { const d = el.value.replace(/\D/g, '').slice(0, 4); el.value = d.length > 2 ? d.slice(0, 2) + '/' + d.slice(2) : d; };
+
+  R.route('/suscripcion', 'manager', () => {
+    const db = R.db();
+    const n = R.activeVehicles(db).length;
+    const sub = db.subscription;
+    if (!sub) {
+      return {
+        eyebrow: 'Suscripción', title: 'Suscribirme a FleetCare',
+        html: html`<div class="grid grid-2 detail-grid">
+          ${R.card('Resumen del plan', html`<dl class="dl"><div><dt>Plan</dt><dd>Suscripción mensual por vehículo</dd></div><div><dt>Vehículos en tu flota</dt><dd>${n}</dd></div><div><dt>Precio por vehículo</dt><dd>${R.money(R.PRICE_PER_VEHICLE)} / mes <small class="muted">· tarifa referencial de la demostración; la cotización real es personalizada</small></dd></div></dl>
+            <div class="total-box"><span>Total mensual estimado</span><strong>${R.money(n * R.PRICE_PER_VEHICLE)}</strong></div>
+            ${n ? '' : html`<p class="form-alert show">Registra al menos un vehículo para suscribirte. <a href="#/vehiculos/nuevo">Registrar vehículo</a></p>`}`)}
+          ${R.card('Método de pago', html`<form data-form="subscribe" novalidate>${R.field({ label: 'Número de tarjeta', name: 'card', placeholder: '4242 4242 4242 4242', attrs: { inputmode: 'numeric', autocomplete: 'cc-number', 'data-input': 'card-mask' } })}
+            <div class="form-grid">${R.field({ label: 'Vencimiento (MM/AA)', name: 'exp', placeholder: '08/28', attrs: { inputmode: 'numeric', autocomplete: 'cc-exp', maxlength: 5, 'data-input': 'exp-mask' } })}${R.field({ label: 'CVC', name: 'cvc', placeholder: '123', attrs: { inputmode: 'numeric', autocomplete: 'cc-csc', maxlength: 4 } })}</div>
+            <p class="demo-note">Simulación: no se realiza ningún cobro y solo se guardan los últimos 4 dígitos.</p>
+            <button class="btn btn-primary btn-block" type="submit" ${n ? '' : R.raw('disabled')}>Confirmar suscripción</button></form>`)}</div>`,
+      };
+    }
+    const cnt = R.ui.subCount == null ? sub.vehicles : R.ui.subCount;
+    const dirty = cnt !== sub.vehicles;
+    return {
+      eyebrow: 'Suscripción', title: 'Mi suscripción',
+      html: html`${n > sub.vehicles ? html`<div class="banner banner-warn">${ico('alert', 20)}<div><strong>Tienes ${n} vehículos activos y tu plan cubre ${sub.vehicles}.</strong> Actualiza el número de vehículos suscritos.</div></div>` : ''}
+        <div class="grid grid-2 detail-grid">
+          ${R.card('Plan actual', html`<dl class="dl"><div><dt>Plan actual</dt><dd>${sub.plan}</dd></div><div><dt>Estado</dt><dd>${R.pill('bueno', 'Activa')}</dd></div><div><dt>Monto</dt><dd>${R.money(sub.vehicles * sub.price)} / mes <small class="muted">(${sub.vehicles} × ${R.money(sub.price)})</small></dd></div><div><dt>Próximo cobro</dt><dd>${R.fmtDate(R.nextCharge(sub))}</dd></div><div><dt>Método de pago</dt><dd>Tarjeta •••• ${sub.card}</dd></div></dl>`)}
+          ${R.card('Vehículos suscritos', html`<p class="lead-sm">Vehículos incluidos en el plan</p>
+            <div class="stepper"><button class="icon-btn" data-action="sub-step" data-d="-1" aria-label="Quitar un vehículo" ${cnt <= Math.max(1, n) ? R.raw('disabled') : ''}>${ico('minus', 18)}</button><output aria-live="polite">${cnt}</output><button class="icon-btn" data-action="sub-step" data-d="1" aria-label="Agregar un vehículo" ${cnt >= 500 ? R.raw('disabled') : ''}>${ico('plus', 18)}</button></div>
+            <div class="total-box"><span>Monto actualizado</span><strong>${R.money(cnt * sub.price)} <small>/ mes</small></strong></div>
+            <small class="muted">Mínimo: ${Math.max(1, n)} (vehículos activos en tu flota).</small>
+            <div class="form-actions"><button class="btn btn-primary" data-action="sub-save" ${dirty ? '' : R.raw('disabled')}>Guardar cambios</button></div>`)}
+        </div>`,
+    };
+  });
+  R.actions['sub-step'] = (el) => {
+    const db = R.db();
+    const cur = R.ui.subCount == null ? db.subscription.vehicles : R.ui.subCount;
+    R.ui.subCount = R.clamp(cur + Number(el.getAttribute('data-d')), Math.max(1, R.activeVehicles(db).length), 500);
+    R.rerender();
+  };
+  R.actions['sub-save'] = () => {
+    const db = R.db();
+    db.subscription.vehicles = R.ui.subCount;
+    R.ui.subCount = null;
+    R.save();
+    R.toast(`Tu plan ahora incluye ${db.subscription.vehicles} vehículos (${R.money(db.subscription.vehicles * db.subscription.price)} / mes).`, 'ok', 'Suscripción actualizada');
+    R.rerender();
+  };
+  R.forms.subscribe = (form) => {
+    const db = R.db();
+    const d = R.formData(form);
+    const num = d.card.replace(/\s/g, '');
+    const errs = {};
+    if (!/^\d{13,19}$/.test(num) || !luhn(num)) errs.card = 'Ingresa un número de tarjeta válido.';
+    const m = /^(\d{2})\/(\d{2})$/.exec(d.exp);
+    if (!m || Number(m[1]) < 1 || Number(m[1]) > 12) errs.exp = 'Usa el formato MM/AA.';
+    else { const now = new Date(); if (2000 + Number(m[2]) < now.getFullYear() || (2000 + Number(m[2]) === now.getFullYear() && Number(m[1]) < now.getMonth() + 1)) errs.exp = 'La tarjeta está vencida.'; }
+    if (!/^\d{3,4}$/.test(d.cvc)) errs.cvc = 'Ingresa el CVC (3 o 4 dígitos).';
+    const n = R.activeVehicles(db).length;
+    if (!n) return R.toast('Registra al menos un vehículo antes de suscribirte.', 'warn');
+    if (R.setErrors(form, errs)) return;
+    db.subscription = { plan: 'Suscripción mensual', vehicles: n, price: R.PRICE_PER_VEHICLE, start: R.today(), card: num.slice(-4), status: 'activa' };
+    R.ui.subCount = null;
+    R.save();
+    R.toast(`Tu plan cubre ${n} ${n === 1 ? 'vehículo' : 'vehículos'}.`, 'ok', '¡Suscripción activa!');
+    R.rerender();
+  };
+
+  /* =====================================================
+     REPORTES (HU-48/49)
+     ===================================================== */
+  R.route('/reportes', 'manager', () => {
+    const db = R.db();
+    const vs = R.activeVehicles(db);
+    const from = R.ymd(R.addDays(new Date(), -30));
+    return {
+      eyebrow: 'Reportes', title: 'Reportes y exportaciones',
+      html: html`<div class="grid grid-2 detail-grid">
+        ${R.card('Exportar reporte de mantenimiento', html`<form data-form="report-pdf" novalidate><h4 class="sub-h">Rango de fechas</h4><div class="form-grid">${R.field({ label: 'Desde', name: 'from', type: 'date', value: from, attrs: { max: R.today() } })}${R.field({ label: 'Hasta', name: 'to', type: 'date', value: R.today(), attrs: { max: R.today() } })}</div>
+          ${R.field({ label: 'Unidad', name: 'vehicle', options: [{ value: '', label: 'Todas las unidades' }, ...vs.map((v) => ({ value: v.id, label: R.vehLabel(v) }))] })}
+          <p class="hint block">Se abrirá el diálogo de impresión: elige “Guardar como PDF”.</p><button class="btn btn-primary" type="submit" ${vs.length ? '' : R.raw('disabled')}>${ico('download', 16)} Exportar PDF</button></form>`)}
+        ${R.card('Exportar historial de combustible', html`<form data-form="report-xlsx" novalidate><h4 class="sub-h">Selecciona unidades</h4>${vs.length ? html`<div class="check-grid">${vs.map((v) => html`<label class="check-card"><input type="checkbox" name="units" value="${v.id}" checked><span><strong>${v.plate}</strong><small>${v.brand} ${v.model}</small></span></label>`)}</div><span class="field-error" data-err="units" role="alert"></span>` : html`<p class="muted">No hay unidades registradas.</p>`}
+          <button class="btn btn-primary" type="submit" ${vs.length ? '' : R.raw('disabled')}>${ico('download', 16)} Exportar Excel</button></form>`)}
+      </div>`,
+    };
+  });
+  R.forms['report-pdf'] = (form) => {
+    const db = R.db();
+    const d = R.formData(form);
+    const errs = {};
+    if (!d.from) errs.from = 'Elige la fecha inicial.';
+    if (!d.to) errs.to = 'Elige la fecha final.';
+    if (d.from && d.to && d.from > d.to) errs.to = 'La fecha final debe ser posterior a la inicial.';
+    if (R.setErrors(form, errs)) return;
+    const r = R.exportMaintenancePdf(db, d.from, d.to, d.vehicle);
+    R.toast(`Reporte listo: ${r.done} mantenimientos y ${r.faults} fallas en el periodo.`, 'ok', 'Generando PDF');
+  };
+  R.forms['report-xlsx'] = (form) => {
+    const db = R.db();
+    const ids = Array.from(form.querySelectorAll('input[name=units]:checked')).map((i) => i.value);
+    if (R.setErrors(form, ids.length ? {} : { units: 'Selecciona al menos una unidad.' })) return;
+    const n = R.exportFuelXlsx(db, ids);
+    if (!n) return R.toast('Las unidades seleccionadas no tienen cargas de combustible.', 'warn', 'Sin datos');
+    R.toast(`Se exportaron ${n} cargas de combustible.`, 'ok', 'Excel descargado');
+  };
+
+  /* =====================================================
+     CONFIGURACIÓN (HU-50)
+     ===================================================== */
+  R.route('/configuracion', 'manager', () => {
+    const db = R.db();
+    const c = db.company;
+    return {
+      eyebrow: 'Configuración', title: 'Datos de la empresa',
+      html: html`<form class="card form-card" data-form="company" novalidate><h3>Datos de la empresa</h3><div class="form-grid">
+        ${R.field({ label: 'Nombre de la empresa', name: 'name', value: c.name })}${R.field({ label: 'RUC', name: 'ruc', value: c.ruc, placeholder: '11 dígitos', attrs: { inputmode: 'numeric', maxlength: 11 } })}
+        ${R.field({ label: 'Dirección', name: 'address', value: c.address })}${R.field({ label: 'Correo de contacto', name: 'email', type: 'email', value: c.email })}</div>
+        <div class="form-actions"><a class="btn btn-outline" href="#/configuracion" data-action="cfg-cancel">Cancelar</a><button class="btn btn-primary" type="submit">Guardar cambios</button></div></form>`,
+    };
+  });
+  R.actions['cfg-cancel'] = (el, ev) => { ev.preventDefault(); R.rerender(); };
+  R.forms.company = (form) => {
+    const db = R.db();
+    const d = R.formData(form);
+    const errs = {};
+    if (d.name.length < 2) errs.name = 'Ingresa el nombre de la empresa.';
+    if (d.ruc && !/^\d{11}$/.test(d.ruc)) errs.ruc = 'El RUC debe tener 11 dígitos.';
+    if (d.email && !R.validEmail(d.email)) errs.email = 'Ingresa un correo válido.';
+    if (R.setErrors(form, errs)) return;
+    Object.assign(db.company, { name: d.name, ruc: d.ruc, address: d.address, email: d.email });
+    R.save();
+    R.refreshChrome();
+    R.toast('Los datos de tu empresa se actualizaron.', 'ok', 'Cambios guardados');
+  };
 })();

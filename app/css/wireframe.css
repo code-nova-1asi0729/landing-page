@@ -1,0 +1,71 @@
+/* FleetCare app — modo wireframe (escala de grises, aspecto plano).
+   Para volver a la versión a color, quita la línea <link ... wireframe.css> de app/index.html. */
+:root {
+  --blue: #3a3a3a;
+  --blue-dark: #262626;
+  --green: #7a7a7a;
+  --orange: #9a9a9a;
+  --red: #3a3a3a;
+  --text: #1f1f1f;
+  --muted: #5c5c5c;
+  --faint: #8a8a8a;
+  --border: #c4c4c4;
+  --bg: #f4f4f4;
+  --blue-tint: #e8e8e8;
+  --green-tint: #eeeeee;
+  --orange-tint: #e4e4e4;
+  --red-tint: #dcdcdc;
+  --on-dark: #d8d8d8;
+  --nav-text: #bdbdbd;
+  --gradient: #4a4a4a;
+  --shadow: none;
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, .22);
+  --warn-text: #333; --warn-text-2: #444; --warn-dark: #222; --warn-line: #c4c4c4;
+  --ok-text: #333; --bad-text: #1f1f1f; --bad-line: #b5b5b5;
+  --track: #e6e6e6; --soft: #f0f0f0; --soft-2: #f6f6f6; --dash: #b5b5b5; --glow: #e2e2e2; --bar: #bdbdbd; --stage: #ececec;
+}
+
+/* Iconos y gráficos SVG con colores fijos en atributos, y logo */
+[stroke="#1E5AA8"], [stroke="#3AA76D"], [stroke="#E8963D"], [stroke="#D64545"] { stroke: #4a4a4a; }
+[stroke="#E1E6EC"] { stroke: #d2d2d2; }
+[fill="#8B96A3"] { fill: #8a8a8a; }
+svg stop { stop-color: #6a6a6a; }
+.logo-img { filter: grayscale(1); }
+
+/* Foco, fondos superpuestos y sombras neutras */
+:focus-visible { outline-color: rgba(0, 0, 0, .45); }
+.field input:focus, .field select:focus, .field textarea:focus, .search input:focus { box-shadow: 0 0 0 3px rgba(0, 0, 0, .12); }
+.modal-backdrop, .shell.nav-open .scrim { background: rgba(0, 0, 0, .5); }
+.auth-wrap, .phone-stage { background: #ececec; }
+
+/* Estados sin color: se distinguen por relleno y borde, además del texto */
+.pill { border: 1px solid transparent; }
+.pill-bueno, .pill-f-resuelta { background: #fff; color: #333; border-color: #9a9a9a; }
+.pill-alerta, .pill-p-media, .pill-f-en_proceso { background: #dedede; color: #222; border-color: #8a8a8a; }
+.pill-critico, .pill-p-alta { background: #2b2b2b; color: #fff; border-color: #2b2b2b; }
+.pill-p-baja, .pill-gray, .pill-f-pendiente { background: #f0f0f0; color: #555; border-color: #bdbdbd; border-style: dashed; }
+.txt-red, .txt-orange, .txt-green { color: #262626; font-weight: 700; }
+.toast-ico, .n-ico, .cause-ico, .done-ico, .empty-ico, .veh-ico, .reminder-ico { background: #e8e8e8; color: #333; }
+.reminder { background: #f0f0f0; border-color: #b5b5b5; } .reminder small { color: #444; }
+.banner-info, .banner-warn { background: #ececec; color: #222; border: 1px solid #c4c4c4; }
+.demo-box, .total-box, .last-km { background: #ececec; }
+
+/* Aspecto plano de bajo detalle */
+.card, .table-wrap, .acc-list, .unit-card, .inc-card, .alert-card, .pcard, .quick a, .empty { box-shadow: none; }
+.unit-card:hover, .inc-card:hover { transform: none; box-shadow: none; }
+.unit-card { border-top-color: #bdbdbd; }
+.unit-card.is-alerta { border-top-color: #8a8a8a; }
+.unit-card.is-critico { border-top-color: #262626; }
+.state-hero { border: 1px dashed #8a8a8a; }
+.alert-card.lvl-critico, .inc-card.prio-alta, .cause-list li.is-critico { border-left-color: #262626; }
+.alert-card.lvl-alerta, .inc-card.prio-media, .cause-list li { border-left-color: #8a8a8a; }
+.progress i, .lvl-alerta .progress i, .lvl-critico .progress i { background: #4a4a4a; }
+.is-active .bar-fill { background: #4a4a4a; }
+.empty { border-style: dashed; }
+.side-nav a.active { border-left-color: #fff; }
+.nav-badge { background: #e8e8e8; color: #1f1f1f; }
+.avatar, .avatar-btn { border: 1px solid #333; }
+.phone { box-shadow: 0 0 0 8px #fff, 0 0 0 9px #b5b5b5; }
+.auth-card { box-shadow: none; border-color: #b5b5b5; }
+.toast { box-shadow: 0 4px 14px rgba(0, 0, 0, .18); }
+.chip-n { background: rgba(0, 0, 0, .08); }

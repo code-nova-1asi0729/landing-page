@@ -1,0 +1,42 @@
+/* FleetCare — modo wireframe (escala de grises, aspecto plano).
+   Para volver a la versión a color, quita la línea <link ... wireframe.css> del HTML. */
+:root {
+  --color-primary: #3a3a3a;
+  --color-primary-dark: #1f1f1f;
+  --color-green: #7a7a7a;
+  --color-orange: #9a9a9a;
+  --color-red: #4a4a4a;
+  --color-text: #1f1f1f;
+  --color-text-muted: #5c5c5c;
+  --color-text-faint: #8a8a8a;
+  --color-border: #c4c4c4;
+  --color-bg-alt: #f1f1f1;
+  --color-blue-tint: #e8e8e8;
+  --color-green-tint: #eeeeee;
+  --color-orange-tint: #e4e4e4;
+  --color-on-dark: #d8d8d8;
+  --color-on-footer: #b8b8b8;
+  --color-footer-line: #555555;
+  --gradient-brand: #4a4a4a;
+  --shadow-card: none;
+}
+
+/* Iconos SVG con colores fijos en atributos, y logo */
+[stroke="#1E5AA8"], [stroke="#3AA76D"], [stroke="#E8963D"] { stroke: #4a4a4a; }
+[fill="#E8963D"], [fill="#1E5AA8"], [fill="#3AA76D"] { fill: #4a4a4a; }
+.logo-img { filter: grayscale(1); }
+
+/* Anillos de foco neutros */
+.btn:focus-visible, .faq-question:focus-visible { outline-color: rgba(0, 0, 0, .45); }
+.form-field input:focus, .form-field textarea:focus { box-shadow: 0 0 0 3px rgba(0, 0, 0, .12); }
+
+/* Aspecto plano de bajo detalle */
+.card, .fact-card, .plan, .testimonial-card, .status-card, .faq-item { box-shadow: none; }
+.card, .fact-card, .plan, .testimonial-card, .status-card, .faq-item, .btn, .form-field input, .form-field textarea { border-color: #b5b5b5; }
+.card:hover { box-shadow: none; transform: none; }
+.badge-green { border: 1px solid #b5b5b5; }
+.btn-accent, .badge-orange { background: #c8c8c8; color: #1f1f1f; }
+.btn-primary { border-color: #3a3a3a; }
+.chart-card, .plan-founder, .action-card, .cta-box { border: 1px solid #333; }
+.icon-badge { border: 1px dashed #9a9a9a; background: #f4f4f4; }
+.avatar { border: 1px solid #333; }
