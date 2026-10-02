@@ -58,7 +58,7 @@ function validateForm() {
 
   [firstname, lastname, subject].forEach((field) => {
     if (!field.value.trim()) {
-      setError(field, 'Este campo es obligatorio.');
+      setError(field, 'This field is required.');
       isValid = false;
     } else {
       setError(field, '');
@@ -67,24 +67,24 @@ function validateForm() {
 
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!email.value.trim()) {
-    setError(email, 'Este campo es obligatorio.');
+    setError(email, 'This field is required.');
     isValid = false;
   } else if (!emailPattern.test(email.value.trim())) {
-    setError(email, 'Ingresa un correo válido.');
+    setError(email, 'Enter a valid email address.');
     isValid = false;
   } else {
     setError(email, '');
   }
 
   if (!message.value.trim()) {
-    setError(message, 'Escribe tu mensaje.');
+    setError(message, 'Write your message.');
     isValid = false;
   } else {
     setError(message, '');
   }
 
   if (!terms.checked) {
-    feedback.textContent = 'Debes aceptar los términos y condiciones.';
+    feedback.textContent = 'You must accept the terms and conditions.';
     feedback.className = 'form-feedback error';
     isValid = false;
   }
@@ -97,13 +97,13 @@ form.addEventListener('submit', (event) => {
 
   if (!validateForm()) {
     if (form.terms.checked) {
-      feedback.textContent = 'Revisa los campos marcados en rojo.';
+      feedback.textContent = 'Please check the fields marked in red.';
       feedback.className = 'form-feedback error';
     }
     return;
   }
 
-  feedback.textContent = '¡Gracias! Tu mensaje fue enviado. Te contactaremos pronto.';
+  feedback.textContent = 'Thanks! Your message has been sent. We’ll be in touch soon.';
   feedback.className = 'form-feedback success';
   form.reset();
 });

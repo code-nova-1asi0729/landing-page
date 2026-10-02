@@ -1,4 +1,4 @@
-// ---------- Precios: toggle mensual/anual + carrusel ----------
+// ---------- Pricing: monthly/yearly toggle + carousel ----------
 (function () {
   const track = document.getElementById('price-track');
   if (!track) return;
@@ -8,7 +8,7 @@
   const dotsBox = document.getElementById('price-dots');
   const plans = Array.from(track.querySelectorAll('.plan'));
 
-  // Toggle de facturación
+  // Billing toggle
   document.querySelectorAll('[data-billing]').forEach((btn) => {
     btn.addEventListener('click', () => {
       const mode = btn.dataset.billing;
@@ -20,11 +20,11 @@
     });
   });
 
-  // Carrusel
+  // Carousel
   plans.forEach((_, i) => {
     const d = document.createElement('button');
     d.type = 'button';
-    d.setAttribute('aria-label', 'Ir al plan ' + (i + 1));
+    d.setAttribute('aria-label', 'Go to plan ' + (i + 1));
     d.addEventListener('click', () => goTo(i));
     dotsBox.appendChild(d);
   });
@@ -62,7 +62,7 @@
   });
   window.addEventListener('resize', update);
 
-  // Arrastrar con el mouse (en pantallas táctiles ya funciona el deslizamiento nativo)
+  // Mouse drag (touch screens already have native swipe)
   let down = false, startX = 0, startLeft = 0;
   track.addEventListener('pointerdown', (e) => {
     if (e.pointerType !== 'mouse' || e.target.closest('a,button')) return;
@@ -77,14 +77,14 @@
   });
 
   update();
-  // En pantallas angostas empieza centrado en el plan popular
+  // On narrow screens, start centered on the popular plan
   if (track.scrollWidth > track.clientWidth + 4) {
     goTo(1, true);
     update();
   }
 })();
 
-// ---------- Solicitar demo (US49) ----------
+// ---------- Request a demo (US49) ----------
 (function () {
   const DEMO_KEY = 'codenova_demo_requests_v1';
   const clean = (s) => s.replace(/[<>&"]/g, '');
@@ -97,7 +97,7 @@
     modal.hidden = true;
     modal.innerHTML =
       '<div class="demo-dialog" role="dialog" aria-modal="true" aria-labelledby="demo-title">' +
-      '<button type="button" class="demo-close" aria-label="Cerrar">&times;</button>' +
+      '<button type="button" class="demo-close" aria-label="Close">&times;</button>' +
       '<div id="demo-body"></div></div>';
     document.body.appendChild(modal);
     modal.addEventListener('mousedown', (e) => { if (e.target === modal) close(); });
@@ -107,15 +107,14 @@
 
   function formView() {
     document.getElementById('demo-body').innerHTML =
-      '<h2 id="demo-title">Solicita una demo</h2>' +
-      '<p>Cuéntanos quién eres y te contactaremos para mostrarte Vigilia en acción.</p>' +
+      '<h2 id="demo-title">Request a demo</h2>' +
+      '<p>Tell us who you are and we’ll reach out to show you Vigilia in action.</p>' +
       '<form class="demo-form" novalidate>' +
-      '<div class="form-field"><label for="demo-name">Nombre</label><input type="text" id="demo-name" name="name" autocomplete="name"><span class="field-error"></span></div>' +
-      '<div class="form-field"><label for="demo-email">Correo electrónico</label><input type="email" id="demo-email" name="email" autocomplete="email"><span class="field-error"></span></div>' +
-      '<div class="form-field"><label for="demo-profile">Perfil</label><select id="demo-profile" name="profile">' +
-      '<option>Administrador de edificio</option><option>Residente</option><option>Empresa de mantenimiento</option><option>Otro</option></select></div>' +
-      '<button type="submit" class="btn btn-primary">Solicitar demo</button></form>' +
-      '<p class="app-link-box">¿Prefieres explorarla ahora? <a href="app/index.html#/login">Entra con una cuenta de demostración</a></p>';
+      '<div class="form-field"><label for="demo-name">Name</label><input type="text" id="demo-name" name="name" autocomplete="name"><span class="field-error"></span></div>' +
+      '<div class="form-field"><label for="demo-email">Email</label><input type="email" id="demo-email" name="email" autocomplete="email"><span class="field-error"></span></div>' +
+      '<div class="form-field"><label for="demo-profile">Profile</label><select id="demo-profile" name="profile">' +
+      '<option>Building administrator</option><option>Resident</option><option>Maintenance company</option><option>Other</option></select></div>' +
+      '<button type="submit" class="btn btn-primary">Request a demo</button></form>';
 
     const form = document.querySelector('.demo-form');
     form.addEventListener('submit', (e) => {
@@ -125,18 +124,18 @@
       let ok = true;
       form.querySelectorAll('.form-field').forEach((f) => f.classList.remove('has-error'));
       errs.forEach((x) => (x.textContent = ''));
-      if (!name) { errs[0].textContent = 'Este campo es obligatorio.'; errs[0].parentNode.classList.add('has-error'); ok = false; }
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { errs[1].textContent = 'Ingresa un correo válido.'; errs[1].parentNode.classList.add('has-error'); ok = false; }
+      if (!name) { errs[0].textContent = 'This field is required.'; errs[0].parentNode.classList.add('has-error'); ok = false; }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { errs[1].textContent = 'Enter a valid email address.'; errs[1].parentNode.classList.add('has-error'); ok = false; }
       if (!ok) { (name ? form.email : form.name).focus(); return; }
       try {
         const list = JSON.parse(localStorage.getItem(DEMO_KEY) || '[]');
         list.push({ ts: Date.now(), name, email, profile });
         localStorage.setItem(DEMO_KEY, JSON.stringify(list));
-      } catch (err) { /* sin almacenamiento: igual confirmamos */ }
+      } catch (err) { /* no storage available: still confirm */ }
       document.getElementById('demo-body').innerHTML =
-        '<div class="demo-success"><div class="tick">✓</div><h2 id="demo-title">¡Solicitud enviada!</h2>' +
-        '<p>Gracias, ' + clean(name) + '. Te escribiremos pronto a ' + clean(email) + '.</p>' +
-        '<button type="button" class="btn btn-primary" id="demo-done">Cerrar</button></div>';
+        '<div class="demo-success"><div class="tick">✓</div><h2 id="demo-title">Request sent!</h2>' +
+        '<p>Thanks, ' + clean(name) + '. We’ll email you soon at ' + clean(email) + '.</p>' +
+        '<button type="button" class="btn btn-primary" id="demo-done">Close</button></div>';
       document.getElementById('demo-done').addEventListener('click', close);
     });
   }
