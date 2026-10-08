@@ -36,4 +36,4 @@ GitHub Pages publishes automatically from the `main` branch.
 
 ## Team
 
-CodeNova – UPC, 1ASI0729 Open Source Apps.
+CodeNova – UPC, 1ASI0729
