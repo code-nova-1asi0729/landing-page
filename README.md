@@ -7,8 +7,8 @@ Static marketing site for **Vigilia**, a building-safety monitoring platform.
 
 ## Tech stack
 
-- HTML5, CSS3, vanilla JavaScript (no build step)
-- Google Fonts (IBM Plex Sans)
+- HTML5, CSS3, vanilla JavaScript
+- Google Fonts
 
 ## Project structure
 
@@ -23,16 +23,6 @@ landing-page/
 │   └── landing-extras.js  # pricing toggle, carousel
 └── README.md
 ```
-
-## Run locally
-
-Open `index.html` in a browser, or serve the folder:
-
-```bash
-python3 -m http.server 8000
-```
-
-Then visit http://localhost:8000.
 
 ## Deployment
 
