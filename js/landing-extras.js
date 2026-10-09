@@ -9,14 +9,18 @@
   const plans = Array.from(track.querySelectorAll('.plan'));
 
   // Billing toggle
+  let mode = 'monthly';
+  function renderBilling() {
+    track.querySelectorAll('.amount[data-monthly]').forEach((el) => { el.textContent = el.dataset[mode]; });
+    track.querySelectorAll('.plan-billed[data-billed-monthly]').forEach((el) => {
+      el.textContent = I18N.t(mode === 'yearly' ? el.dataset.billedYearly : el.dataset.billedMonthly);
+    });
+  }
   document.querySelectorAll('[data-billing]').forEach((btn) => {
     btn.addEventListener('click', () => {
-      const mode = btn.dataset.billing;
+      mode = btn.dataset.billing;
       document.querySelectorAll('[data-billing]').forEach((b) => b.classList.toggle('on', b === btn));
-      track.querySelectorAll('.amount[data-monthly]').forEach((el) => { el.textContent = el.dataset[mode]; });
-      track.querySelectorAll('.plan-billed[data-monthly-text]').forEach((el) => {
-        el.textContent = mode === 'yearly' ? el.dataset.yearlyText : el.dataset.monthlyText;
-      });
+      renderBilling();
     });
   });
 
@@ -24,11 +28,13 @@
   plans.forEach((_, i) => {
     const d = document.createElement('button');
     d.type = 'button';
-    d.setAttribute('aria-label', 'Go to plan ' + (i + 1));
     d.addEventListener('click', () => goTo(i));
     dotsBox.appendChild(d);
   });
   const dots = Array.from(dotsBox.children);
+  function labelDots() {
+    dots.forEach((d, i) => d.setAttribute('aria-label', I18N.t('a11y.go-to-plan', { n: i + 1 })));
+  }
 
   function step() { return plans[0].offsetWidth + 24; }
   function goTo(i, instant) {
@@ -75,6 +81,10 @@
     down = false; track.style.scrollBehavior = ''; track.style.scrollSnapType = '';
     goTo(current());
   });
+
+  renderBilling();
+  labelDots();
+  document.addEventListener('i18n:change', () => { renderBilling(); labelDots(); });
 
   update();
   // On narrow screens, start centered on the popular plan
