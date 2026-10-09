@@ -834,6 +834,47 @@ h2 { font-size: clamp(28px, 4vw, 40px); font-weight: 700; }
   .header-right { margin-left: auto; }
 }
 
+/* ===== Terms and conditions ===== */
+.checkbox-field a { color: var(--color-primary); font-weight: 600; text-decoration: underline; }
+body:has(.terms-dialog[open]) { overflow: hidden; }
+.terms-dialog {
+  width: min(720px, calc(100% - 32px));
+  max-height: min(82vh, 760px);
+  padding: 0;
+  border: 0;
+  border-radius: 16px;
+  color: var(--color-text);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.25);
+}
+.terms-dialog[open] { display: flex; flex-direction: column; }
+.terms-dialog::backdrop { background: rgba(34, 48, 60, 0.55); }
+.terms-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--color-border);
+}
+.terms-header h2 { font-size: 24px; }
+.terms-close {
+  flex-shrink: 0;
+  width: 40px; height: 40px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--color-text-muted);
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+}
+.terms-close:hover { background: var(--color-bg-alt); color: var(--color-text); }
+.terms-body { padding: 4px 24px 20px; overflow-y: auto; }
+.terms-body h3 { font-size: 17px; margin: 20px 0 6px; }
+.terms-body p { margin: 0; color: var(--color-text-muted); font-size: 15px; }
+.terms-body .terms-updated { margin-top: 16px; font-size: 14px; }
+.terms-footer { display: flex; justify-content: flex-end; padding: 16px 24px; border-top: 1px solid var(--color-border); }
+
 /* Respect users who prefer reduced motion (a11y) */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }

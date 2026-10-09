@@ -115,3 +115,15 @@ document.addEventListener('i18n:change', () => {
   feedback.textContent = '';
   feedback.className = 'form-feedback';
 });
+
+// Terms and conditions dialog: opened from the footer and from the contact form
+const termsDialog = document.getElementById('terms-dialog');
+document.addEventListener('click', (event) => {
+  if (event.target.closest('[data-open-terms]')) {
+    event.preventDefault();
+    header.classList.remove('nav-open');
+    termsDialog.showModal();
+  } else if (event.target.closest('[data-close-terms]') || event.target === termsDialog) {
+    termsDialog.close();
+  }
+});
