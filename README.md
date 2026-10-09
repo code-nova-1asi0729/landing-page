@@ -18,6 +18,8 @@ landing-page/
 ├── css/
 │   ├── style.css
 │   └── wireframe.css
+├── img/
+│   └── team/              # team member photos
 ├── js/
 │   ├── i18n.js            # language switcher (English / Spanish)
 │   ├── script.js          # menu, FAQ, contact form

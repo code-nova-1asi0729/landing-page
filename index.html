@@ -290,11 +290,11 @@
           <li data-i18n="product.point-alerts">Alerts sorted by severity, the most urgent first</li>
           <li data-i18n="product.point-incidents">Incident follow-up, from the report to the resident's rating</li>
         </ul>
-        <a href="#about-product" class="btn btn-primary" data-product-video target="_blank" rel="noopener" data-i18n="product.watch">Watch the video</a>
+        <a href="https://upcedupe-my.sharepoint.com/:v:/r/personal/u202411843_upc_edu_pe/Documents/Entrevistas%20-%20Code%20Nova/4.5%20Web%20Applications%20Prototyping..mkv?d=w827942a5d9844c509d0df218e7f0c993&amp;csf=1&amp;web=1&amp;e=26YvhK&amp;nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJTdHJlYW1XZWJBcHAiLCJyZWZlcnJhbFZpZXciOiJTaGFyZURpYWxvZy1MaW5rIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXcifX0%3D" class="btn btn-primary" data-product-video target="_blank" rel="noopener" data-i18n="product.watch">Watch the video</a>
       </div>
 
       <div class="product-video">
-        <a href="#about-product" class="video-card" data-product-video target="_blank" rel="noopener" aria-label="Watch the video" data-i18n-attr="aria-label:product.watch">
+        <a href="https://upcedupe-my.sharepoint.com/:v:/r/personal/u202411843_upc_edu_pe/Documents/Entrevistas%20-%20Code%20Nova/4.5%20Web%20Applications%20Prototyping..mkv?d=w827942a5d9844c509d0df218e7f0c993&amp;csf=1&amp;web=1&amp;e=26YvhK&amp;nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJTdHJlYW1XZWJBcHAiLCJyZWZlcnJhbFZpZXciOiJTaGFyZURpYWxvZy1MaW5rIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXcifX0%3D" class="video-card" data-product-video target="_blank" rel="noopener" aria-label="Watch the video" data-i18n-attr="aria-label:product.watch">
           <svg class="video-wave" viewBox="0 0 200 100" preserveAspectRatio="none" aria-hidden="true">
             <polyline points="0,70 30,70 40,30 55,90 70,15 90,70 200,70" fill="none" stroke="#ffffff" stroke-width="2"></polyline>
           </svg>
@@ -365,22 +365,22 @@
       <h2 class="text-center" data-i18n="team.title">Meet the team</h2>
       <div class="grid grid-3 team-grid">
         <div class="team-card">
-          <div class="avatar avatar-blue">AV</div>
+          <img class="avatar avatar-photo" src="img/team/arturo-valladolid.jpg" alt="Arturo Valladolid" width="96" height="96" loading="lazy">
           <h3>Arturo Valladolid</h3>
           <p data-i18n="team.leader">Team Leader</p>
         </div>
         <div class="team-card">
-          <div class="avatar avatar-green">FD</div>
+          <img class="avatar avatar-photo" src="img/team/fernanda-diaz.jpg" alt="Fernanda Díaz" width="96" height="96" loading="lazy">
           <h3>Fernanda Díaz</h3>
           <p data-i18n="team.member">Member</p>
         </div>
         <div class="team-card">
-          <div class="avatar avatar-orange">MR</div>
+          <img class="avatar avatar-photo" src="img/team/matthias-romero.jpg" alt="Matthias Romero" width="96" height="96" loading="lazy">
           <h3>Matthias Romero</h3>
           <p data-i18n="team.member">Member</p>
         </div>
         <div class="team-card">
-          <div class="avatar avatar-dark">MS</div>
+          <img class="avatar avatar-photo" src="img/team/mateo-salazar.jpg" alt="Mateo Salazar Miranda" width="96" height="96" loading="lazy">
           <h3>Mateo Salazar Miranda</h3>
           <p data-i18n="team.member">Member</p>
         </div>
@@ -537,7 +537,7 @@
 
           <label class="checkbox-field">
             <input type="checkbox" id="terms" name="terms" required>
-            <span data-i18n="contact.terms">I accept the terms and conditions</span>
+            <span data-i18n-html="contact.terms">I accept the <a href="#terms" data-open-terms>terms and conditions</a></span>
           </label>
 
           <button type="submit" class="btn btn-primary" data-i18n="contact.send">Send message</button>
@@ -629,7 +629,7 @@
 
       <div class="footer-col">
         <h3 data-i18n="footer.legal">Legal</h3>
-        <a href="#" data-i18n="footer.terms">Terms</a>
+        <a href="#terms" data-open-terms data-i18n="footer.terms">Terms and conditions</a>
         <a href="#" data-i18n="footer.privacy">Privacy</a>
         <a href="#" data-i18n="footer.complaints">Complaints</a>
       </div>
@@ -641,6 +641,17 @@
     </div>
   </div>
 </footer>
+
+<dialog class="terms-dialog" id="terms-dialog" aria-labelledby="terms-title">
+  <div class="terms-header">
+    <h2 id="terms-title" data-i18n="terms.title">Terms and conditions</h2>
+    <button type="button" class="terms-close" data-close-terms aria-label="Close" data-i18n-attr="aria-label:terms.close">&times;</button>
+  </div>
+  <div class="terms-body" data-i18n-html="terms.body"><p class="terms-updated">Last updated: October 2026</p><h3>1. Acceptance</h3><p>By using the Vigilia website or web application you accept these terms. If you do not agree with them, please do not use the service.</p><h3>2. The service</h3><p>Vigilia is a preventive maintenance platform by CodeNova that monitors the critical equipment of buildings (water pumps, electrical panels, elevators and HVAC) through IoT sensors, prioritized alerts and incident management.</p><h3>3. Accounts and use</h3><p>Administrators are responsible for the accuracy of the building and equipment data they register and for the users they give access to. The service must not be used for unlawful purposes.</p><h3>4. Alerts and responsibility</h3><p>Alerts support decision-making but do not replace the inspections and maintenance required by law or by the equipment manufacturer. CodeNova is not liable for damage caused by equipment failures.</p><h3>5. Data and privacy</h3><p>Sensor readings and building information are used only to provide the service, are stored encrypted and are not sold to third parties. Personal data is handled in accordance with Peruvian Law No. 29733 on Personal Data Protection.</p><h3>6. Plans and payments</h3><p>Prices are in Peruvian soles (PEN) and include taxes. Plans can be changed or cancelled at any time; the change applies from the next billing period.</p><h3>7. Changes to these terms</h3><p>We may update these terms. Significant changes will be announced on this website.</p><h3>8. Contact</h3><p>For questions about these terms, write to support@codenova.pe.</p></div>
+  <div class="terms-footer">
+    <button type="button" class="btn btn-primary" data-close-terms data-i18n="terms.understood">Got it</button>
+  </div>
+</dialog>
 
 <script src="js/i18n.js"></script>
 <script src="js/script.js"></script>

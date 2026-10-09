@@ -146,7 +146,7 @@
       "contact.email-label": "Email",
       "contact.subject": "Subject",
       "contact.message": "Message",
-      "contact.terms": "I accept the terms and conditions",
+      "contact.terms": "I accept the <a href=\"#terms\" data-open-terms>terms and conditions</a>",
       "contact.send": "Send message",
       "contact.email-title": "Email",
       "contact.hours": "Hours",
@@ -160,7 +160,7 @@
       "footer.company": "Company",
       "footer.team": "Team",
       "footer.legal": "Legal",
-      "footer.terms": "Terms",
+      "footer.terms": "Terms and conditions",
       "footer.privacy": "Privacy",
       "footer.complaints": "Complaints",
       "footer.rights": "© 2026 CodeNova. All rights reserved.",
@@ -185,8 +185,12 @@
       "form.message-required": "Write your message.",
       "form.terms-required": "You must accept the terms and conditions.",
       "form.check-fields": "Please check the fields marked in red.",
-      "form.sent": "Thanks! Your message has been sent. We’ll be in touch soon."
-  },
+      "form.sent": "Thanks! Your message has been sent. We’ll be in touch soon.",
+      "terms.title": "Terms and conditions",
+      "terms.close": "Close",
+      "terms.understood": "Got it",
+      "terms.body": "<p class=\"terms-updated\">Last updated: October 2026</p><h3>1. Acceptance</h3><p>By using the Vigilia website or web application you accept these terms. If you do not agree with them, please do not use the service.</p><h3>2. The service</h3><p>Vigilia is a preventive maintenance platform by CodeNova that monitors the critical equipment of buildings (water pumps, electrical panels, elevators and HVAC) through IoT sensors, prioritized alerts and incident management.</p><h3>3. Accounts and use</h3><p>Administrators are responsible for the accuracy of the building and equipment data they register and for the users they give access to. The service must not be used for unlawful purposes.</p><h3>4. Alerts and responsibility</h3><p>Alerts support decision-making but do not replace the inspections and maintenance required by law or by the equipment manufacturer. CodeNova is not liable for damage caused by equipment failures.</p><h3>5. Data and privacy</h3><p>Sensor readings and building information are used only to provide the service, are stored encrypted and are not sold to third parties. Personal data is handled in accordance with Peruvian Law No. 29733 on Personal Data Protection.</p><h3>6. Plans and payments</h3><p>Prices are in Peruvian soles (PEN) and include taxes. Plans can be changed or cancelled at any time; the change applies from the next billing period.</p><h3>7. Changes to these terms</h3><p>We may update these terms. Significant changes will be announced on this website.</p><h3>8. Contact</h3><p>For questions about these terms, write to support@codenova.pe.</p>"
+    },
     es: {
       "meta.title": "Vigilia — Mantenimiento preventivo inteligente",
       "nav.product": "Producto",
@@ -325,7 +329,7 @@
       "contact.email-label": "Correo electrónico",
       "contact.subject": "Asunto",
       "contact.message": "Mensaje",
-      "contact.terms": "Acepto los términos y condiciones",
+      "contact.terms": "Acepto los <a href=\"#terms\" data-open-terms>términos y condiciones</a>",
       "contact.send": "Enviar mensaje",
       "contact.email-title": "Correo",
       "contact.hours": "Horario",
@@ -339,7 +343,7 @@
       "footer.company": "Empresa",
       "footer.team": "Equipo",
       "footer.legal": "Legal",
-      "footer.terms": "Términos",
+      "footer.terms": "Términos y condiciones",
       "footer.privacy": "Privacidad",
       "footer.complaints": "Reclamaciones",
       "footer.rights": "© 2026 CodeNova. Todos los derechos reservados.",
@@ -364,8 +368,12 @@
       "form.message-required": "Escribe tu mensaje.",
       "form.terms-required": "Debes aceptar los términos y condiciones.",
       "form.check-fields": "Revisa los campos marcados en rojo.",
-      "form.sent": "¡Gracias! Tu mensaje fue enviado. Te contactaremos pronto."
-  },
+      "form.sent": "¡Gracias! Tu mensaje fue enviado. Te contactaremos pronto.",
+      "terms.title": "Términos y condiciones",
+      "terms.close": "Cerrar",
+      "terms.understood": "Entendido",
+      "terms.body": "<p class=\"terms-updated\">Última actualización: octubre de 2026</p><h3>1. Aceptación</h3><p>Al usar el sitio web o la aplicación web de Vigilia aceptas estos términos. Si no estás de acuerdo con ellos, por favor no uses el servicio.</p><h3>2. El servicio</h3><p>Vigilia es una plataforma de mantenimiento preventivo de CodeNova que monitorea los equipos críticos de los edificios (bombas de agua, tableros eléctricos, ascensores y aire acondicionado) mediante sensores IoT, alertas priorizadas y gestión de incidentes.</p><h3>3. Cuentas y uso</h3><p>Los administradores son responsables de que los datos de edificios y equipos que registran sean correctos, y de los usuarios a los que dan acceso. El servicio no debe usarse con fines ilícitos.</p><h3>4. Alertas y responsabilidad</h3><p>Las alertas apoyan la toma de decisiones, pero no reemplazan las inspecciones ni el mantenimiento exigidos por ley o por el fabricante del equipo. CodeNova no se responsabiliza por daños causados por fallas de los equipos.</p><h3>5. Datos y privacidad</h3><p>Las lecturas de los sensores y la información de los edificios se usan solo para brindar el servicio, se almacenan cifradas y no se venden a terceros. Los datos personales se tratan conforme a la Ley N.º 29733, Ley de Protección de Datos Personales del Perú.</p><h3>6. Planes y pagos</h3><p>Los precios están en soles peruanos (PEN) e incluyen IGV. Puedes cambiar o cancelar tu plan en cualquier momento; el cambio se aplica desde el siguiente periodo de facturación.</p><h3>7. Cambios en estos términos</h3><p>Podemos actualizar estos términos. Los cambios importantes se anunciarán en este sitio web.</p><h3>8. Contacto</h3><p>Si tienes dudas sobre estos términos, escríbenos a support@codenova.pe.</p>"
+    },
   };
 
   let current = DEFAULT_LANG;
