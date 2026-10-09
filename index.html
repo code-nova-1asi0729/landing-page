@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Vigilia — Smart Preventive Maintenance</title>
-<meta name="description" content="Vigilia: an IoT preventive maintenance platform for buildings and condominiums. Catch failures in pumps, panels and elevators before they become emergencies.">
+<title data-i18n="meta.title">Vigilia — Smart Preventive Maintenance</title>
+<meta name="description" data-i18n-attr="content:meta.description" content="Vigilia: an IoT preventive maintenance platform for buildings and condominiums. Catch failures in pumps, panels and elevators before they become emergencies.">
 <meta name="keywords" content="preventive maintenance, building maintenance, condominium, IoT sensors, water pump, elevator, electrical panel, Lima, Vigilia">
 <meta name="author" content="CodeNova">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect x='6' y='6' width='28' height='28' rx='6' fill='none' stroke='%230F5C78' stroke-width='3'/%3E%3Cpolyline points='10,24 15,24 18,15 22,29 26,11 30,24 34,24' fill='none' stroke='%232E9E6D' stroke-width='2.5'/%3E%3C/svg%3E">
@@ -17,7 +17,7 @@
 
 <header class="site-header" id="header">
   <div class="container header-inner">
-    <a href="#top" class="logo" aria-label="Vigilia - home">
+    <a href="#top" class="logo" aria-label="Vigilia - home" data-i18n-attr="aria-label:a11y.home">
       <svg viewBox="0 0 40 40" width="36" height="36" aria-hidden="true">
         <rect x="6" y="6" width="28" height="28" rx="6" fill="none" stroke="#0F5C78" stroke-width="3"></rect>
         <polyline points="10,24 15,24 18,15 22,29 26,11 30,24 34,24" fill="none" stroke="#2E9E6D" stroke-width="2.5"></polyline>
@@ -26,18 +26,25 @@
     </a>
 
     <nav class="main-nav" id="main-nav">
-      <a href="#features">Product</a>
-      <a href="#how-it-works">How it works</a>
-      <a href="#pricing">Pricing</a>
-      <a href="#about">About</a>
-      <a href="#contact">Contact</a>
+      <a href="#features" data-i18n="nav.product">Product</a>
+      <a href="#how-it-works" data-i18n="nav.how-it-works">How it works</a>
+      <a href="#pricing" data-i18n="nav.pricing">Pricing</a>
+      <a href="#about" data-i18n="nav.about">About</a>
+      <a href="#contact" data-i18n="nav.contact">Contact</a>
+      <a href="https://vigilia-frontend.vercel.app" class="btn btn-primary nav-app-link" data-i18n="nav.go-to-app">Go to app</a>
     </nav>
 
-    <div class="header-actions">
-      <a href="https://vigilia-frontend.vercel.app" class="btn btn-primary btn-sm">Go to app</a>
+    <div class="header-right">
+      <div class="header-actions">
+        <a href="https://vigilia-frontend.vercel.app" class="btn btn-primary btn-sm" data-i18n="nav.go-to-app">Go to app</a>
+      </div>
+      <div class="lang-switch" role="group" aria-label="Language" data-i18n-attr="aria-label:a11y.language">
+        <button type="button" class="on" data-lang="en" aria-pressed="true">EN</button>
+        <button type="button" data-lang="es" aria-pressed="false">ES</button>
+      </div>
     </div>
 
-    <button class="menu-toggle" id="menu-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="main-nav">
+    <button class="menu-toggle" id="menu-toggle" aria-label="Open menu" data-i18n-attr="aria-label:a11y.open-menu" aria-expanded="false" aria-controls="main-nav">
       <span></span><span></span><span></span>
     </button>
   </div>
@@ -49,43 +56,43 @@
   <section class="hero">
     <div class="container hero-inner">
       <div class="hero-copy">
-        <span class="badge badge-green">New · IoT Platform</span>
-        <h1>Smart preventive maintenance for your building</h1>
-        <p class="lead">Catch failures in pumps, panels and elevators before they become emergencies.</p>
+        <span class="badge badge-green" data-i18n="hero.badge">New · IoT Platform</span>
+        <h1 data-i18n="hero.title">Smart preventive maintenance for your building</h1>
+        <p class="lead" data-i18n="hero.lead">Catch failures in pumps, panels and elevators before they become emergencies.</p>
         <div class="hero-cta">
-          <a href="https://vigilia-frontend.vercel.app" class="btn btn-primary">Go to app</a>
-          <a href="#how-it-works" class="btn btn-outline">See how it works</a>
+          <a href="https://vigilia-frontend.vercel.app" class="btn btn-primary" data-i18n="nav.go-to-app">Go to app</a>
+          <a href="#how-it-works" class="btn btn-outline" data-i18n="hero.see-how">See how it works</a>
         </div>
         <div class="hero-stats">
           <div class="stat">
             <p class="stat-value">+50</p>
-            <p>Active buildings</p>
+            <p data-i18n="hero.active-buildings">Active buildings</p>
           </div>
           <div class="stat">
             <p class="stat-value">120</p>
-            <p>Alerts/month</p>
+            <p data-i18n="hero.alerts-month">Alerts/month</p>
           </div>
           <div class="stat">
             <p class="stat-value">4.8★</p>
-            <p>Satisfaction</p>
+            <p data-i18n="hero.satisfaction">Satisfaction</p>
           </div>
         </div>
       </div>
 
       <div class="hero-visual">
         <div class="chart-card">
-          <svg viewBox="0 0 200 100" aria-label="Preview of the Vigilia dashboard">
+          <svg viewBox="0 0 200 100" aria-label="Preview of the Vigilia dashboard" data-i18n-attr="aria-label:a11y.dashboard-preview">
             <polyline points="0,70 30,70 40,30 55,90 70,15 90,70 200,70" fill="none" stroke="#ffffff" stroke-width="3" opacity="0.85"></polyline>
           </svg>
         </div>
         <div class="status-card">
-          <p class="status-title">Equipment status</p>
+          <p class="status-title" data-i18n="hero.equipment-status">Equipment status</p>
           <div class="status-legend">
-            <span class="dot" style="background:#2E9E6D"></span>Normal
-            <span class="dot" style="background:#1F4E9C"></span>Low
-            <span class="dot" style="background:#F4B400"></span>Medium
-            <span class="dot" style="background:#F2994A"></span>High
-            <span class="dot" style="background:#E53935"></span>Critical
+            <span class="dot" style="background:#2E9E6D"></span><span data-i18n="severity.normal">Normal</span>
+            <span class="dot" style="background:#1F4E9C"></span><span data-i18n="severity.low">Low</span>
+            <span class="dot" style="background:#F4B400"></span><span data-i18n="severity.medium">Medium</span>
+            <span class="dot" style="background:#F2994A"></span><span data-i18n="severity.high">High</span>
+            <span class="dot" style="background:#E53935"></span><span data-i18n="severity.critical">Critical</span>
           </div>
         </div>
       </div>
@@ -96,47 +103,47 @@
   <section class="section section-alt" id="features">
     <div class="container">
       <div class="section-heading">
-        <p class="eyebrow">— WHAT WE OFFER</p>
-        <h2>Everything you need to maintain your building</h2>
-        <p class="section-sub">Sensors, prioritized alerts and visit management in one place.</p>
+        <p class="eyebrow" data-i18n="features.eyebrow">— WHAT WE OFFER</p>
+        <h2 data-i18n="features.title">Everything you need to maintain your building</h2>
+        <p class="section-sub" data-i18n="features.sub">Sensors, prioritized alerts and visit management in one place.</p>
       </div>
 
       <div class="grid grid-3">
         <div class="card">
           <div class="icon-badge icon-blue"></div>
-          <h3>IoT sensors</h3>
-          <p>Vibration, temperature, humidity and power consumption monitored in real time.</p>
-          <span class="tag tag-blue">Real time</span>
+          <h3 data-i18n="features.sensors">IoT sensors</h3>
+          <p data-i18n="features.sensors-text">Vibration, temperature, humidity and power consumption monitored in real time.</p>
+          <span class="tag tag-blue" data-i18n="features.real-time">Real time</span>
         </div>
         <div class="card">
           <div class="icon-badge icon-orange"></div>
-          <h3>Severity-based alerts</h3>
-          <p>Green, yellow, orange and red: see at a glance what needs attention first.</p>
-          <span class="tag tag-orange">Priority</span>
+          <h3 data-i18n="features.alerts">Severity-based alerts</h3>
+          <p data-i18n="features.alerts-text">Green, yellow, orange and red: see at a glance what needs attention first.</p>
+          <span class="tag tag-orange" data-i18n="features.priority">Priority</span>
         </div>
         <div class="card">
           <div class="icon-badge icon-green"></div>
-          <h3>Request management</h3>
-          <p>Intake, visit scheduling and materials tracking in one place.</p>
-          <span class="tag tag-green">Automated</span>
+          <h3 data-i18n="features.requests">Request management</h3>
+          <p data-i18n="features.requests-text">Intake, visit scheduling and materials tracking in one place.</p>
+          <span class="tag tag-green" data-i18n="features.automated">Automated</span>
         </div>
         <div class="card">
           <div class="icon-badge icon-blue"></div>
-          <h3>Visit scheduling</h3>
-          <p>Planning prioritized by severity and zone for maintenance companies.</p>
-          <span class="tag tag-blue">Calendar</span>
+          <h3 data-i18n="features.visits">Visit scheduling</h3>
+          <p data-i18n="features.visits-text">Planning prioritized by severity and zone for maintenance companies.</p>
+          <span class="tag tag-blue" data-i18n="features.calendar">Calendar</span>
         </div>
         <div class="card">
           <div class="icon-badge icon-green"></div>
-          <h3>Materials tracking</h3>
-          <p>Track the inventory used in every intervention.</p>
-          <span class="tag tag-green">Inventory</span>
+          <h3 data-i18n="features.materials">Materials tracking</h3>
+          <p data-i18n="features.materials-text">Track the inventory used in every intervention.</p>
+          <span class="tag tag-green" data-i18n="features.inventory">Inventory</span>
         </div>
         <div class="card">
           <div class="icon-badge icon-blue"></div>
-          <h3>Reports and savings</h3>
-          <p>Back up accumulated savings in front of the building board.</p>
-          <span class="tag tag-blue">Dashboard</span>
+          <h3 data-i18n="features.reports">Reports and savings</h3>
+          <p data-i18n="features.reports-text">Back up accumulated savings in front of the building board.</p>
+          <span class="tag tag-blue" data-i18n="features.dashboard">Dashboard</span>
         </div>
       </div>
     </div>
@@ -146,36 +153,36 @@
   <section class="section" id="how-it-works">
     <div class="container how-inner">
       <div class="how-copy">
-        <p class="eyebrow">— SIMPLE PROCESS</p>
-        <h2>How does Vigilia work?</h2>
+        <p class="eyebrow" data-i18n="how.eyebrow">— SIMPLE PROCESS</p>
+        <h2 data-i18n="how.title">How does Vigilia work?</h2>
 
         <ol class="steps">
           <li>
             <span class="step-number">1</span>
             <div>
-              <h3>Install the sensors</h3>
-              <p>Vibration, temperature, humidity and power consumption.</p>
+              <h3 data-i18n="how.step1">Install the sensors</h3>
+              <p data-i18n="how.step1-text">Vibration, temperature, humidity and power consumption.</p>
             </div>
           </li>
           <li>
             <span class="step-number">2</span>
             <div>
-              <h3>Set up your building</h3>
-              <p>Register equipment by type: pumps, panels, elevators.</p>
+              <h3 data-i18n="how.step2">Set up your building</h3>
+              <p data-i18n="how.step2-text">Register equipment by type: pumps, panels, elevators.</p>
             </div>
           </li>
           <li>
             <span class="step-number">3</span>
             <div>
-              <h3>Get prioritized alerts</h3>
-              <p>Ordered by severity: critical, high, medium, low.</p>
+              <h3 data-i18n="how.step3">Get prioritized alerts</h3>
+              <p data-i18n="how.step3-text">Ordered by severity: critical, high, medium, low.</p>
             </div>
           </li>
           <li>
             <span class="step-number">4</span>
             <div>
-              <h3>Manage maintenance</h3>
-              <p>Schedule the visit and log the intervention performed.</p>
+              <h3 data-i18n="how.step4">Manage maintenance</h3>
+              <p data-i18n="how.step4-text">Schedule the visit and log the intervention performed.</p>
             </div>
           </li>
         </ol>
@@ -184,11 +191,11 @@
       <div class="how-visual">
         <div class="action-card">
           <div class="action-icon"></div>
-          <h3>Vigilia in action</h3>
-          <p>More buildings prevent critical failures every month</p>
+          <h3 data-i18n="how.in-action">Vigilia in action</h3>
+          <p data-i18n="how.in-action-text">More buildings prevent critical failures every month</p>
           <div class="action-metric">
             <h3>98%</h3>
-            <p>Alerts handled on time</p>
+            <p data-i18n="how.on-time">Alerts handled on time</p>
           </div>
         </div>
       </div>
@@ -199,75 +206,104 @@
   <section class="section section-alt" id="pricing">
     <div class="container">
       <div class="section-heading">
-        <p class="eyebrow">— PRICING</p>
-        <h2>Plans that grow with your building</h2>
-        <p class="section-sub">No lock-in. Switch plans whenever you need to.</p>
-        <div class="billing-toggle" role="group" aria-label="Billing">
-          <button type="button" class="on" data-billing="monthly">Monthly</button>
-          <button type="button" data-billing="yearly">Yearly <span>-20%</span></button>
+        <p class="eyebrow" data-i18n="pricing.eyebrow">— PRICING</p>
+        <h2 data-i18n="pricing.title">Plans that grow with your building</h2>
+        <p class="section-sub" data-i18n="pricing.sub">No lock-in. Switch plans whenever you need to.</p>
+        <div class="billing-toggle" role="group" aria-label="Billing" data-i18n-attr="aria-label:a11y.billing">
+          <button type="button" class="on" data-billing="monthly" data-i18n="pricing.monthly">Monthly</button>
+          <button type="button" data-billing="yearly" data-i18n-html="pricing.yearly">Yearly <span>-20%</span></button>
         </div>
       </div>
 
       <div class="pricing-carousel">
-        <button type="button" class="carousel-btn prev" id="price-prev" aria-label="Previous plan">
+        <button type="button" class="carousel-btn prev" id="price-prev" aria-label="Previous plan" data-i18n-attr="aria-label:a11y.previous-plan">
           <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
         </button>
 
-        <div class="pricing-track" id="price-track" tabindex="0" aria-label="Pricing plans">
+        <div class="pricing-track" id="price-track" tabindex="0" aria-label="Pricing plans" data-i18n-attr="aria-label:a11y.pricing-plans">
           <article class="plan">
-            <h3>Starter</h3>
-            <p class="plan-desc">To start monitoring a small building.</p>
-            <p class="plan-price"><span class="cur">S/</span><span class="amount" data-monthly="149" data-yearly="119">149</span><span class="per">/mo</span></p>
-            <p class="plan-billed" data-monthly-text="Billed monthly" data-yearly-text="Billed yearly (S/ 1,428)">Billed monthly</p>
+            <h3 data-i18n="pricing.starter">Starter</h3>
+            <p class="plan-desc" data-i18n="pricing.starter-text">To start monitoring a small building.</p>
+            <p class="plan-price"><span class="cur">S/</span><span class="amount" data-monthly="149" data-yearly="119">149</span><span class="per" data-i18n="pricing.per-month">/mo</span></p>
+            <p class="plan-billed" data-billed-monthly="pricing.billed-monthly" data-billed-yearly="pricing.billed-yearly-starter">Billed monthly</p>
             <ul class="plan-list">
-              <li>1 building</li>
-              <li>Up to 10 monitored assets</li>
-              <li>Severity-based alerts</li>
-              <li>Resident app</li>
-              <li>Email support</li>
+              <li data-i18n="pricing.one-building">1 building</li>
+              <li data-i18n="pricing.ten-assets">Up to 10 monitored assets</li>
+              <li data-i18n="features.alerts">Severity-based alerts</li>
+              <li data-i18n="pricing.resident-app">Resident app</li>
+              <li data-i18n="pricing.email-support">Email support</li>
             </ul>
-            <a href="https://vigilia-frontend.vercel.app" class="btn btn-outline">Get started</a>
+            <a href="https://vigilia-frontend.vercel.app" class="btn btn-outline" data-i18n="pricing.get-started">Get started</a>
           </article>
 
           <article class="plan plan-featured">
-            <span class="plan-flag">Most popular</span>
-            <h3>Professional</h3>
-            <p class="plan-desc">For admins with several buildings and maintenance companies.</p>
-            <p class="plan-price"><span class="cur">S/</span><span class="amount" data-monthly="349" data-yearly="279">349</span><span class="per">/mo</span></p>
-            <p class="plan-billed" data-monthly-text="Billed monthly" data-yearly-text="Billed yearly (S/ 3,348)">Billed monthly</p>
+            <span class="plan-flag" data-i18n="pricing.popular">Most popular</span>
+            <h3 data-i18n="pricing.professional">Professional</h3>
+            <p class="plan-desc" data-i18n="pricing.professional-text">For admins with several buildings and maintenance companies.</p>
+            <p class="plan-price"><span class="cur">S/</span><span class="amount" data-monthly="349" data-yearly="279">349</span><span class="per" data-i18n="pricing.per-month">/mo</span></p>
+            <p class="plan-billed" data-billed-monthly="pricing.billed-monthly" data-billed-yearly="pricing.billed-yearly-professional">Billed monthly</p>
             <ul class="plan-list">
-              <li>Up to 3 buildings</li>
-              <li>Up to 40 monitored assets</li>
-              <li>Visit and technician scheduling</li>
-              <li>Board PDF reports</li>
-              <li>CSV export of readings</li>
-              <li>Priority WhatsApp support</li>
+              <li data-i18n="pricing.three-buildings">Up to 3 buildings</li>
+              <li data-i18n="pricing.forty-assets">Up to 40 monitored assets</li>
+              <li data-i18n="pricing.technicians">Visit and technician scheduling</li>
+              <li data-i18n="pricing.pdf-reports">Board PDF reports</li>
+              <li data-i18n="pricing.csv-export">CSV export of readings</li>
+              <li data-i18n="pricing.whatsapp-support">Priority WhatsApp support</li>
             </ul>
-            <a href="https://vigilia-frontend.vercel.app" class="btn btn-primary">Get started</a>
+            <a href="https://vigilia-frontend.vercel.app" class="btn btn-primary" data-i18n="pricing.get-started">Get started</a>
           </article>
 
           <article class="plan">
-            <h3>Enterprise</h3>
-            <p class="plan-desc">For property managers and developers with many buildings.</p>
-            <p class="plan-price plan-custom"><span class="amount">Custom</span></p>
-            <p class="plan-billed">Quoted to fit your portfolio</p>
+            <h3 data-i18n="pricing.enterprise">Enterprise</h3>
+            <p class="plan-desc" data-i18n="pricing.enterprise-text">For property managers and developers with many buildings.</p>
+            <p class="plan-price plan-custom"><span class="amount" data-i18n="pricing.custom">Custom</span></p>
+            <p class="plan-billed" data-i18n="pricing.quoted">Quoted to fit your portfolio</p>
             <ul class="plan-list">
-              <li>Unlimited buildings and assets</li>
-              <li>Cross-building comparison panel</li>
-              <li>Maintenance company ranking</li>
-              <li>Integration with your own sensors</li>
-              <li>Dedicated account manager</li>
+              <li data-i18n="pricing.unlimited">Unlimited buildings and assets</li>
+              <li data-i18n="pricing.comparison">Cross-building comparison panel</li>
+              <li data-i18n="pricing.ranking">Maintenance company ranking</li>
+              <li data-i18n="pricing.own-sensors">Integration with your own sensors</li>
+              <li data-i18n="pricing.account-manager">Dedicated account manager</li>
             </ul>
-            <a href="#contact" class="btn btn-outline">Talk to sales</a>
+            <a href="#contact" class="btn btn-outline" data-i18n="pricing.talk-to-sales">Talk to sales</a>
           </article>
         </div>
 
-        <button type="button" class="carousel-btn next" id="price-next" aria-label="Next plan">
+        <button type="button" class="carousel-btn next" id="price-next" aria-label="Next plan" data-i18n-attr="aria-label:a11y.next-plan">
           <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
         </button>
       </div>
       <div class="carousel-dots" id="price-dots" aria-hidden="true"></div>
-      <p class="pricing-note">Prices in Peruvian soles (PEN), taxes included. Questions? <a href="#contact">Contact us</a>.</p>
+      <p class="pricing-note" data-i18n-html="pricing.note">Prices in Peruvian soles (PEN), taxes included. Questions? <a href="#contact">Contact us</a>.</p>
+    </div>
+  </section>
+
+  <!-- ABOUT THE PRODUCT -->
+  <section class="section section-product" id="about-product">
+    <div class="container product-inner">
+      <div class="product-copy">
+        <p class="eyebrow" data-i18n="product.eyebrow">— ABOUT THE PRODUCT</p>
+        <h2 data-i18n="product.title">See Vigilia in action</h2>
+        <p data-i18n="product.text">Watch how Vigilia connects IoT sensors, prioritized alerts and incident follow-up so the critical equipment of your building keeps working.</p>
+        <ul class="product-points">
+          <li data-i18n="product.point-monitoring">Real-time monitoring of pumps, electrical panels, elevators and HVAC</li>
+          <li data-i18n="product.point-alerts">Alerts sorted by severity, the most urgent first</li>
+          <li data-i18n="product.point-incidents">Incident follow-up, from the report to the resident's rating</li>
+        </ul>
+        <a href="https://upcedupe-my.sharepoint.com/:v:/r/personal/u202411843_upc_edu_pe/Documents/Entrevistas%20-%20Code%20Nova/4.5%20Web%20Applications%20Prototyping..mkv?d=w827942a5d9844c509d0df218e7f0c993&amp;csf=1&amp;web=1&amp;e=26YvhK&amp;nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJTdHJlYW1XZWJBcHAiLCJyZWZlcnJhbFZpZXciOiJTaGFyZURpYWxvZy1MaW5rIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXcifX0%3D" class="btn btn-primary" data-product-video target="_blank" rel="noopener" data-i18n="product.watch">Watch the video</a>
+      </div>
+
+      <div class="product-video">
+        <a href="https://upcedupe-my.sharepoint.com/:v:/r/personal/u202411843_upc_edu_pe/Documents/Entrevistas%20-%20Code%20Nova/4.5%20Web%20Applications%20Prototyping..mkv?d=w827942a5d9844c509d0df218e7f0c993&amp;csf=1&amp;web=1&amp;e=26YvhK&amp;nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJTdHJlYW1XZWJBcHAiLCJyZWZlcnJhbFZpZXciOiJTaGFyZURpYWxvZy1MaW5rIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXcifX0%3D" class="video-card" data-product-video target="_blank" rel="noopener" aria-label="Watch the video" data-i18n-attr="aria-label:product.watch">
+          <svg class="video-wave" viewBox="0 0 200 100" preserveAspectRatio="none" aria-hidden="true">
+            <polyline points="0,70 30,70 40,30 55,90 70,15 90,70 200,70" fill="none" stroke="#ffffff" stroke-width="2"></polyline>
+          </svg>
+          <span class="play-button" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="30" height="30"><path d="M8 5v14l11-7z" fill="currentColor"></path></svg>
+          </span>
+          <span class="video-caption" data-i18n="product.caption">Vigilia product video</span>
+        </a>
+      </div>
     </div>
   </section>
 
@@ -276,13 +312,13 @@
     <div class="container">
       <div class="about-top">
         <div class="about-copy">
-          <p class="eyebrow">— ABOUT US</p>
-          <h2>We are CodeNova</h2>
-          <p>We're the startup behind Vigilia: a team focused on catching failures before they become emergencies.</p>
-          <p>We believe preventive maintenance should be clear and accessible to everyone.</p>
+          <p class="eyebrow" data-i18n="about.eyebrow">— ABOUT US</p>
+          <h2 data-i18n="about.title">We are CodeNova</h2>
+          <p data-i18n="about.text1">We're the startup behind Vigilia: a team focused on catching failures before they become emergencies.</p>
+          <p data-i18n="about.text2">We believe preventive maintenance should be clear and accessible to everyone.</p>
           <div class="mission-callout">
-            <p class="mission-label">OUR MISSION</p>
-            <p>Give control and peace of mind to those who manage a building.</p>
+            <p class="mission-label" data-i18n="about.mission-label">OUR MISSION</p>
+            <p data-i18n="about.mission-callout">Give control and peace of mind to those who manage a building.</p>
           </div>
         </div>
 
@@ -290,19 +326,19 @@
           <div class="grid grid-2">
             <div class="stat-card">
               <h3>2026</h3>
-              <p>Founded</p>
+              <p data-i18n="about.founded">Founded</p>
             </div>
             <div class="stat-card">
               <h3>4</h3>
-              <p>Team members</p>
+              <p data-i18n="about.members">Team members</p>
             </div>
             <div class="stat-card">
               <h3>+10</h3>
-              <p>Buildings</p>
+              <p data-i18n="about.buildings">Buildings</p>
             </div>
             <div class="stat-card">
-              <h3>Peru</h3>
-              <p>Origin</p>
+              <h3 data-i18n="about.peru">Peru</h3>
+              <p data-i18n="about.origin">Origin</p>
             </div>
           </div>
         </div>
@@ -311,13 +347,13 @@
       <div class="grid grid-2 about-values">
         <div class="value-card">
           <div class="icon-badge icon-blue small"></div>
-          <h3>Mission</h3>
-          <p>Provide safe, accessible preventive maintenance.</p>
+          <h3 data-i18n="about.mission">Mission</h3>
+          <p data-i18n="about.mission-text">Provide safe, accessible preventive maintenance.</p>
         </div>
         <div class="value-card">
           <div class="icon-badge icon-green small"></div>
-          <h3>Vision</h3>
-          <p>To be the leading preventive maintenance platform in Peru.</p>
+          <h3 data-i18n="about.vision">Vision</h3>
+          <p data-i18n="about.vision-text">To be the leading preventive maintenance platform in Peru.</p>
         </div>
       </div>
     </div>
@@ -326,27 +362,27 @@
   <!-- TEAM -->
   <section class="section section-alt" id="team">
     <div class="container">
-      <h2 class="text-center">Meet the team</h2>
+      <h2 class="text-center" data-i18n="team.title">Meet the team</h2>
       <div class="grid grid-3 team-grid">
         <div class="team-card">
-          <div class="avatar avatar-blue">AV</div>
+          <img class="avatar avatar-photo" src="img/team/arturo-valladolid.jpg" alt="Arturo Valladolid" width="96" height="96" loading="lazy">
           <h3>Arturo Valladolid</h3>
-          <p>Team Leader</p>
+          <p data-i18n="team.leader">Team Leader</p>
         </div>
         <div class="team-card">
-          <div class="avatar avatar-green">FD</div>
+          <img class="avatar avatar-photo" src="img/team/fernanda-diaz.jpg" alt="Fernanda Díaz" width="96" height="96" loading="lazy">
           <h3>Fernanda Díaz</h3>
-          <p>Member</p>
+          <p data-i18n="team.member">Member</p>
         </div>
         <div class="team-card">
-          <div class="avatar avatar-orange">MR</div>
+          <img class="avatar avatar-photo" src="img/team/matthias-romero.jpg" alt="Matthias Romero" width="96" height="96" loading="lazy">
           <h3>Matthias Romero</h3>
-          <p>Member</p>
+          <p data-i18n="team.member">Member</p>
         </div>
         <div class="team-card">
-          <div class="avatar avatar-dark">MS</div>
+          <img class="avatar avatar-photo" src="img/team/mateo-salazar.jpg" alt="Mateo Salazar Miranda" width="96" height="96" loading="lazy">
           <h3>Mateo Salazar Miranda</h3>
-          <p>Member</p>
+          <p data-i18n="team.member">Member</p>
         </div>
       </div>
     </div>
@@ -356,41 +392,41 @@
   <section class="section" id="testimonials">
     <div class="container">
       <div class="section-heading">
-        <p class="eyebrow">— TESTIMONIALS</p>
-        <h2>What building administrators are saying</h2>
+        <p class="eyebrow" data-i18n="testimonials.eyebrow">— TESTIMONIALS</p>
+        <h2 data-i18n="testimonials.title">What building administrators are saying</h2>
       </div>
 
       <div class="grid grid-3">
         <div class="testimonial-card">
           <div class="stars">★★★★★</div>
-          <p>We now catch failures before they turn into a costly problem.</p>
+          <p data-i18n="testimonials.quote1">We now catch failures before they turn into a costly problem.</p>
           <div class="testimonial-author">
             <div class="avatar avatar-blue small"></div>
             <div>
               <p class="author-name">Nella Vargas</p>
-              <p class="author-role">Building administrator</p>
+              <p class="author-role" data-i18n="testimonials.administrator">Building administrator</p>
             </div>
           </div>
         </div>
         <div class="testimonial-card">
           <div class="stars">★★★★★</div>
-          <p>Severity-based alerts help us prioritize without reading every report.</p>
+          <p data-i18n="testimonials.quote2">Severity-based alerts help us prioritize without reading every report.</p>
           <div class="testimonial-author">
             <div class="avatar avatar-green small"></div>
             <div>
               <p class="author-name">Hernando Diaz</p>
-              <p class="author-role">Maintenance company</p>
+              <p class="author-role" data-i18n="testimonials.maintenance">Maintenance company</p>
             </div>
           </div>
         </div>
         <div class="testimonial-card">
           <div class="stars">★★★★★</div>
-          <p>Reporting an issue from my phone is really simple.</p>
+          <p data-i18n="testimonials.quote3">Reporting an issue from my phone is really simple.</p>
           <div class="testimonial-author">
             <div class="avatar avatar-orange small"></div>
             <div>
               <p class="author-name">Pilar Angeles</p>
-              <p class="author-role">Resident</p>
+              <p class="author-role" data-i18n="testimonials.resident">Resident</p>
             </div>
           </div>
         </div>
@@ -402,57 +438,57 @@
   <section class="section section-alt" id="faq">
     <div class="container">
       <div class="section-heading">
-        <p class="eyebrow">— FAQ</p>
-        <h2>Answers to your questions</h2>
-        <p class="section-sub">Can't find what you're looking for? Reach out directly.</p>
+        <p class="eyebrow" data-i18n="faq.eyebrow">— FAQ</p>
+        <h2 data-i18n="faq.title">Answers to your questions</h2>
+        <p class="section-sub" data-i18n="faq.sub">Can't find what you're looking for? Reach out directly.</p>
       </div>
 
       <div class="faq-list">
 
         <div class="faq-item">
           <button class="faq-question" aria-expanded="false">
-            <span>How are the sensors installed?</span>
+            <span data-i18n="faq.q-install">How are the sensors installed?</span>
             <span class="faq-icon"></span>
           </button>
           <div class="faq-answer">
             <div class="faq-answer-inner">
-              <p>Our technical team schedules a visit to install sensors on pumps, panels and elevators. The process doesn't interrupt the building's operation.</p>
+              <p data-i18n="faq.a-install">Our technical team schedules a visit to install sensors on pumps, panels and elevators. The process doesn't interrupt the building's operation.</p>
             </div>
           </div>
         </div>
 
         <div class="faq-item">
           <button class="faq-question" aria-expanded="false">
-            <span>What kinds of buildings can use it?</span>
+            <span data-i18n="faq.q-buildings">What kinds of buildings can use it?</span>
             <span class="faq-icon"></span>
           </button>
           <div class="faq-answer">
             <div class="faq-answer-inner">
-              <p>Vigilia works for residential buildings, condominiums and corporate buildings of any size.</p>
+              <p data-i18n="faq.a-buildings">Vigilia works for residential buildings, condominiums and corporate buildings of any size.</p>
             </div>
           </div>
         </div>
 
         <div class="faq-item">
           <button class="faq-question" aria-expanded="false">
-            <span>How does the severity scale work?</span>
+            <span data-i18n="faq.q-severity">How does the severity scale work?</span>
             <span class="faq-icon"></span>
           </button>
           <div class="faq-answer">
             <div class="faq-answer-inner">
-              <p>Alerts are classified into four severity levels: low, medium, high and critical, based on how far a reading is from the expected range.</p>
+              <p data-i18n="faq.a-severity">Alerts are classified into four severity levels: low, medium, high and critical, based on how far a reading is from the expected range.</p>
             </div>
           </div>
         </div>
 
         <div class="faq-item">
           <button class="faq-question" aria-expanded="false">
-            <span>Is my data secure?</span>
+            <span data-i18n="faq.q-security">Is my data secure?</span>
             <span class="faq-icon"></span>
           </button>
           <div class="faq-answer">
             <div class="faq-answer-inner">
-              <p>Yes, your equipment and building information is stored encrypted and is only accessible to authorized users on your account.</p>
+              <p data-i18n="faq.a-security">Yes, your equipment and building information is stored encrypted and is only accessible to authorized users on your account.</p>
             </div>
           </div>
         </div>
@@ -464,47 +500,47 @@
   <section class="section" id="contact">
     <div class="container contact-inner">
       <div class="contact-form-wrap">
-        <p class="eyebrow">— CONTACT</p>
-        <h2>Get in touch</h2>
+        <p class="eyebrow" data-i18n="contact.eyebrow">— CONTACT</p>
+        <h2 data-i18n="contact.title">Get in touch</h2>
 
         <form id="contact-form" novalidate>
           <div class="form-row">
             <div class="form-field">
-              <label for="firstname">First name</label>
+              <label for="firstname" data-i18n="contact.first-name">First name</label>
               <input type="text" id="firstname" name="firstname" required>
               <span class="field-error"></span>
             </div>
             <div class="form-field">
-              <label for="lastname">Last name</label>
+              <label for="lastname" data-i18n="contact.last-name">Last name</label>
               <input type="text" id="lastname" name="lastname" required>
               <span class="field-error"></span>
             </div>
           </div>
 
           <div class="form-field">
-            <label for="email">Email</label>
+            <label for="email" data-i18n="contact.email-label">Email</label>
             <input type="email" id="email" name="email" required>
             <span class="field-error"></span>
           </div>
 
           <div class="form-field">
-            <label for="subject">Subject</label>
+            <label for="subject" data-i18n="contact.subject">Subject</label>
             <input type="text" id="subject" name="subject" required>
             <span class="field-error"></span>
           </div>
 
           <div class="form-field">
-            <label for="message">Message</label>
+            <label for="message" data-i18n="contact.message">Message</label>
             <textarea id="message" name="message" rows="4" required></textarea>
             <span class="field-error"></span>
           </div>
 
           <label class="checkbox-field">
             <input type="checkbox" id="terms" name="terms" required>
-            I accept the terms and conditions
+            <span data-i18n-html="contact.terms">I accept the <a href="#terms" data-open-terms>terms and conditions</a></span>
           </label>
 
-          <button type="submit" class="btn btn-primary">Send message</button>
+          <button type="submit" class="btn btn-primary" data-i18n="contact.send">Send message</button>
 
           <p class="form-feedback" id="form-feedback" role="status" aria-live="polite"></p>
         </form>
@@ -514,7 +550,7 @@
         <div class="info-item">
           <div class="icon-badge icon-blue"></div>
           <div>
-            <h3>Email</h3>
+            <h3 data-i18n="contact.email-title">Email</h3>
             <p>support@codenova.pe</p>
           </div>
         </div>
@@ -528,15 +564,15 @@
         <div class="info-item">
           <div class="icon-badge icon-blue"></div>
           <div>
-            <h3>Hours</h3>
-            <p>Mon-Fri: 9am - 6pm</p>
+            <h3 data-i18n="contact.hours">Hours</h3>
+            <p data-i18n="contact.hours-value">Mon-Fri: 9am - 6pm</p>
           </div>
         </div>
         <div class="info-item">
           <div class="icon-badge icon-green"></div>
           <div>
-            <h3>Location</h3>
-            <p>Lima, Peru</p>
+            <h3 data-i18n="contact.location">Location</h3>
+            <p data-i18n="contact.location-value">Lima, Peru</p>
           </div>
         </div>
       </div>
@@ -547,10 +583,10 @@
   <section class="section">
     <div class="container">
       <div class="cta-box">
-        <h2>Start optimizing your building today</h2>
-        <p>No credit card, no commitments.</p>
+        <h2 data-i18n="cta.title">Start optimizing your building today</h2>
+        <p data-i18n="cta.text">No credit card, no commitments.</p>
         <div class="cta-actions">
-          <a href="https://vigilia-frontend.vercel.app" class="btn btn-accent">Go to app</a>
+          <a href="https://vigilia-frontend.vercel.app" class="btn btn-accent" data-i18n="nav.go-to-app">Go to app</a>
         </div>
       </div>
     </div>
@@ -569,7 +605,7 @@
           </svg>
           <span>Vigilia</span>
         </a>
-        <p>Smart preventive maintenance for buildings and condominiums.</p>
+        <p data-i18n="footer.tagline">Smart preventive maintenance for buildings and condominiums.</p>
         <div class="social-links">
           <a href="#" aria-label="Facebook"></a>
           <a href="#" aria-label="Instagram"></a>
@@ -578,34 +614,46 @@
       </div>
 
       <div class="footer-col">
-        <h3>Product</h3>
-        <a href="#features">Services</a>
-        <a href="#how-it-works">How it works</a>
-        <a href="#pricing">Pricing</a>
+        <h3 data-i18n="nav.product">Product</h3>
+        <a href="#features" data-i18n="footer.services">Services</a>
+        <a href="#how-it-works" data-i18n="nav.how-it-works">How it works</a>
+        <a href="#pricing" data-i18n="nav.pricing">Pricing</a>
       </div>
 
       <div class="footer-col">
-        <h3>Company</h3>
-        <a href="#about">About</a>
-        <a href="#team">Team</a>
-        <a href="#contact">Contact</a>
+        <h3 data-i18n="footer.company">Company</h3>
+        <a href="#about" data-i18n="nav.about">About</a>
+        <a href="#team" data-i18n="footer.team">Team</a>
+        <a href="#contact" data-i18n="nav.contact">Contact</a>
       </div>
 
       <div class="footer-col">
-        <h3>Legal</h3>
-        <a href="#">Terms</a>
-        <a href="#">Privacy</a>
-        <a href="#">Complaints</a>
+        <h3 data-i18n="footer.legal">Legal</h3>
+        <a href="#terms" data-open-terms data-i18n="footer.terms">Terms and conditions</a>
+        <a href="#" data-i18n="footer.privacy">Privacy</a>
+        <a href="#" data-i18n="footer.complaints">Complaints</a>
       </div>
     </div>
 
     <div class="footer-bottom">
-      <p>© 2026 CodeNova. All rights reserved.</p>
-      <p>Built by the CodeNova team · UPC</p>
+      <p data-i18n="footer.rights">© 2026 CodeNova. All rights reserved.</p>
+      <p data-i18n="footer.built-by">Built by the CodeNova team · UPC</p>
     </div>
   </div>
 </footer>
 
+<dialog class="terms-dialog" id="terms-dialog" aria-labelledby="terms-title">
+  <div class="terms-header">
+    <h2 id="terms-title" data-i18n="terms.title">Terms and conditions</h2>
+    <button type="button" class="terms-close" data-close-terms aria-label="Close" data-i18n-attr="aria-label:terms.close">&times;</button>
+  </div>
+  <div class="terms-body" data-i18n-html="terms.body"><p class="terms-updated">Last updated: October 2026</p><h3>1. Acceptance</h3><p>By using the Vigilia website or web application you accept these terms. If you do not agree with them, please do not use the service.</p><h3>2. The service</h3><p>Vigilia is a preventive maintenance platform by CodeNova that monitors the critical equipment of buildings (water pumps, electrical panels, elevators and HVAC) through IoT sensors, prioritized alerts and incident management.</p><h3>3. Accounts and use</h3><p>Administrators are responsible for the accuracy of the building and equipment data they register and for the users they give access to. The service must not be used for unlawful purposes.</p><h3>4. Alerts and responsibility</h3><p>Alerts support decision-making but do not replace the inspections and maintenance required by law or by the equipment manufacturer. CodeNova is not liable for damage caused by equipment failures.</p><h3>5. Data and privacy</h3><p>Sensor readings and building information are used only to provide the service, are stored encrypted and are not sold to third parties. Personal data is handled in accordance with Peruvian Law No. 29733 on Personal Data Protection.</p><h3>6. Plans and payments</h3><p>Prices are in Peruvian soles (PEN) and include taxes. Plans can be changed or cancelled at any time; the change applies from the next billing period.</p><h3>7. Changes to these terms</h3><p>We may update these terms. Significant changes will be announced on this website.</p><h3>8. Contact</h3><p>For questions about these terms, write to support@codenova.pe.</p></div>
+  <div class="terms-footer">
+    <button type="button" class="btn btn-primary" data-close-terms data-i18n="terms.understood">Got it</button>
+  </div>
+</dialog>
+
+<script src="js/i18n.js"></script>
 <script src="js/script.js"></script>
 <script src="js/landing-extras.js"></script>
 </body>
