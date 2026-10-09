@@ -58,7 +58,7 @@ function validateForm() {
 
   [firstname, lastname, subject].forEach((field) => {
     if (!field.value.trim()) {
-      setError(field, 'This field is required.');
+      setError(field, I18N.t('form.required'));
       isValid = false;
     } else {
       setError(field, '');
@@ -67,24 +67,24 @@ function validateForm() {
 
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!email.value.trim()) {
-    setError(email, 'This field is required.');
+    setError(email, I18N.t('form.required'));
     isValid = false;
   } else if (!emailPattern.test(email.value.trim())) {
-    setError(email, 'Enter a valid email address.');
+    setError(email, I18N.t('form.invalid-email'));
     isValid = false;
   } else {
     setError(email, '');
   }
 
   if (!message.value.trim()) {
-    setError(message, 'Write your message.');
+    setError(message, I18N.t('form.message-required'));
     isValid = false;
   } else {
     setError(message, '');
   }
 
   if (!terms.checked) {
-    feedback.textContent = 'You must accept the terms and conditions.';
+    feedback.textContent = I18N.t('form.terms-required');
     feedback.className = 'form-feedback error';
     isValid = false;
   }
@@ -97,13 +97,21 @@ form.addEventListener('submit', (event) => {
 
   if (!validateForm()) {
     if (form.terms.checked) {
-      feedback.textContent = 'Please check the fields marked in red.';
+      feedback.textContent = I18N.t('form.check-fields');
       feedback.className = 'form-feedback error';
     }
     return;
   }
 
-  feedback.textContent = 'Thanks! Your message has been sent. We’ll be in touch soon.';
+  feedback.textContent = I18N.t('form.sent');
   feedback.className = 'form-feedback success';
   form.reset();
+});
+
+// Messages already on screen are cleared when the language changes
+document.addEventListener('i18n:change', () => {
+  form.querySelectorAll('.form-field').forEach((field) => field.classList.remove('has-error'));
+  form.querySelectorAll('.field-error').forEach((error) => { error.textContent = ''; });
+  feedback.textContent = '';
+  feedback.className = 'form-feedback';
 });

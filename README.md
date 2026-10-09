@@ -19,6 +19,7 @@ landing-page/
 │   ├── style.css
 │   └── wireframe.css
 ├── js/
+│   ├── i18n.js            # language switcher (English / Spanish)
 │   ├── script.js          # menu, FAQ, contact form
 │   └── landing-extras.js  # pricing toggle, carousel
 └── README.md
